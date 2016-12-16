@@ -1,7 +1,5 @@
 package instinctools.android.readers;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +19,6 @@ public class JsonBookReader implements IReader<String, List<Book>> {
         List<Book> objects = new ArrayList<>();
         try {
             JSONObject obj = new JSONObject(json);
-            Log.e("ORION", json);
             JSONArray dataArray = obj.getJSONArray("data");
             for (int i = 0; i < dataArray.length(); ++i) {
                 Book book = new Book();

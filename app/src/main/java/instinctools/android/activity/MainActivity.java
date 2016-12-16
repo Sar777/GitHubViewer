@@ -16,7 +16,6 @@ import instinctools.android.readers.FileReader;
 import instinctools.android.readers.JsonBookReader;
 
 public class MainActivity extends AppCompatActivity {
-
     private RecyclerView mRecyclerView;
     private BookAdapter mBookAdapter;
 
@@ -25,15 +24,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String str = new FileReader(this).read(R.raw.data);
-        List<Book> objects = new JsonBookReader().read(str);
-        mBookAdapter = new BookAdapter(objects);
-
         initView();
     }
 
     private void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_book_list);
+
+        String str = new FileReader(this).read(R.raw.data);
+        List<Book> objects = new JsonBookReader().read(str);
+        mBookAdapter = new BookAdapter(this, mRecyclerView, objects);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mBookAdapter);

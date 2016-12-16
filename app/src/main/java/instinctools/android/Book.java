@@ -1,12 +1,14 @@
 package instinctools.android;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 /**
  * Created by orion on 16.12.16.
  */
 
-public class Book {
+public class Book implements Parcelable {
     private String mTitle;
     private String mDescription;
     private String mImage;
@@ -18,6 +20,24 @@ public class Book {
         this.mTitle = title;
         this.mDescription = description;
         this.mImage = image;
+    }
+
+    protected Book(Parcel in) {
+        mTitle = in.readString();
+        mDescription = in.readString();
+        mImage = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeString(mDescription);
+        dest.writeString(mImage);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public String getTitle() {
@@ -56,4 +76,16 @@ public class Book {
     public boolean isValid() {
         return !TextUtils.isEmpty(mTitle) && !TextUtils.isEmpty(mDescription) && !TextUtils.isEmpty(mImage);
     }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }
