@@ -95,21 +95,14 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_empty, parent, false);
                 return new EmptyItemHolder(view);
             }
-            case VIEW_TYPE_ITEM: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_book, parent, false);
-                view.setOnClickListener(this);
-                return new BookItemHolder(view);
-            }
-            default:
+            case VIEW_TYPE_ITEM:
                 break;
-        }
-
-        if (viewType == VIEW_TYPE_HEADER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_header, parent, false);
-            return new HeaderItemHolder(view);
+            default:
+                throw new UnsupportedOperationException("Unsupported view item type: " + viewType);
         }
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_book, parent, false);
+        view.setOnClickListener(this);
         return new BookItemHolder(view);
     }
 
