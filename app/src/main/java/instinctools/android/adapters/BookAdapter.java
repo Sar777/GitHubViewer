@@ -68,7 +68,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             mImageView.setImageDrawable(DrawableFactory.createFromAssets(mContext, item.getImage()));
             mTitle.setText(item.getTitle());
-            mDescription.setText(item.getDescription().length() > 50 ? item.getDescription().substring(0, 50) + "..." : item.getDescription());
+            mDescription.setText(item.getDescription());
         }
     }
 
@@ -124,10 +124,6 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public int getItemCount() {
-        if (mResources.isEmpty())
-            return 1;
-        else
-            return mResources.size() + 1;
+        return mResources.size() + 1;
     }
-
 }

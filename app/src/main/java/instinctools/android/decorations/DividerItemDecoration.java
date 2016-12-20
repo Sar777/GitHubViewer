@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by orion on 16.12.16.
@@ -22,12 +23,14 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         int right = parent.getWidth() - parent.getPaddingRight();
 
         int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for (int i = 1; i < childCount; ++i) {
             View child = parent.getChildAt(i);
 
-            // Prevent decorator for first element
-            if (parent.getChildPosition(child) == 0)
-                continue;
+            if (child instanceof ViewGroup) {
+                View view = ((ViewGroup)child).getChildAt(1);
+                if (view != null)
+                    left = view.getLeft();
+            }
 
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
