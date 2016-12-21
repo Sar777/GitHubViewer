@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
+            app:expandedTitleTextAppearance="@style/TransparentText"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 

@@ -25,7 +25,6 @@ public class DescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(null);
         
         initView();
 
@@ -34,6 +33,7 @@ public class DescriptionActivity extends AppCompatActivity {
             Book book = intent.getParcelableExtra(BookAdapter.EXTRA_BOOK_TAG);
 
             mTextViewTitle.setText(book.getTitle());
+            getSupportActionBar().setTitle(book.getTitle());
             mTextViewDescription.setText(book.getDescription());
 
             mImageViewBook.setImageDrawable(DrawableFactory.createFromAssets(this, book.getImage()));
