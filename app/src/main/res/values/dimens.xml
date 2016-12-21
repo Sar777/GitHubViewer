@@ -8,5 +8,5 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="text_view_title_margin">16dp</dimen>
     <dimen name="text_view_description_margin">8dp</dimen>
-    <dimen name="recycler_item_child_layout_margin">74dp</dimen>
+    <dimen name="recycler_item_child_layout_margin">72dp</dimen>
 </resources>
