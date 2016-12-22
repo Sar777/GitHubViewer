@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_book_list);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_item_child_layout_margin), ContextCompat.getDrawable(this, R.drawable.line_divider)));
 
+        mBookAdapter = new BookAdapter(this, mRecyclerView, mBooks);
+        mRecyclerView.setAdapter(mBookAdapter);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
     }
@@ -63,9 +66,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState.containsKey(BUNDLE_BOOKS)) {
             mBooks = savedInstanceState.getParcelableArrayList(BUNDLE_BOOKS);
-
-            mBookAdapter = new BookAdapter(this, mRecyclerView, mBooks);
-            mRecyclerView.setAdapter(mBookAdapter);
+            mBookAdapter.setResources(mBooks);
+            mBookAdapter.notifyDataSetChanged();
         }
     }
 
@@ -81,9 +83,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> data) {
         mBooks = data;
-
-        mBookAdapter = new BookAdapter(this, mRecyclerView, mBooks);
-        mRecyclerView.setAdapter(mBookAdapter);
+        mBookAdapter.setResources(mBooks);
+        mBookAdapter.notifyDataSetChanged();
     }
 
     @Override
