@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.Book;
+import instinctools.android.data.Book;
 import instinctools.android.activity.MainActivity;
 import instinctools.android.network.HttpCustomClient;
 import instinctools.android.readers.JsonBookReader;

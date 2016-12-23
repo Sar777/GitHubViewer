@@ -1,4 +1,4 @@
-package instinctools.android;
+package instinctools.android.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

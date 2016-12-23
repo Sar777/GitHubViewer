@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.Book;
+import instinctools.android.data.Book;
 
 /**
  * Created by orion on 16.12.16.

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import instinctools.android.Book;
+import instinctools.android.data.Book;
 import instinctools.android.ImageLoader;
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
@@ -68,7 +68,8 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
             //mImageView.setImageDrawable(DrawableFactory.createFromAssets(mContext, item.getImage()));
 
-            new ImageLoader.Builder(mContext, mImageView).setLoadingDrawableId(R.drawable.ic_add_circle_outline_black_24dp).build().load(item.getImage());
+            ImageLoader loader = new ImageLoader.Builder(mContext, mImageView).error(R.drawable.ic_clear_red_24dp).placeholder(R.drawable.ic_crop_original_orange_24dp).build();
+            loader.load(item.getImage());
 
             mTitle.setText(item.getTitle());
             mDescription.setText(item.getDescription());

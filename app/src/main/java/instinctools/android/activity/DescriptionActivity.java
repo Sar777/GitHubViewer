@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import instinctools.android.Book;
+import instinctools.android.data.Book;
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
 import instinctools.android.utility.DrawableFactory;

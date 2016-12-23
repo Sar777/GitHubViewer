@@ -1,6 +1,5 @@
 package instinctools.android.activity;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -9,16 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.Book;
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
-import instinctools.android.cache.BitmapCacheMgr;
 import instinctools.android.constans.Constants;
+import instinctools.android.data.Book;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.loaders.AsyncHttpLoader;
 
@@ -46,37 +42,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Bundle bundle = new Bundle();
             bundle.putString(BUNDLE_LOADER_URL, Constants.API_URL);
             getSupportLoaderManager().initLoader(LOADER_CONTENT_ID, bundle, this);
-        }
-
-        BitmapCacheMgr cacheMgr = new BitmapCacheMgr.Builder(this).enableSDCache(1024 * 1024 * 10).build();
-
-        InputStream stream = null;
-        try {
-            stream = getAssets().open("1.jpg");
-            cacheMgr.addToCache("1.jpg", BitmapFactory.decodeStream(stream));
-
-           /* stream = getAssets().open("2.jpg");
-            cacheMgr.addToCache("2.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("3.jpg");
-            cacheMgr.addToCache("3.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("4.jpg");
-            cacheMgr.addToCache("4.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("5.jpg");
-            cacheMgr.addToCache("5.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("6.jpg");
-            cacheMgr.addToCache("6.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("7.jpg");
-            cacheMgr.addToCache("7.jpg", BitmapFactory.decodeStream(stream));
-
-            stream = getAssets().open("8.jpg");
-            cacheMgr.addToCache("8.jpg", BitmapFactory.decodeStream(stream));*/
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

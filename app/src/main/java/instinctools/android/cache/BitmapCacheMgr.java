@@ -63,7 +63,7 @@ public class BitmapCacheMgr {
             return this;
         }
 
-        public Builder enableSDCache(long maxSize) {
+        public Builder enableSDCardCache(long maxSize) {
             mSDCache = new SDCardCache(maxSize, mContext);
             return this;
         }

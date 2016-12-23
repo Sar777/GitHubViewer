@@ -1,18 +1,26 @@
 package instinctools.android;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by orion on 22.12.16.
  */
 
 public class ImageLoader {
+    private static final String TAG = "ImageLoader";
+
     private Context mContext;
     private WeakReference<ImageView> mImageViewReference;
     private int mPlaceholderErrorDrawId;
@@ -43,12 +51,12 @@ public class ImageLoader {
             this.mImageViewReference = new WeakReference<>(imageView);
         }
 
-        public Builder setErrorDrawableId(int errorDrawableId) {
+        public Builder error(int errorDrawableId) {
             this.mPlaceholderErrorDrawId = errorDrawableId;
             return this;
         }
 
-        public Builder setLoadingDrawableId(int errorDrawableId) {
+        public Builder placeholder(int errorDrawableId) {
             this.mPlaceholderLoadingDrawId = errorDrawableId;
             return this;
         }
@@ -58,7 +66,7 @@ public class ImageLoader {
         }
     }
 
-    private class ImageLoadTask extends AsyncTask<String, Void, Void> {
+    private class ImageLoadTask extends AsyncTask<String, Bitmap, Bitmap> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -72,13 +80,46 @@ public class ImageLoader {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
-            return null;
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = App.getBitmapCache().getFromCache(params[0]);
+            if (bitmap == null) {
+                URL url;
+                try {
+                    url = new URL(params[0]);
+                } catch (MalformedURLException e) {
+                    Log.e(TAG, "Fail parse url for loading image", e);
+                    return null;
+                }
+
+                try {
+                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (IOException e) {
+                    Log.e(TAG, "Fail open connection for loading image", e);
+                    return null;
+                }
+
+                App.getBitmapCache().addToCache(params[0], bitmap);
+            }
+
+            return bitmap;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
+
+            ImageView imageView = mImageViewReference.get();
+            if (imageView == null)
+                return;
+
+            if (result == null) {
+                if (mPlaceholderErrorDrawId != 0) {
+                    imageView.setImageDrawable(ContextCompat.getDrawable(mContext, mPlaceholderErrorDrawId));
+                    return;
+                }
+            }
+
+            imageView.setImageBitmap(result);
         }
     }
 }
