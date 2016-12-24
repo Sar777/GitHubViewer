@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import instinctools.android.data.Book;
-import instinctools.android.ImageLoader;
+import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
 
@@ -66,10 +66,12 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private void onBindViewHolder(int position) {
             Book item = getItem(position);
 
-            //mImageView.setImageDrawable(DrawableFactory.createFromAssets(mContext, item.getImage()));
-
-            ImageLoader loader = new ImageLoader.Builder(mContext, mImageView).error(R.drawable.ic_clear_red_24dp).placeholder(R.drawable.ic_crop_original_orange_24dp).build();
-            loader.load(item.getImage());
+            ImageLoader.with(mContext).
+                    loading(R.drawable.ic_crop_original_orange_24dp).
+                    error(R.drawable.ic_clear_red_24dp).
+                    load(item.getImage()).
+                    in(mImageView).
+                    load();
 
             mTitle.setText(item.getTitle());
             mDescription.setText(item.getDescription());

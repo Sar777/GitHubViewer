@@ -10,16 +10,18 @@ import java.util.Map;
  */
 
 public abstract class BitmapCache<A> {
-    protected long mCacheSize;
-    protected final long mMaxCacheSize;
+    final Object mCacheLock = new Object();
 
-    protected Map<String, A> mCacheStore = new HashMap<>();
+    long mCacheSize;
+    final long mMaxCacheSize;
+    Map<String, A> mCacheStore;
 
-    public BitmapCache(long maxSize) {
+    BitmapCache(long maxSize) {
         if (maxSize <= 0)
             throw new IllegalArgumentException("Cache constructor: bad max size cache value: " + maxSize);
 
         this.mMaxCacheSize = maxSize;
+        this.mCacheStore = new HashMap<>();
     }
 
     long getSize() {
@@ -29,12 +31,12 @@ public abstract class BitmapCache<A> {
     long getMaxCacheSize() {
         return mMaxCacheSize;
     }
+
     void clear() {
         mCacheStore.clear();
     }
 
     abstract void resize();
-
     abstract boolean addToCache(String key, Bitmap bitmap);
     abstract Bitmap getFromCache(String key);
 }

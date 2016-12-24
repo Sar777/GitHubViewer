@@ -3,7 +3,6 @@ package instinctools.android.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static android.os.Environment.isExternalStorageRemovable;
+import instinctools.android.utility.Common;
 
 /**
  * Created by orion on 23.12.16.
@@ -29,6 +28,7 @@ public class SDCardCache extends BitmapCache<File> {
 
     private static final String CACHE_FILE_TYPE = ".bitmap";
 
+    private boolean mDiskCacheStarting = true;
     private Context mContext;
     private final File mCacheFolder;
 
@@ -38,7 +38,7 @@ public class SDCardCache extends BitmapCache<File> {
         super(maxSize);
 
         this.mContext = context;
-        this.mCacheFolder = getDiskCacheDir(context);
+        this.mCacheFolder = Common.getDiskCacheDir(context);
 
         mCacheFilter = new FilenameFilter() {
             @Override
@@ -52,14 +52,13 @@ public class SDCardCache extends BitmapCache<File> {
         };
 
         loadingCache();
-
         resize();
     }
 
     private void loadingCache() {
         Log.d(TAG, "Loading cache from SD Card");
 
-        synchronized (mCacheStore) {
+        synchronized (mCacheLock) {
             mCacheSize = 0;
             mCacheStore.clear();
 
@@ -68,6 +67,9 @@ public class SDCardCache extends BitmapCache<File> {
                 mCacheSize += file.length();
                 mCacheStore.put(file.getName().substring(0, file.getName().indexOf(CACHE_FILE_TYPE)), file);
             }
+
+            mDiskCacheStarting = false;
+            mCacheLock.notifyAll();
         }
 
         Log.d(TAG, "Loaded cache from SD Card: Bitmaps in cache: " + mCacheStore.size() + " Size: " + mCacheSize);
@@ -75,18 +77,25 @@ public class SDCardCache extends BitmapCache<File> {
 
     @Override
     public boolean addToCache(@NonNull String key, @NonNull Bitmap data) {
-        if (mCacheStore.containsKey(key))
-            return false;
+        synchronized (mCacheLock) {
+            while (mDiskCacheStarting) {
+                try {
+                    mCacheLock.wait();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Cache interrupt exception in addToCache", e);
+                }
+            }
 
-        if (mCacheSize > mMaxCacheSize)
-            resize();
+            if (mCacheStore.containsKey(key))
+                return false;
 
-        if (!writeToDisk(key, data))
-            return false;
+            if (mCacheSize > mMaxCacheSize)
+                resize();
 
-        Log.d(TAG, "Added bitmap to SD card cache: Key: " + key + " Bitmap size: " + data.getByteCount());
+            if (!writeToDisk(key, data))
+                return false;
 
-        synchronized (mCacheStore) {
+            Log.d(TAG, "Added bitmap to SD card cache: Key: " + key + " Bitmap size: " + data.getByteCount());
             mCacheStore.put(key, new File(mCacheFolder.getAbsolutePath() + File.separator + key + CACHE_FILE_TYPE));
         }
 
@@ -95,8 +104,15 @@ public class SDCardCache extends BitmapCache<File> {
 
     @Override
     public Bitmap getFromCache(@NonNull String key) {
-        String path;
-        synchronized (mCacheStore) {
+        synchronized (mCacheLock) {
+            while (mDiskCacheStarting) {
+                try {
+                    mCacheLock.wait();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Cache interrupt exception in getFromCache", e);
+                }
+            }
+
             File file = mCacheStore.get(key);
 
             if (file == null) {
@@ -104,18 +120,16 @@ public class SDCardCache extends BitmapCache<File> {
                 return null;
             }
 
-            path = file.getAbsolutePath();
+            Log.d(TAG, "Get bitmap from SD card cache by: " + key);
+            return BitmapFactory.decodeFile(file.getAbsolutePath());
         }
-
-        Log.d(TAG, "Get bitmap from SD card cache by: " + key);
-        return BitmapFactory.decodeFile(path);
     }
 
     @Override
     public void clear() {
         Log.d(TAG, "Clear bitmap cache storage");
 
-        synchronized (mCacheStore) {
+        synchronized (mCacheLock) {
             for (Map.Entry<String, File> cache : mCacheStore.entrySet()) {
                 cache.getValue().delete();
             }
@@ -131,7 +145,7 @@ public class SDCardCache extends BitmapCache<File> {
 
         Log.d(TAG, "Resize bitmap cache storage. Current: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
 
-        synchronized (mCacheStore) {
+        synchronized (mCacheLock) {
             List<File> files = new ArrayList<>(mCacheStore.values());
             Collections.sort(files, new Comparator<File>() {
                 @Override
@@ -152,15 +166,6 @@ public class SDCardCache extends BitmapCache<File> {
         Log.d(TAG, "Resize bitmap cache storage. Now: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
 
         loadingCache();
-    }
-
-    public static File getDiskCacheDir(Context context) {
-        final String cachePath =
-                Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
-                        !isExternalStorageRemovable() ? context.getExternalCacheDir().getPath() :
-                        context.getCacheDir().getPath();
-
-        return new File(cachePath);
     }
 
     private boolean writeToDisk(String key, Bitmap data) {
