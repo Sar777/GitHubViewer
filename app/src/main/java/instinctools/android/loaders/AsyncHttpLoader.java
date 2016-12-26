@@ -3,14 +3,14 @@ package instinctools.android.loaders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
+import android.text.TextUtils;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.data.Book;
 import instinctools.android.activity.MainActivity;
-import instinctools.android.network.HttpCustomClient;
+import instinctools.android.data.Book;
+import instinctools.android.network.HttpClientFactory;
 import instinctools.android.readers.JsonBookReader;
 
 /**
@@ -29,12 +29,11 @@ public class AsyncHttpLoader extends AsyncTaskLoader<List<Book>> {
 
     @Override
     public List<Book> loadInBackground() {
-        HttpCustomClient client = new HttpCustomClient.Builder(mUrl).addHeader("Accept", "application/json").build();
-        client.sendRequest();
-        if (client.getResponseCode() != HttpURLConnection.HTTP_OK)
+        String content = HttpClientFactory.create(mUrl).addHeader("Accept", "application/json").setMethod("GET").send();
+        if (TextUtils.isEmpty(content))
             return new ArrayList<>();
 
-        List<Book> books = new JsonBookReader().read(client.getContent());
+        List<Book> books = new JsonBookReader().read(content);
         return books;
     }
 
