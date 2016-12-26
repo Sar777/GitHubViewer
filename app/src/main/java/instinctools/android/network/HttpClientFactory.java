@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,6 +46,7 @@ public class HttpClientFactory {
 
             this.mMethod = DEFAULT_METHOD;
             this.mResponseCode = -1;
+            this.mHeaders = new HashMap<>();
         }
 
         public HttpClient setMethod(String method) {
