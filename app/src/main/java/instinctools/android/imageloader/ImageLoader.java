@@ -13,9 +13,13 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Executor;
 
 import instinctools.android.cache.BitmapCacheMgr;
 import instinctools.android.constans.Constants;
+import instinctools.android.utility.MD5Hash;
 
 /**
  * Created by orion on 22.12.16.
@@ -25,33 +29,17 @@ public class ImageLoader {
     private static final String TAG = "ImageLoader";
 
     private static BitmapCacheMgr mBitmapCacheMgr;
+    // Current loading images
+    private static final Set<String> IMAGE_LOADING_SET = new HashSet<>();
+    private static final Executor THREAD_POOL_EXECUTOR = ImageThreadExecutor.create();
 
-    private Context mContext;
-    private ImagePlaceholder mImagePlaceholder;
-
-    private ImageLoader() {
-    }
-
-    public ImageLoader(Context context) {
+    private ImageLoader(Context context) {
         if (mBitmapCacheMgr == null)
-            mBitmapCacheMgr = new BitmapCacheMgr.Builder(context).enableSDCardCache(Constants.DISK_MAX_CACHE_SIZE).build();
-
-        mImagePlaceholder = new ImagePlaceholder();
-        mContext = context;
+            mBitmapCacheMgr = new BitmapCacheMgr.Builder(context.getApplicationContext()).enableSDCardCache(Constants.DISK_MAX_CACHE_SIZE).build();
     }
 
     public static ImageLoader with(Context context) {
         return new ImageLoader(context);
-    }
-
-    public ImageLoader error(int drawId) {
-        mImagePlaceholder.setErrorId(drawId);
-        return this;
-    }
-
-    public ImageLoader loading(int drawId) {
-        mImagePlaceholder.setLoadingId(drawId);
-        return this;
     }
 
     public ImageLoad load(String url) {
@@ -61,12 +49,29 @@ public class ImageLoader {
     public class ImageLoad {
         private String mUrl;
         private WeakReference<ImageView> mImageReference;
+        private ImagePlaceholder mImagePlaceholder;
 
         private ImageLoad() {
         }
 
         public ImageLoad(String url) {
             this.mUrl = url;
+        }
+
+        public ImageLoad error(int drawId) {
+            if (mImagePlaceholder == null)
+                mImagePlaceholder = new ImagePlaceholder();
+
+            mImagePlaceholder.setErrorId(drawId);
+            return this;
+        }
+
+        public ImageLoad loading(int drawId) {
+            if (mImagePlaceholder == null)
+                mImagePlaceholder = new ImagePlaceholder();
+
+            mImagePlaceholder.setLoadingId(drawId);
+            return this;
         }
 
         public ImageLoad in(@NonNull ImageView image) {
@@ -78,37 +83,44 @@ public class ImageLoader {
             if (mUrl == null || mImageReference == null)
                 throw new IllegalArgumentException("Null load arguments. Url or ImageView");
 
-            new ImageLoadTask(mUrl, mImageReference).execute();
+            synchronized (IMAGE_LOADING_SET) {
+                String urlHash = MD5Hash.create(mUrl);
+                if (IMAGE_LOADING_SET.contains(urlHash))
+                    return;
+
+                IMAGE_LOADING_SET.add(urlHash);
+            }
+
+            ImageLoadTask task = new ImageLoadTask(this);
+            task.executeOnExecutor(THREAD_POOL_EXECUTOR);
         }
     }
 
-    public class ImageLoadTask extends AsyncTask<Void, Bitmap, Bitmap> {
-        private String mUrl;
-        private WeakReference<ImageView> mImageReference;
+    private static class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
+        private final ImageLoad mImageLoad;
 
-        public ImageLoadTask(@NonNull String url, WeakReference<ImageView> imageLoadWeakReference) {
-            this.mUrl = url;
-            this.mImageReference = imageLoadWeakReference;
+        ImageLoadTask(@NonNull ImageLoad imageLoad) {
+            this.mImageLoad = imageLoad;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            if (mImagePlaceholder.getLoadingId() != 0) {
-                ImageView imageView = mImageReference.get();
+            if (mImageLoad.mImagePlaceholder != null && mImageLoad.mImagePlaceholder.getLoadingId() != 0) {
+                ImageView imageView = mImageLoad.mImageReference.get();
                 if (imageView != null)
-                    imageView.setImageDrawable(ContextCompat.getDrawable(mContext, mImagePlaceholder.getLoadingId()));
+                    imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), mImageLoad.mImagePlaceholder.getLoadingId()));
             }
         }
 
         @Override
         protected Bitmap doInBackground(Void... params) {
-            Bitmap bitmap = mBitmapCacheMgr.getFromCache(mUrl);
+            Bitmap bitmap = mBitmapCacheMgr.getFromCache(mImageLoad.mUrl);
             if (bitmap == null) {
                 URL url;
                 try {
-                    url = new URL(mUrl);
+                    url = new URL(mImageLoad.mUrl);
                 } catch (MalformedURLException e) {
                     Log.e(TAG, "Fail parse url for loading image", e);
                     return null;
@@ -121,7 +133,7 @@ public class ImageLoader {
                     return null;
                 }
 
-                mBitmapCacheMgr.addToCache(mUrl, bitmap);
+                mBitmapCacheMgr.addToCache(mImageLoad.mUrl, bitmap);
             }
 
             return bitmap;
@@ -131,14 +143,17 @@ public class ImageLoader {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
 
-            ImageView imageView = mImageReference.get();
+            synchronized (IMAGE_LOADING_SET) {
+                IMAGE_LOADING_SET.remove(MD5Hash.create(mImageLoad.mUrl));
+            }
+
+            ImageView imageView = mImageLoad.mImageReference.get();
             if (imageView == null)
                 return;
 
             if (result == null) {
-                if (mImagePlaceholder.getErrorId() != 0) {
-                    imageView.setImageDrawable(ContextCompat.getDrawable(mContext, mImagePlaceholder.getErrorId()));
-                }
+                if (mImageLoad.mImagePlaceholder != null && mImageLoad.mImagePlaceholder.getErrorId() != 0)
+                    imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), mImageLoad.mImagePlaceholder.getErrorId()));
 
                 return;
             }

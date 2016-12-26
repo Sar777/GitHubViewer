@@ -7,10 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import instinctools.android.data.Book;
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
-import instinctools.android.utility.DrawableFactory;
+import instinctools.android.data.Book;
+import instinctools.android.imageloader.ImageLoader;
 
 public class DescriptionActivity extends AppCompatActivity {
 
@@ -36,7 +36,12 @@ public class DescriptionActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(book.getTitle());
             mTextViewDescription.setText(book.getDescription());
 
-            mImageViewBook.setImageDrawable(DrawableFactory.createFromAssets(this, book.getImage()));
+            ImageLoader.with(this).
+                    load(book.getImage()).
+                    loading(R.drawable.ic_crop_original_orange_24dp).
+                    error(R.drawable.ic_clear_red_24dp).
+                    in(mImageViewBook).
+                    load();
         }
     }
 
