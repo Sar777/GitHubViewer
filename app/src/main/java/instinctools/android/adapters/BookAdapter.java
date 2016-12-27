@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import instinctools.android.Book;
+import instinctools.android.data.Book;
+import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
-import instinctools.android.utility.DrawableFactory;
 
 /**
  * Created by orion on 16.12.16.
@@ -37,7 +37,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mResources = resources;
     }
 
-    public Book getItem(int position) {
+    private Book getItem(int position) {
         return mResources.get(position - 1);
     }
 
@@ -50,12 +50,12 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mContext.startActivity(intent);
     }
 
-    public class BookItemHolder extends RecyclerView.ViewHolder {
+    private class BookItemHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
         private TextView mTitle;
         private TextView mDescription;
 
-        public BookItemHolder(View view) {
+        BookItemHolder(View view) {
             super(view);
 
             mImageView = (ImageView) view.findViewById(R.id.image_book);
@@ -66,20 +66,26 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private void onBindViewHolder(int position) {
             Book item = getItem(position);
 
-            mImageView.setImageDrawable(DrawableFactory.createFromAssets(mContext, item.getImage()));
+            ImageLoader.with(mContext).
+                    what(item.getImage()).
+                    loading(R.drawable.ic_crop_original_orange_24dp).
+                    error(R.drawable.ic_clear_red_24dp).
+                    in(mImageView).
+                    load();
+
             mTitle.setText(item.getTitle());
             mDescription.setText(item.getDescription());
         }
     }
 
-    public class HeaderItemHolder extends RecyclerView.ViewHolder {
-        public HeaderItemHolder(View view) {
+    private class HeaderItemHolder extends RecyclerView.ViewHolder {
+        HeaderItemHolder(View view) {
             super(view);
         }
     }
 
-    public class EmptyItemHolder extends RecyclerView.ViewHolder {
-        public EmptyItemHolder(View view) {
+    private class EmptyItemHolder extends RecyclerView.ViewHolder {
+        EmptyItemHolder(View view) {
             super(view);
         }
     }
@@ -124,6 +130,10 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public int getItemCount() {
-        return mResources.size() + 1;
+        return mResources != null ? mResources.size() + 1 : 0;
+    }
+
+    public void setResources(List<Book> books) {
+        mResources = books;
     }
 }
