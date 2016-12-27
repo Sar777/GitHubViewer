@@ -91,8 +91,7 @@ public class ImageLoader {
                 IMAGE_LOADING_SET.add(urlHash);
             }
 
-            ImageLoadTask task = new ImageLoadTask(this);
-            task.executeOnExecutor(THREAD_POOL_EXECUTOR);
+            new ImageLoadTask(this).executeOnExecutor(THREAD_POOL_EXECUTOR);
         }
     }
 

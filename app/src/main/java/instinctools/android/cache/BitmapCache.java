@@ -36,7 +36,7 @@ public abstract class BitmapCache<A> {
         mCacheStore.clear();
     }
 
-    abstract void resize();
+    abstract void asyncCleanup();
     abstract boolean addToCache(String key, Bitmap bitmap);
     abstract Bitmap getFromCache(String key);
 }

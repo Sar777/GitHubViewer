@@ -16,13 +16,13 @@ public class BitmapCacheMgr {
     private static final String TAG = "BitmapCacheMgr";
 
     private Context mContext;
-    private BitmapCache<File> mSDCache;
+    private BitmapCache<File> mSDCardCache;
     private BitmapCache<Bitmap> mMemoryCache;
 
-    public BitmapCacheMgr(Builder builder) {
+    private BitmapCacheMgr(Builder builder) {
         this.mContext = builder.mContext;
         this.mMemoryCache = builder.mMemoryCache;
-        this.mSDCache = builder.mSDCache;
+        this.mSDCardCache = builder.mSDCache;
     }
 
     public void addToCache(@NonNull String key, @NonNull Bitmap bitmap) {
@@ -32,8 +32,8 @@ public class BitmapCacheMgr {
 
         mMemoryCache.addToCache(keyHash, bitmap);
 
-        if (mSDCache != null)
-            mSDCache.addToCache(MD5Hash.create(key), bitmap);
+        if (mSDCardCache != null)
+            mSDCardCache.addToCache(MD5Hash.create(key), bitmap);
     }
 
     public Bitmap getFromCache(@NonNull String key) {
@@ -43,7 +43,7 @@ public class BitmapCacheMgr {
         if (cacheBitmap != null)
             return cacheBitmap;
 
-        return mSDCache != null ? mSDCache.getFromCache(keyHash) : null;
+        return mSDCardCache != null ? mSDCardCache.getFromCache(keyHash) : null;
     }
 
     public static class Builder {

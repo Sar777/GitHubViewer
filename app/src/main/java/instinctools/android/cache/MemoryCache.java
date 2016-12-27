@@ -24,7 +24,7 @@ public class MemoryCache extends BitmapCache<Bitmap> {
                 return false;
 
             if (mCacheSize > mMaxCacheSize)
-                resize();
+                asyncCleanup();
 
             Log.d(TAG, "Add bitmap to memory cache by: " + key);
             mCacheStore.put(key, data);
@@ -45,7 +45,7 @@ public class MemoryCache extends BitmapCache<Bitmap> {
     }
 
     @Override
-    public void resize() {
+    public void asyncCleanup() {
         synchronized (mCacheLock) {
             Log.d(TAG, "Resize bitmap cache storage. Current: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
             Iterator<Bitmap> itr = mCacheStore.values().iterator();

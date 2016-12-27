@@ -16,6 +16,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import instinctools.android.utility.Common;
 
@@ -28,7 +31,8 @@ public class SDCardCache extends BitmapCache<File> {
 
     private static final String CACHE_FILE_TYPE = ".bitmap";
 
-    private boolean mDiskCacheStarting = true;
+    private boolean mDiskCacheBusy;
+
     private Context mContext;
     private final File mCacheFolder;
 
@@ -51,8 +55,15 @@ public class SDCardCache extends BitmapCache<File> {
             }
         };
 
-        loadingCache();
-        resize();
+        this.mDiskCacheBusy = true;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadingCache();
+                cleanup();
+            }
+        }).start();
     }
 
     private void loadingCache() {
@@ -68,7 +79,7 @@ public class SDCardCache extends BitmapCache<File> {
                 mCacheStore.put(file.getName().substring(0, file.getName().indexOf(CACHE_FILE_TYPE)), file);
             }
 
-            mDiskCacheStarting = false;
+            mDiskCacheBusy = false;
             mCacheLock.notifyAll();
         }
 
@@ -78,7 +89,7 @@ public class SDCardCache extends BitmapCache<File> {
     @Override
     public boolean addToCache(@NonNull String key, @NonNull Bitmap data) {
         synchronized (mCacheLock) {
-            while (mDiskCacheStarting) {
+            while (mDiskCacheBusy) {
                 try {
                     mCacheLock.wait();
                 } catch (InterruptedException e) {
@@ -90,13 +101,11 @@ public class SDCardCache extends BitmapCache<File> {
                 return false;
 
             if (mCacheSize > mMaxCacheSize)
-                resize();
+                asyncCleanup();
 
-            if (!writeToDisk(key, data))
-                return false;
-
-            Log.d(TAG, "Added bitmap to SD card cache: Key: " + key + " Bitmap size: " + data.getByteCount());
             mCacheStore.put(key, new File(mCacheFolder.getAbsolutePath() + File.separator + key + CACHE_FILE_TYPE));
+            asyncWriteToDisk(key, data);
+            Log.d(TAG, "Added bitmap to SD card cache: Key: " + key + " Bitmap size: " + data.getByteCount());
         }
 
         return true;
@@ -105,7 +114,7 @@ public class SDCardCache extends BitmapCache<File> {
     @Override
     public Bitmap getFromCache(@NonNull String key) {
         synchronized (mCacheLock) {
-            while (mDiskCacheStarting) {
+            while (mDiskCacheBusy) {
                 try {
                     mCacheLock.wait();
                 } catch (InterruptedException e) {
@@ -113,15 +122,32 @@ public class SDCardCache extends BitmapCache<File> {
                 }
             }
 
-            File file = mCacheStore.get(key);
+            final File file = mCacheStore.get(key);
 
             if (file == null) {
                 Log.d(TAG, "Bitmap not found in SD card cache by key: " + key);
                 return null;
             }
 
-            Log.d(TAG, "Get bitmap from SD card cache by: " + key);
-            return BitmapFactory.decodeFile(file.getAbsolutePath());
+            FutureTask<Bitmap> task = new FutureTask<>(new BitmapDecodeTask(file.getAbsolutePath()));
+            new Thread(task).start();
+
+            while (!task.isDone()) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                Log.d(TAG, "Get bitmap from SD card cache by: " + key);
+                return task.get();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, "Task interrupted or execution exception in getFromCache: " + key, e);
+            }
+
+            return null;
         }
     }
 
@@ -138,14 +164,22 @@ public class SDCardCache extends BitmapCache<File> {
         }
     }
 
-    @Override
-    public void resize() {
+    private void cleanup() {
         if (mCacheStore.isEmpty())
             return;
 
-        Log.d(TAG, "Resize bitmap cache storage. Current: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
-
         synchronized (mCacheLock) {
+            while (mDiskCacheBusy) {
+                try {
+                    mCacheLock.wait();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Cache interrupt exception in getFromCache", e);
+                }
+            }
+
+            mDiskCacheBusy = true;
+            Log.d(TAG, "Resize bitmap cache storage. Current: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
+
             List<File> files = new ArrayList<>(mCacheStore.values());
             Collections.sort(files, new Comparator<File>() {
                 @Override
@@ -161,34 +195,59 @@ public class SDCardCache extends BitmapCache<File> {
                 file.delete();
                 itr.remove();
             }
+
+            mDiskCacheBusy = false;
+            mCacheLock.notifyAll();
+
+            loadingCache();
+            Log.d(TAG, "Resize bitmap cache storage. Now: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
         }
-
-        Log.d(TAG, "Resize bitmap cache storage. Now: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
-
-        loadingCache();
     }
 
-    private boolean writeToDisk(String key, Bitmap data) {
-        if (mCacheSize > mMaxCacheSize)
-            return false;
-
-        FileOutputStream out = null;
-        try {
-            File file = new File(mCacheFolder, key + CACHE_FILE_TYPE);
-            out = new FileOutputStream(file);
-            data.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } catch (Exception e) {
-            Log.e(TAG, "Fail compress bitmap in writeToDisk", e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Fail close output stream in writeToDisk", e);
+    @Override
+    public void asyncCleanup() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                cleanup();
             }
+        }).start();
+    }
+
+    private void asyncWriteToDisk(final String key, final Bitmap data) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FileOutputStream out = null;
+                try {
+                    File file = new File(mCacheFolder, key + CACHE_FILE_TYPE);
+                    out = new FileOutputStream(file);
+                    data.compress(Bitmap.CompressFormat.PNG, 100, out);
+                } catch (Exception e) {
+                    Log.e(TAG, "Fail compress bitmap in writeToDisk", e);
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Fail close output stream in writeToDisk", e);
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private class BitmapDecodeTask implements Callable<Bitmap> {
+        private String mPath;
+
+        public BitmapDecodeTask(String path) {
+            this.mPath = path;
         }
 
-        return true;
+        @Override
+        public Bitmap call() throws Exception {
+            return BitmapFactory.decodeFile(mPath);
+        }
     }
 }
