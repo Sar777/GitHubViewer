@@ -29,33 +29,32 @@ public class ImageLoader {
     private static final String TAG = "ImageLoader";
 
     private static BitmapCacheMgr mBitmapCacheMgr;
+
     // Current loading images
     private static final Set<String> IMAGE_LOADING_SET = new HashSet<>();
     private static final Executor THREAD_POOL_EXECUTOR = ImageThreadExecutor.create();
 
-    private ImageLoader(Context context) {
+    private ImageLoader() {
+    }
+
+    public static ImageLoad with(Context context) {
         if (mBitmapCacheMgr == null)
-            mBitmapCacheMgr = new BitmapCacheMgr.Builder(context.getApplicationContext()).enableSDCardCache(Constants.DISK_MAX_CACHE_SIZE).build();
+            mBitmapCacheMgr = new BitmapCacheMgr.Builder().enableSDCardCache(Constants.DISK_MAX_CACHE_SIZE, context.getApplicationContext()).build();
+
+        return new ImageLoad();
     }
 
-    public static ImageLoader with(Context context) {
-        return new ImageLoader(context);
-    }
-
-    public ImageLoad load(String url) {
-        return new ImageLoad(url);
-    }
-
-    public class ImageLoad {
+    public static class ImageLoad {
         private String mUrl;
         private WeakReference<ImageView> mImageReference;
         private ImagePlaceholder mImagePlaceholder;
 
-        private ImageLoad() {
+        ImageLoad() {
         }
 
-        public ImageLoad(String url) {
+        public ImageLoad what(String url) {
             this.mUrl = url;
+            return this;
         }
 
         public ImageLoad error(int drawId) {
@@ -81,7 +80,7 @@ public class ImageLoader {
 
         public void load() {
             if (mUrl == null || mImageReference == null)
-                throw new IllegalArgumentException("Null load arguments. Url or ImageView");
+                throw new IllegalArgumentException("Null what arguments. Url or ImageView");
 
             synchronized (IMAGE_LOADING_SET) {
                 String urlHash = MD5Hash.create(mUrl);

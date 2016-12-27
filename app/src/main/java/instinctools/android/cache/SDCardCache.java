@@ -3,6 +3,7 @@ package instinctools.android.cache;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,7 +21,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-import instinctools.android.utility.Common;
+import instinctools.android.utility.Permission;
+
+import static android.os.Environment.isExternalStorageRemovable;
 
 /**
  * Created by orion on 23.12.16.
@@ -33,8 +36,7 @@ public class SDCardCache extends BitmapCache<File> {
 
     private boolean mDiskCacheBusy;
 
-    private Context mContext;
-    private final File mCacheFolder;
+    private final Context mContext;
 
     private FilenameFilter mCacheFilter;
 
@@ -42,7 +44,6 @@ public class SDCardCache extends BitmapCache<File> {
         super(maxSize);
 
         this.mContext = context;
-        this.mCacheFolder = Common.getDiskCacheDir(context);
 
         mCacheFilter = new FilenameFilter() {
             @Override
@@ -73,10 +74,13 @@ public class SDCardCache extends BitmapCache<File> {
             mCacheSize = 0;
             mCacheStore.clear();
 
-            // Cache pair: name - path
-            for (File file : mCacheFolder.listFiles(mCacheFilter)) {
-                mCacheSize += file.length();
-                mCacheStore.put(file.getName().substring(0, file.getName().indexOf(CACHE_FILE_TYPE)), file);
+            File cacheFolder = getDiskCacheDir();
+            if (cacheFolder != null) {
+                // Cache pair: name - path
+                for (File file : cacheFolder.listFiles(mCacheFilter)) {
+                    mCacheSize += file.length();
+                    mCacheStore.put(file.getName().substring(0, file.getName().indexOf(CACHE_FILE_TYPE)), file);
+                }
             }
 
             mDiskCacheBusy = false;
@@ -97,13 +101,17 @@ public class SDCardCache extends BitmapCache<File> {
                 }
             }
 
+            File cacheFolder = getDiskCacheDir();
+            if (cacheFolder == null)
+                return false;
+
             if (mCacheStore.containsKey(key))
                 return false;
 
             if (mCacheSize > mMaxCacheSize)
                 asyncCleanup();
 
-            mCacheStore.put(key, new File(mCacheFolder.getAbsolutePath() + File.separator + key + CACHE_FILE_TYPE));
+            mCacheStore.put(key, new File(cacheFolder.getAbsolutePath() + File.separator + key + CACHE_FILE_TYPE));
             asyncWriteToDisk(key, data);
             Log.d(TAG, "Added bitmap to SD card cache: Key: " + key + " Bitmap size: " + data.getByteCount());
         }
@@ -136,7 +144,7 @@ public class SDCardCache extends BitmapCache<File> {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.d(TAG, "Task interrupted exception in getFromCache: " + key, e);
                 }
             }
 
@@ -178,6 +186,7 @@ public class SDCardCache extends BitmapCache<File> {
             }
 
             mDiskCacheBusy = true;
+
             Log.d(TAG, "Resize bitmap cache storage. Current: Count: " + mCacheStore.size() + ", Size: " + mCacheSize + ", Max: " + mMaxCacheSize);
 
             List<File> files = new ArrayList<>(mCacheStore.values());
@@ -218,9 +227,13 @@ public class SDCardCache extends BitmapCache<File> {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                File cacheFolder = getDiskCacheDir();
+                if (cacheFolder == null)
+                    return;
+
                 FileOutputStream out = null;
                 try {
-                    File file = new File(mCacheFolder, key + CACHE_FILE_TYPE);
+                    File file = new File(cacheFolder, key + CACHE_FILE_TYPE);
                     out = new FileOutputStream(file);
                     data.compress(Bitmap.CompressFormat.PNG, 100, out);
                 } catch (Exception e) {
@@ -236,6 +249,19 @@ public class SDCardCache extends BitmapCache<File> {
                 }
             }
         }).start();
+    }
+
+    private File getDiskCacheDir() {
+        if (Permission.hasReadWriteExternal(mContext)) {
+            final String cachePath =
+                    Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ||
+                            !isExternalStorageRemovable() ? mContext.getExternalCacheDir().getPath() :
+                            mContext.getCacheDir().getPath();
+
+            return new File(cachePath);
+        }
+
+        return null;
     }
 
     private class BitmapDecodeTask implements Callable<Bitmap> {

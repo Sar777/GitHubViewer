@@ -15,12 +15,10 @@ import instinctools.android.utility.MD5Hash;
 public class BitmapCacheMgr {
     private static final String TAG = "BitmapCacheMgr";
 
-    private Context mContext;
     private BitmapCache<File> mSDCardCache;
     private BitmapCache<Bitmap> mMemoryCache;
 
     private BitmapCacheMgr(Builder builder) {
-        this.mContext = builder.mContext;
         this.mMemoryCache = builder.mMemoryCache;
         this.mSDCardCache = builder.mSDCache;
     }
@@ -47,13 +45,10 @@ public class BitmapCacheMgr {
     }
 
     public static class Builder {
-        private Context mContext;
         private BitmapCache<File> mSDCache;
         private BitmapCache<Bitmap> mMemoryCache;
 
-        public Builder(Context context) {
-            this.mContext = context;
-
+        public Builder() {
             // Default 1/8 heap
             this.mMemoryCache = new MemoryCache((int)(Runtime.getRuntime().maxMemory() / 1024) / 8);
         }
@@ -63,8 +58,8 @@ public class BitmapCacheMgr {
             return this;
         }
 
-        public Builder enableSDCardCache(long maxSize) {
-            mSDCache = new SDCardCache(maxSize, mContext);
+        public Builder enableSDCardCache(long maxSize, Context context) {
+            mSDCache = new SDCardCache(maxSize, context);
             return this;
         }
 
