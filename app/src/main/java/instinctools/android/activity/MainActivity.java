@@ -12,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Snackbar.make(findViewById(R.id.activity_main), R.string.msg_permission_external_storage_granted, Snackbar.LENGTH_SHORT).show();
             }
         }
-
-        for (int grant : grantResults)
-            Log.e("ORION", "RESULT " + grant);
-
-        for (String perm : permissions)
-            Log.e("ORION", "PERM " + perm);
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

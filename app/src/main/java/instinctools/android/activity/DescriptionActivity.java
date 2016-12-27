@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
 import instinctools.android.data.Book;
 import instinctools.android.imageloader.ImageLoader;
+import instinctools.android.misc.LinkTransformationMethod;
 
 public class DescriptionActivity extends AppCompatActivity {
 
@@ -48,7 +50,10 @@ public class DescriptionActivity extends AppCompatActivity {
     private void initView() {
         mImageViewBook = (ImageView) findViewById(R.id.image_book);
         mTextViewTitle = (TextView) findViewById(R.id.text_title);
+
         mTextViewDescription = (TextView) findViewById(R.id.text_description);
+        mTextViewDescription.setTransformationMethod(new LinkTransformationMethod());
+        mTextViewDescription.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
