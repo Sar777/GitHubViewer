@@ -41,7 +41,10 @@ public class BitmapCacheMgr {
         if (cacheBitmap != null)
             return cacheBitmap;
 
-        return mSDCardCache != null ? mSDCardCache.getFromCache(keyHash) : null;
+        if (mSDCardCache != null)
+            return mSDCardCache.getFromCache(keyHash);
+
+        return null;
     }
 
     public static class Builder {

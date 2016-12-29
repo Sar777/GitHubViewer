@@ -38,8 +38,7 @@ public class DescriptionActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(book.getTitle());
             mTextViewDescription.setText(book.getDescription());
 
-            ImageLoader.with(this).
-                    what(book.getImage()).
+            ImageLoader.what(book.getImage()).
                     loading(R.drawable.ic_crop_original_orange_24dp).
                     error(R.drawable.ic_clear_red_24dp).
                     in(mImageViewBook).

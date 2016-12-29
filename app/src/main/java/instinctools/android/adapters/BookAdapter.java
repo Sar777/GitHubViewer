@@ -66,8 +66,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private void onBindViewHolder(int position) {
             Book item = getItem(position);
 
-            ImageLoader.with(mContext).
-                    what(item.getImage()).
+            ImageLoader.what(item.getImage()).
                     loading(R.drawable.ic_crop_original_orange_24dp).
                     error(R.drawable.ic_clear_red_24dp).
                     in(mImageView).
