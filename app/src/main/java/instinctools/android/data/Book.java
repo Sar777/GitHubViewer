@@ -1,5 +1,6 @@
 package instinctools.android.data;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -88,4 +89,10 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
+
+    public static Book fromCursor(Cursor cursor) {
+        return new Book(cursor.getString(cursor.getColumnIndex("title")),
+                        cursor.getString(cursor.getColumnIndex("description")),
+                        cursor.getString(cursor.getColumnIndex("image_url")));
+    }
 }

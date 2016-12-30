@@ -31,7 +31,6 @@ public class HttpUpdateDataService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e("ORION", "HANDLE");
         String content = HttpClientFactory.create(Constants.API_URL).addHeader("Accept", "application/json").setMethod("GET").send();
         if (TextUtils.isEmpty(content))
             return;
@@ -39,7 +38,7 @@ public class HttpUpdateDataService extends IntentService {
         List<Book> books = new JsonBookReader().read(content);
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<>(books.size());
-        operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());
+        //operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());
 
         for (Book book : books) {
             operations.add(ContentProviderOperation.newInsert(BooksProvider.BOOK_CONTENT_URI)

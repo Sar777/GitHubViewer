@@ -179,6 +179,8 @@ public class ImageLoader {
                 return;
             }
 
+            mBitmapCacheMgr.addToCache(mImageTarget.mUrl, bitmap);
+
             ImageView imageView = mImageTarget.mImageReference.get();
             if (imageView != null)
                 imageView.setImageBitmap(bitmap);

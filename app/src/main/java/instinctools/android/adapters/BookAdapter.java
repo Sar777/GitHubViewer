@@ -2,6 +2,7 @@ package instinctools.android.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,20 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
-import instinctools.android.data.Book;
-import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
+import instinctools.android.data.Book;
+import instinctools.android.imageloader.ImageLoader;
 
 /**
  * Created by orion on 16.12.16.
  */
 
-public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public class BookAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private Context mContext;
-    private List<Book> mResources;
     private RecyclerView mRecyclerView;
 
     public static final String EXTRA_BOOK_TAG = "BOOK";
@@ -31,20 +29,16 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private static final int VIEW_TYPE_HEADER = 2;
     private static final int VIEW_TYPE_EMPTY = 3;
 
-    public BookAdapter(Context context, RecyclerView recyclerView, List<Book> resources) {
+    public BookAdapter(Context context, RecyclerView recyclerView, Cursor cursor) {
+        super(context, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
-        mResources = resources;
-    }
-
-    private Book getItem(int position) {
-        return mResources.get(position - 1);
     }
 
     @Override
     public void onClick(View view) {
         int position = mRecyclerView.getChildAdapterPosition(view);
-        Book book = getItem(position);
+        Book book = null;//getItem(position);
         Intent intent = new Intent(mContext, DescriptionActivity.class);
         intent.putExtra(EXTRA_BOOK_TAG, book);
         mContext.startActivity(intent);
@@ -63,8 +57,8 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDescription = (TextView) view.findViewById(R.id.text_description);
         }
 
-        private void onBindViewHolder(int position) {
-            Book item = getItem(position);
+        private void onBindViewHolder(Cursor cursor) {
+            Book item = Book.fromCursor(cursor);
 
             ImageLoader.what(item.getImage()).
                     loading(R.drawable.ic_crop_original_orange_24dp).
@@ -112,27 +106,20 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == VIEW_TYPE_ITEM) {
-            if (holder instanceof BookItemHolder)
-                ((BookItemHolder) holder).onBindViewHolder(position);
-        }
-    }
-
-    @Override
     public int getItemViewType(int position) {
-        if (position == 0)
-            return !mResources.isEmpty() ? VIEW_TYPE_HEADER : VIEW_TYPE_EMPTY;
+        if (mDataValid && mCursor != null) {
+            if (position == 0)
+                return mCursor.getCount() != 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_EMPTY;
+        }
 
         return VIEW_TYPE_ITEM;
     }
 
     @Override
-    public int getItemCount() {
-        return mResources != null ? mResources.size() + 1 : 0;
-    }
-
-    public void setResources(List<Book> books) {
-        mResources = books;
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, Cursor cursor) {
+        if (holder.getItemViewType() == VIEW_TYPE_ITEM) {
+            if (holder instanceof BookItemHolder)
+                ((BookItemHolder) holder).onBindViewHolder(cursor);
+        }
     }
 }

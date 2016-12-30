@@ -22,14 +22,15 @@ public class MemoryCache extends BitmapCache<Bitmap> {
         synchronized (mCacheLock) {
             if (mCacheStore.get(key) != null)
                 return false;
-
+            
             if (mCacheSize > mMaxCacheSize)
                 cleanup();
 
             Log.d(TAG, "Add bitmap to memory cache by: " + key);
             mCacheStore.put(key, data);
-            return true;
         }
+
+        return true;
     }
 
     @Override
