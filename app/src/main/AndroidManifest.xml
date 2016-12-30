@@ -3,6 +3,7 @@
     package="instinctools.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -25,6 +26,27 @@
             android:name=".activity.DescriptionActivity"
             android:label="@string/title_activity_description"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".broadcasts.OnBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".broadcasts.OnAlarmReceiver"
+            android:process=":remote" />
+
+        <service
+            android:name=".services.HttpUpdateDataService"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <provider
+            android:name=".database.providers.BooksProvider"
+            android:authorities="instinctools.android.providers.Books" />
     </application>
 
 </manifest>

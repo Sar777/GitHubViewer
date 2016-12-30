@@ -85,12 +85,12 @@ public class ImageLoader {
             return mImagesInProcess.contains(urlHash);
         }
 
-        public void load(@NonNull ImageLoadingStateListener callback) {
+        public void load(@NonNull ImageLoadingStateListener listener) {
             if (isContainTask())
                 return;
 
             mImagesInProcess.add(MD5Hash.create(mUrl));
-            new ImageBitmapWorker(this, callback).executeOnExecutor(ImageBitmapExecutor);
+            new ImageBitmapWorker(this, listener).executeOnExecutor(ImageBitmapExecutor);
         }
 
         public void load() {
@@ -111,9 +111,9 @@ public class ImageLoader {
             this.mListener = null;
         }
 
-        public ImageBitmapWorker(ImageTarget image, ImageLoadingStateListener callback) {
+        public ImageBitmapWorker(ImageTarget image, ImageLoadingStateListener listener) {
             this.mImageTarget = image;
-            this.mListener = callback;
+            this.mListener = listener;
         }
 
         private Bitmap loadingFromNetwork() {

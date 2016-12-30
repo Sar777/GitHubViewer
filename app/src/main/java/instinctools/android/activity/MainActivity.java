@@ -1,6 +1,10 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +22,7 @@ import java.util.List;
 
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
+import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.data.Book;
 import instinctools.android.decorations.DividerItemDecoration;
@@ -52,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 
         requestExternalStoragePermissions();
+
+        Intent alarmIntent = new Intent(this, OnAlarmReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, OnAlarmReceiver.REQUEST_ALARM_CODE, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, 5000, pIntent);
     }
 
     private void initView() {

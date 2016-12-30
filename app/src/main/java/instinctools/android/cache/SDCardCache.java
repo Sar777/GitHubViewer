@@ -123,7 +123,6 @@ public class SDCardCache extends BitmapCache<File> {
             }
 
             final File file = mCacheStore.get(key);
-
             if (file == null) {
                 Log.d(TAG, "Bitmap not found in SD card cache by key: " + key);
                 return null;
