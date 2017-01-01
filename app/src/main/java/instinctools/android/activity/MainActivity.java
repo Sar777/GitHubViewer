@@ -33,11 +33,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
 
-    private static final String BUNDLE_BOOKS = "BOOKS";
-
     private static final int LOADER_BOOKS_ID = 1;
-
-    public static final String BUNDLE_LOADER_URL = "LOADER_URL";
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;

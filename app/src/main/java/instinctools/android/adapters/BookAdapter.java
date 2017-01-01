@@ -23,7 +23,7 @@ public class BookAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHold
     private Context mContext;
     private RecyclerView mRecyclerView;
 
-    public static final String EXTRA_BOOK_TAG = "BOOK";
+    public static final String EXTRA_BOOK_ID_TAG = "BOOK";
 
     private static final int VIEW_TYPE_ITEM = 1;
     private static final int VIEW_TYPE_HEADER = 2;
@@ -38,9 +38,8 @@ public class BookAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHold
     @Override
     public void onClick(View view) {
         int position = mRecyclerView.getChildAdapterPosition(view);
-        Book book = null;//getItem(position);
         Intent intent = new Intent(mContext, DescriptionActivity.class);
-        intent.putExtra(EXTRA_BOOK_TAG, book);
+        intent.putExtra(EXTRA_BOOK_ID_TAG, getItemId(position));
         mContext.startActivity(intent);
     }
 

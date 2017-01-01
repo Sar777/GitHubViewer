@@ -1,7 +1,11 @@
 package instinctools.android.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
@@ -11,14 +15,20 @@ import android.widget.TextView;
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
 import instinctools.android.data.Book;
+import instinctools.android.database.DBConstants;
+import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.misc.LinkTransformationMethod;
 
-public class DescriptionActivity extends AppCompatActivity {
+public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ImageView mImageViewBook;
     private TextView mTextViewTitle;
     private TextView mTextViewDescription;
+
+    private static final String BUNDLE_BOOK_ID = "ID";
+
+    private static final int LOADER_BOOK_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +42,11 @@ public class DescriptionActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            Book book = intent.getParcelableExtra(BookAdapter.EXTRA_BOOK_TAG);
+            long id = intent.getLongExtra(BookAdapter.EXTRA_BOOK_ID_TAG, -1);
 
-            mTextViewTitle.setText(book.getTitle());
-            getSupportActionBar().setTitle(book.getTitle());
-            mTextViewDescription.setText(book.getDescription());
-
-            ImageLoader.what(book.getImage()).
-                    loading(R.drawable.ic_crop_original_orange_24dp).
-                    error(R.drawable.ic_clear_red_24dp).
-                    in(mImageViewBook).
-                    load();
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_BOOK_ID, id);
+            getSupportLoaderManager().initLoader(LOADER_BOOK_ID, bundle, this);
         }
     }
 
@@ -59,5 +63,38 @@ public class DescriptionActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (id != LOADER_BOOK_ID)
+            return null;
+
+        return new CursorLoader(this, BooksProvider.BOOK_CONTENT_URI, null, DBConstants.BOOK_ID + " = ?", new String[] { String.valueOf(args.getLong(BUNDLE_BOOK_ID)) }, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || !cursor.moveToFirst())
+            return;
+
+        Book book = Book.fromCursor(cursor);
+
+        mTextViewTitle.setText(book.getTitle());
+        getSupportActionBar().setTitle(book.getTitle());
+        mTextViewDescription.setText(book.getDescription());
+
+        ImageLoader.what(book.getImage()).
+                loading(R.drawable.ic_crop_original_orange_24dp).
+                error(R.drawable.ic_clear_red_24dp).
+                in(mImageViewBook).
+                load();
+
+        cursor.close();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
