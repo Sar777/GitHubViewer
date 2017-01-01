@@ -42,6 +42,7 @@ public class HttpUpdateDataService extends IntentService {
 
         for (Book book : books) {
             operations.add(ContentProviderOperation.newInsert(BooksProvider.BOOK_CONTENT_URI)
+                    .withValue(DBConstants.BOOK_ID, book.getId())
                     .withValue(DBConstants.BOOK_TITLE, book.getTitle())
                     .withValue(DBConstants.BOOK_DESCRIPTION, book.getDescription())
                     .withValue(DBConstants.BOOK_IMAGE_URL, book.getImage())
@@ -49,7 +50,7 @@ public class HttpUpdateDataService extends IntentService {
         }
 
         try {
-            this.getContentResolver().applyBatch(BooksProvider.AUTHORITY, operations);
+            getContentResolver().applyBatch(BooksProvider.AUTHORITY, operations);
         } catch (RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Content provider exception in onHandleIntent", e);
         }

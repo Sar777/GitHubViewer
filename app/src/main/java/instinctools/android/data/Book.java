@@ -10,6 +10,7 @@ import android.text.TextUtils;
  */
 
 public class Book implements Parcelable {
+    private int mId;
     private String mTitle;
     private String mDescription;
     private String mImage;
@@ -17,13 +18,15 @@ public class Book implements Parcelable {
     public Book() {
     }
 
-    public Book(String title, String description, String image) {
+    public Book(int id, String title, String description, String image) {
+        this.mId = id;
         this.mTitle = title;
         this.mDescription = description;
         this.mImage = image;
     }
 
     protected Book(Parcel in) {
+        this.mId = in.readInt();
         mTitle = in.readString();
         mDescription = in.readString();
         mImage = in.readString();
@@ -31,6 +34,7 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
         dest.writeString(mTitle);
         dest.writeString(mDescription);
         dest.writeString(mImage);
@@ -39,6 +43,14 @@ public class Book implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        this.mId = id;
     }
 
     public String getTitle() {
@@ -65,15 +77,6 @@ public class Book implements Parcelable {
         this.mImage = image;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "mTitle='" + mTitle + '\'' +
-                ", mDescription='" + mDescription + '\'' +
-                ", mImage='" + mImage + '\'' +
-                '}';
-    }
-
     public boolean isValid() {
         return !TextUtils.isEmpty(mTitle) && !TextUtils.isEmpty(mDescription) && !TextUtils.isEmpty(mImage);
     }
@@ -91,7 +94,8 @@ public class Book implements Parcelable {
     };
 
     public static Book fromCursor(Cursor cursor) {
-        return new Book(cursor.getString(cursor.getColumnIndex("title")),
+        return new Book(cursor.getInt(cursor.getColumnIndex("_id")),
+                        cursor.getString(cursor.getColumnIndex("title")),
                         cursor.getString(cursor.getColumnIndex("description")),
                         cursor.getString(cursor.getColumnIndex("image_url")));
     }

@@ -15,7 +15,7 @@ public class DBConstants {
     public static final String BOOK_IMAGE_URL = "image_url";
 
     public static final String TABLE_BOOKS_CREATE = "CREATE TABLE " + TABLE_BOOKS + "("
-            + BOOK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + BOOK_ID + " INTEGER PRIMARY KEY, "
             + BOOK_TITLE + " VARCHAR(255), "
             + BOOK_DESCRIPTION + " VARCHAR(255), "
             + BOOK_IMAGE_URL + " VARCHAR(255)" + " );";

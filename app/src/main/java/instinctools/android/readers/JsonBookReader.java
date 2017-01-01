@@ -19,6 +19,7 @@ public class JsonBookReader implements IReader<String, List<Book>> {
     private static final String TAG = "JsonBookReader";
 
     private static final String J_CONTAINER = "data";
+    private static final String J_FIELD_ID = "id";
     private static final String J_FIELD_TITLE = "title";
     private static final String J_FIELD_DESCRIPTION = "description";
     private static final String J_FIELD_IMAGE = "image_url";
@@ -50,6 +51,7 @@ public class JsonBookReader implements IReader<String, List<Book>> {
         for (int i = 0; i < dataArray.length(); ++i) {
             Book book = new Book();
             try {
+                book.setId(dataArray.getJSONObject(i).getInt(J_FIELD_ID));
                 book.setTitle(dataArray.getJSONObject(i).getString(J_FIELD_TITLE));
                 book.setDescription(dataArray.getJSONObject(i).getString(J_FIELD_DESCRIPTION));
                 book.setImage(dataArray.getJSONObject(i).getString(J_FIELD_IMAGE));
