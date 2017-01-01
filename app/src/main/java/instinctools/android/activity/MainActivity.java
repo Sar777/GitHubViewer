@@ -17,6 +17,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +28,7 @@ import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
 
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String BUNDLE_LOADER_URL = "LOADER_URL";
 
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private BookAdapter mBookAdapter;
     private BooksChangedObserver mBooksChangedObserver;
 
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void initView() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_main_recycler);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_book_list);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_item_child_layout_margin), ContextCompat.getDrawable(this, R.drawable.line_divider)));
 
@@ -96,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mBookAdapter.changeCursor(cursor);
+
+        // Hidden refresh bar
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -116,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onDestroy() {
         mBooksChangedObserver.unobserve();
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+        getSupportLoaderManager().restartLoader(LOADER_BOOKS_ID, null, this);
     }
 
     private class BooksChangedObserver extends ContentObserver {
