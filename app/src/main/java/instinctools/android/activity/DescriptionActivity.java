@@ -9,7 +9,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import instinctools.android.R;
@@ -25,6 +27,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private ImageView mImageViewBook;
     private TextView mTextViewTitle;
     private TextView mTextViewDescription;
+    private ProgressBar mProgressBar;
 
     private static final String BUNDLE_BOOK_ID = "ID";
 
@@ -53,6 +56,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private void initView() {
         mImageViewBook = (ImageView) findViewById(R.id.image_book);
         mTextViewTitle = (TextView) findViewById(R.id.text_title);
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_description_content);
 
         mTextViewDescription = (TextView) findViewById(R.id.text_description);
         mTextViewDescription.setTransformationMethod(new LinkTransformationMethod());
@@ -75,6 +79,8 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mProgressBar.setVisibility(View.GONE);
+
         if (cursor == null || !cursor.moveToFirst())
             return;
 
@@ -90,7 +96,8 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
                 in(mImageViewBook).
                 load();
 
-        cursor.close();
+        if (!cursor.isClosed())
+            cursor.close();
     }
 
     @Override

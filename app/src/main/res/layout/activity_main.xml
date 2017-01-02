@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context="instinctools.android.activity.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/pb_main_books_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh_main_recycler"
         android:layout_width="match_parent"

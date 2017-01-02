@@ -1,10 +1,6 @@
 package instinctools.android.activity;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -21,10 +17,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
-import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 
@@ -36,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final int LOADER_BOOKS_ID = 1;
 
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BookAdapter mBookAdapter;
     private BooksChangedObserver mBooksChangedObserver;
@@ -50,19 +48,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         requestExternalStoragePermissions();
 
         getSupportLoaderManager().initLoader(LOADER_BOOKS_ID, null, this);
-
-        // TODO REMOVE ME
-        Intent alarmIntent = new Intent(this, OnAlarmReceiver.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, OnAlarmReceiver.REQUEST_ALARM_CODE, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, 10000, pIntent);
     }
 
     private void initView() {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_main_recycler);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_books_list);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_book_list);
+        mRecyclerView.setVisibility(View.INVISIBLE);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDimensionPixelSize(R.dimen.recycler_item_child_layout_margin), ContextCompat.getDrawable(this, R.drawable.line_divider)));
 
         mBookAdapter = new BookAdapter(this, mRecyclerView, null);
@@ -96,6 +91,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor.getCount() != 0) {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+        }
+
         mBookAdapter.changeCursor(cursor);
 
         // Hidden refresh bar

@@ -47,7 +47,7 @@ public class ImageLoader {
 
     public static class ImageTarget {
         private String mUrl;
-        private WeakReference<ImageView> mImageReference;
+        private WeakReference<ImageView> mImageViewReference;
         private ImagePlaceholder mImagePlaceholder;
 
         public ImageTarget(String url) {
@@ -76,7 +76,7 @@ public class ImageLoader {
         }
 
         public ImageTarget in(@NonNull ImageView image) {
-            this.mImageReference = new WeakReference<>(image);
+            this.mImageViewReference = new WeakReference<>(image);
             return this;
         }
 
@@ -143,7 +143,7 @@ public class ImageLoader {
                 return;
 
             if (imagePlaceholder.getLoadingId() != 0) {
-                ImageView imageView = mImageTarget.mImageReference.get();
+                ImageView imageView = mImageTarget.mImageViewReference.get();
                 if (imageView != null)
                     imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), imagePlaceholder.getLoadingId()));
             }
@@ -168,7 +168,7 @@ public class ImageLoader {
             if (bitmap == null) {
                 ImagePlaceholder imagePlaceholder = mImageTarget.mImagePlaceholder;
                 if (imagePlaceholder != null && imagePlaceholder.getErrorId() != 0) {
-                    ImageView imageView = mImageTarget.mImageReference.get();
+                    ImageView imageView = mImageTarget.mImageViewReference.get();
                     if (imageView != null)
                         imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), imagePlaceholder.getErrorId()));
                 }
@@ -181,7 +181,7 @@ public class ImageLoader {
 
             mBitmapCacheMgr.addToCache(mImageTarget.mUrl, bitmap);
 
-            ImageView imageView = mImageTarget.mImageReference.get();
+            ImageView imageView = mImageTarget.mImageViewReference.get();
             if (imageView != null)
                 imageView.setImageBitmap(bitmap);
 
