@@ -16,7 +16,7 @@ import instinctools.android.data.Book;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.network.HttpClientFactory;
-import instinctools.android.readers.JsonBookReader;
+import instinctools.android.readers.json.JsonTransformer;
 
 /**
  * Created by orion on 30.12.16.
@@ -35,7 +35,7 @@ public class HttpUpdateDataService extends IntentService {
         if (TextUtils.isEmpty(content))
             return;
 
-        List<Book> books = new JsonBookReader().read(content);
+        List<Book> books = JsonTransformer.transform(content, Book.class);
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<>(books.size());
         operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());

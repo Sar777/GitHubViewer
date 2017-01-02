@@ -41,10 +41,7 @@
             android:name=".broadcasts.OnAlarmReceiver"
             android:process=":remote" />
 
-        <service
-            android:name=".services.HttpUpdateDataService"
-            android:enabled="true"
-            android:exported="false"/>
+        <service android:name=".services.HttpUpdateDataService" />
 
         <provider
             android:name=".database.providers.BooksProvider"
