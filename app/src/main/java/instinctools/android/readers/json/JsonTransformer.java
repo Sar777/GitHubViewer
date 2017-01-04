@@ -26,6 +26,9 @@ public class JsonTransformer {
     }
 
     public static <Model> Model transform(String json, Class<?> clazz) {
+        if (!transformerMap.containsKey(clazz))
+            throw new UnsupportedOperationException("Not found transformer for class " + clazz.getName());
+
         JSONObject obj;
         try {
             obj = new JSONObject(json);
@@ -33,9 +36,6 @@ public class JsonTransformer {
             Log.e(TAG, "Create json object error...", e);
             return null;
         }
-
-        if (!transformerMap.containsKey(clazz))
-            throw new UnsupportedOperationException("Not found transformer for class " + clazz.getName());
 
         try {
             ITransformer transformer = transformerMap.get(clazz).newInstance();

@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import instinctools.android.database.DBConstants;
+
 /**
  * Created by orion on 16.12.16.
  */
@@ -94,9 +96,9 @@ public class Book implements Parcelable {
     };
 
     public static Book fromCursor(Cursor cursor) {
-        return new Book(cursor.getInt(cursor.getColumnIndex("_id")),
-                        cursor.getString(cursor.getColumnIndex("title")),
-                        cursor.getString(cursor.getColumnIndex("description")),
-                        cursor.getString(cursor.getColumnIndex("image_url")));
+        return new Book(cursor.getInt(cursor.getColumnIndex(DBConstants.BOOK_ID)),
+                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_IMAGE_URL)));
     }
 }

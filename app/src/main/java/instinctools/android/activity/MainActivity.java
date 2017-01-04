@@ -2,10 +2,8 @@ package instinctools.android.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private BookAdapter mBookAdapter;
-    private BooksChangedObserver mBooksChangedObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mBookAdapter = new BookAdapter(this, mRecyclerView, null);
         mRecyclerView.setAdapter(mBookAdapter);
-
-        mBooksChangedObserver = new BooksChangedObserver(new Handler());
-        mBooksChangedObserver.observe();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -119,31 +114,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onDestroy() {
-        mBooksChangedObserver.unobserve();
         super.onDestroy();
     }
 
     @Override
     public void onRefresh() {
         getSupportLoaderManager().restartLoader(LOADER_BOOKS_ID, null, this);
-    }
-
-    private class BooksChangedObserver extends ContentObserver {
-        BooksChangedObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            getContentResolver().registerContentObserver(BooksProvider.BOOK_CONTENT_URI, true, this);
-        }
-
-        void unobserve() {
-            getContentResolver().unregisterContentObserver(this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            getSupportLoaderManager().restartLoader(LOADER_BOOKS_ID, null, MainActivity.this);
-        }
     }
 }
