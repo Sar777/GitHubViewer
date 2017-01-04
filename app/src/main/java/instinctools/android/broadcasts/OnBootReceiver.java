@@ -20,6 +20,6 @@ public class OnBootReceiver extends BroadcastReceiver {
         Intent alarmIntent = new Intent(context, OnAlarmReceiver.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(context, OnAlarmReceiver.REQUEST_ALARM_CODE, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_ALARM_PENDING, pIntent);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, INTERVAL_ALARM_PENDING, pIntent);
     }
 }

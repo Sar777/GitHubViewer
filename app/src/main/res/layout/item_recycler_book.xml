@@ -25,6 +25,7 @@
         android:layout_centerVertical="true"
         android:orientation="vertical"
         tools:ignore="RtlHardcoded">
+
         <TextView
             android:id="@+id/text_title"
             android:layout_width="match_parent"

@@ -16,7 +16,7 @@ public class OnAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent intent2 = new Intent(context, HttpUpdateDataService.class);
-        context.startService(intent2);
+        Intent intentService = new Intent(context, HttpUpdateDataService.class);
+        context.startService(intentService);
     }
 }

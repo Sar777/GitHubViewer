@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by orion on 23.12.16.
  */
 
-public abstract class BitmapCache<A> {
+abstract class BitmapCache<A> {
     final Object mCacheLock = new Object();
 
     long mCacheSize;
@@ -37,6 +37,8 @@ public abstract class BitmapCache<A> {
     }
 
     abstract void cleanup();
+
     abstract boolean addToCache(String key, Bitmap bitmap);
+
     abstract Bitmap getFromCache(String key);
 }

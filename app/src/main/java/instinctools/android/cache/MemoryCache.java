@@ -10,10 +10,10 @@ import java.util.Iterator;
  * Created by orion on 23.12.16.
  */
 
-public class MemoryCache extends BitmapCache<Bitmap> {
+class MemoryCache extends BitmapCache<Bitmap> {
     private static final String TAG = "MemoryCache";
 
-    public MemoryCache(long maxSize) {
+    MemoryCache(long maxSize) {
         super(maxSize);
     }
 
@@ -22,7 +22,7 @@ public class MemoryCache extends BitmapCache<Bitmap> {
         synchronized (mCacheLock) {
             if (mCacheStore.get(key) != null)
                 return false;
-            
+
             if (mCacheSize > mMaxCacheSize)
                 cleanup();
 

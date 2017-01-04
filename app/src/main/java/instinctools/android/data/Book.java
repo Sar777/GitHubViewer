@@ -20,14 +20,14 @@ public class Book implements Parcelable {
     public Book() {
     }
 
-    public Book(int id, String title, String description, String image) {
+    private Book(int id, String title, String description, String image) {
         this.mId = id;
         this.mTitle = title;
         this.mDescription = description;
         this.mImage = image;
     }
 
-    protected Book(Parcel in) {
+    private Book(Parcel in) {
         this.mId = in.readInt();
         mTitle = in.readString();
         mDescription = in.readString();
@@ -97,8 +97,8 @@ public class Book implements Parcelable {
 
     public static Book fromCursor(Cursor cursor) {
         return new Book(cursor.getInt(cursor.getColumnIndex(DBConstants.BOOK_ID)),
-                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_TITLE)),
-                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_IMAGE_URL)));
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_TITLE)),
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_IMAGE_URL)));
     }
 }

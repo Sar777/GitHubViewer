@@ -53,7 +53,7 @@ public class BitmapCacheMgr {
 
         public Builder() {
             // Default 1/8 heap
-            this.mMemoryCache = new MemoryCache((int)(Runtime.getRuntime().maxMemory() / 1024) / 8);
+            this.mMemoryCache = new MemoryCache((int) (Runtime.getRuntime().maxMemory() / 1024) / 8);
         }
 
         public Builder setMaxSizeMemoryCache(long maxSize) {

@@ -40,7 +40,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
+
         initView();
 
         Intent intent = getIntent();
@@ -74,7 +74,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (id != LOADER_BOOK_ID)
             return null;
 
-        return new CursorLoader(this, BooksProvider.BOOK_CONTENT_URI, null, DBConstants.BOOK_ID + " = ?", new String[] { String.valueOf(args.getLong(BUNDLE_BOOK_ID)) }, null);
+        return new CursorLoader(this, BooksProvider.BOOK_CONTENT_URI, null, DBConstants.BOOK_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_BOOK_ID))}, null);
     }
 
     @Override
