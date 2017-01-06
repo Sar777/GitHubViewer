@@ -52,7 +52,7 @@ public class BooksProvider extends ContentProvider {
         switch (mUriMatcher.match(uri)) {
             case URI_BOOKS: {
                 if (TextUtils.isEmpty(sortOrder))
-                    sortOrder = DBConstants.BOOK_TITLE + " ASC";
+                    sortOrder = DBConstants.BOOK_ID + " ASC";
                 break;
             }
             case URI_BOOKS_ID: {

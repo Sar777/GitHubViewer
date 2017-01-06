@@ -19,14 +19,14 @@ import instinctools.android.readers.json.transformers.books.BooksListTransformer
 public class JsonTransformer {
     private static final String TAG = "JsonTransformer";
 
-    private static Map<Class, Class<? extends ITransformer>> transformerMap = new HashMap<>();
+    private static Map<Class, Class<? extends ITransformer>> mTransformersMap = new HashMap<>();
 
     static {
-        transformerMap.put(Book.class, BooksListTransformer.class);
+        mTransformersMap.put(Book.class, BooksListTransformer.class);
     }
 
     public static <Model> Model transform(String json, Class<?> clazz) {
-        if (!transformerMap.containsKey(clazz))
+        if (!mTransformersMap.containsKey(clazz))
             throw new UnsupportedOperationException("Not found transformer for class " + clazz.getName());
 
         JSONObject obj;
@@ -38,7 +38,7 @@ public class JsonTransformer {
         }
 
         try {
-            ITransformer transformer = transformerMap.get(clazz).newInstance();
+            ITransformer transformer = mTransformersMap.get(clazz).newInstance();
             return (Model) transformer.transform(obj);
         } catch (Exception e) {
             Log.e(TAG, "Transform exception", e);

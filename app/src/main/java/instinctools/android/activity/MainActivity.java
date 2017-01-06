@@ -112,11 +112,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onRefresh() {
         getSupportLoaderManager().restartLoader(LOADER_BOOKS_ID, null, this);
     }

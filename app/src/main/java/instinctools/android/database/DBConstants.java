@@ -16,7 +16,7 @@ public class DBConstants {
 
     public static final String TABLE_BOOKS_CREATE = "CREATE TABLE " + TABLE_BOOKS + "("
             + BOOK_ID + " INTEGER PRIMARY KEY, "
-            + BOOK_TITLE + " VARCHAR(255), "
+            + BOOK_TITLE + " VARCHAR(100), "
             + BOOK_DESCRIPTION + " TEXT, "
-            + BOOK_IMAGE_URL + " VARCHAR(100)" + " );";
+            + BOOK_IMAGE_URL + " VARCHAR(255)" + " );";
 }
