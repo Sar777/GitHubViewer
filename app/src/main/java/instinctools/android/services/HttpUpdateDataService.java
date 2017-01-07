@@ -42,7 +42,7 @@ public class HttpUpdateDataService extends IntentService {
         if (TextUtils.isEmpty(content))
             return;
 
-        List<Book> books = JsonTransformer.transform(content, Book.class);
+        List<Book> books = JsonTransformer.transform(content, Book[].class);
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<>(books.size());
         operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());

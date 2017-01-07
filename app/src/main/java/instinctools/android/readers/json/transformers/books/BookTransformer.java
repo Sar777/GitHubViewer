@@ -12,7 +12,7 @@ import instinctools.android.readers.json.transformers.ITransformer;
  * Created by orion on 2.1.17.
  */
 
-class BookTransformer implements ITransformer<Book, JSONObject> {
+public class BookTransformer implements ITransformer<Book, JSONObject> {
     private static final String TAG = "BookTransformer";
 
     private static final String J_FIELD_ID = "id";
