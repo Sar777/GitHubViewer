@@ -1,14 +1,18 @@
 package instinctools.android.data;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
+import instinctools.android.database.DBConstants;
 
 /**
  * Created by orion on 16.12.16.
  */
 
 public class Book implements Parcelable {
+    private int mId;
     private String mTitle;
     private String mDescription;
     private String mImage;
@@ -16,13 +20,15 @@ public class Book implements Parcelable {
     public Book() {
     }
 
-    public Book(String title, String description, String image) {
+    private Book(int id, String title, String description, String image) {
+        this.mId = id;
         this.mTitle = title;
         this.mDescription = description;
         this.mImage = image;
     }
 
-    protected Book(Parcel in) {
+    private Book(Parcel in) {
+        this.mId = in.readInt();
         mTitle = in.readString();
         mDescription = in.readString();
         mImage = in.readString();
@@ -30,6 +36,7 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
         dest.writeString(mTitle);
         dest.writeString(mDescription);
         dest.writeString(mImage);
@@ -38,6 +45,14 @@ public class Book implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        this.mId = id;
     }
 
     public String getTitle() {
@@ -64,15 +79,6 @@ public class Book implements Parcelable {
         this.mImage = image;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "mTitle='" + mTitle + '\'' +
-                ", mDescription='" + mDescription + '\'' +
-                ", mImage='" + mImage + '\'' +
-                '}';
-    }
-
     public boolean isValid() {
         return !TextUtils.isEmpty(mTitle) && !TextUtils.isEmpty(mDescription) && !TextUtils.isEmpty(mImage);
     }
@@ -88,4 +94,11 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
+
+    public static Book fromCursor(Cursor cursor) {
+        return new Book(cursor.getInt(cursor.getColumnIndex(DBConstants.BOOK_ID)),
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_TITLE)),
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(DBConstants.BOOK_IMAGE_URL)));
+    }
 }

@@ -41,7 +41,10 @@ public class BitmapCacheMgr {
         if (cacheBitmap != null)
             return cacheBitmap;
 
-        return mSDCardCache != null ? mSDCardCache.getFromCache(keyHash) : null;
+        if (mSDCardCache != null)
+            return mSDCardCache.getFromCache(keyHash);
+
+        return null;
     }
 
     public static class Builder {
@@ -50,7 +53,7 @@ public class BitmapCacheMgr {
 
         public Builder() {
             // Default 1/8 heap
-            this.mMemoryCache = new MemoryCache((int)(Runtime.getRuntime().maxMemory() / 1024) / 8);
+            this.mMemoryCache = new MemoryCache((int) (Runtime.getRuntime().maxMemory() / 1024) / 8);
         }
 
         public Builder setMaxSizeMemoryCache(long maxSize) {

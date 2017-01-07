@@ -110,7 +110,7 @@ public class HttpClientFactory {
                     response.append(inputLine);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Fail read stream in sendRequest", e);
+                Log.e(TAG, "Fail transform stream in sendRequest", e);
             }
 
             try {
