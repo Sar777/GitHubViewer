@@ -12,14 +12,12 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 
 import instinctools.android.App;
 import instinctools.android.cache.BitmapCacheMgr;
 import instinctools.android.constans.Constants;
-import instinctools.android.utility.MD5Hash;
+import instinctools.android.executors.ImageTaskExecutor;
 
 /**
  * Created by orion on 22.12.16.
@@ -31,8 +29,7 @@ public class ImageLoader {
     private static final BitmapCacheMgr mBitmapCacheMgr;
 
     // Current loading images
-    private static final Set<String> mImagesInProcess = new CopyOnWriteArraySet<>();
-    private static final Executor ImageBitmapExecutor = ImageThreadExecutor.create();
+    private static final Executor ImageBitmapExecutor = ImageTaskExecutor.create();
 
     static {
         mBitmapCacheMgr = new BitmapCacheMgr.Builder().enableSDCardCache(Constants.DISK_MAX_CACHE_SIZE, App.getAppContext()).build();
@@ -80,24 +77,11 @@ public class ImageLoader {
             return this;
         }
 
-        private boolean isContainTask() {
-            String urlHash = MD5Hash.create(mUrl);
-            return mImagesInProcess.contains(urlHash);
-        }
-
         public void load(@NonNull ImageLoadingStateListener listener) {
-            if (isContainTask())
-                return;
-
-            mImagesInProcess.add(MD5Hash.create(mUrl));
             new ImageBitmapWorker(this, listener).executeOnExecutor(ImageBitmapExecutor);
         }
 
         public void load() {
-            if (isContainTask())
-                return;
-
-            mImagesInProcess.add(MD5Hash.create(mUrl));
             new ImageBitmapWorker(this).executeOnExecutor(ImageBitmapExecutor);
         }
     }
@@ -163,8 +147,6 @@ public class ImageLoader {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            mImagesInProcess.remove(MD5Hash.create(mImageTarget.mUrl));
-
             if (bitmap == null) {
                 ImagePlaceholder imagePlaceholder = mImageTarget.mImagePlaceholder;
                 if (imagePlaceholder != null && imagePlaceholder.getErrorId() != 0) {
