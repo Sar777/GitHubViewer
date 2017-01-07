@@ -41,7 +41,7 @@ public class ImageLoader {
     private ImageLoader() {
     }
 
-    public static ImageTarget what(String url) {
+    public static ImageTarget what(@NonNull String url) {
         return new ImageTarget(url);
     }
 
@@ -59,7 +59,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget error(int drawId) {
+        public ImageTarget error(@NonNull int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 
@@ -67,7 +67,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget loading(int drawId) {
+        public ImageTarget loading(@NonNull int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 

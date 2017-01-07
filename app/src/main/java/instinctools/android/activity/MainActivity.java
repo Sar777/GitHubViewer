@@ -1,6 +1,7 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.decorations.DividerItemDecoration;
+import instinctools.android.services.HttpUpdateDataService;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
-        getSupportLoaderManager().restartLoader(LOADER_BOOKS_ID, null, this);
+        Intent intentService = new Intent(this, HttpUpdateDataService.class);
+        startService(intentService);
     }
 }

@@ -1,9 +1,13 @@
 package instinctools.android.services;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.os.Build;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +15,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.data.Book;
 import instinctools.android.database.DBConstants;
@@ -24,6 +29,8 @@ import instinctools.android.readers.json.JsonTransformer;
 
 public class HttpUpdateDataService extends IntentService {
     private static final String TAG = "HttpUpdateDataService";
+
+    private static final long INTERVAL_ALARM_PENDING = 10 * 60 * 1000; // 10 min
 
     public HttpUpdateDataService() {
         super(TAG);
@@ -54,5 +61,14 @@ public class HttpUpdateDataService extends IntentService {
         } catch (RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Content provider exception in onHandleIntent", e);
         }
+
+        Intent alarmIntent = new Intent(this, OnAlarmReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, OnAlarmReceiver.REQUEST_ALARM_CODE, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            alarm.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + INTERVAL_ALARM_PENDING, pIntent);
+        else
+            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + INTERVAL_ALARM_PENDING, pIntent);
     }
 }

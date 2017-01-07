@@ -81,7 +81,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mProgressBar.setVisibility(View.GONE);
 
-        if (cursor == null || !cursor.moveToFirst())
+        if (!cursor.moveToFirst())
             return;
 
         Book book = Book.fromCursor(cursor);
