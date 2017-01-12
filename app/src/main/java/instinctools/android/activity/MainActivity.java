@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         requestExternalStoragePermissions();
 
         getSupportLoaderManager().initLoader(LOADER_BOOKS_ID, null, this);
+
+        /// TODO remove ME
+        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(intent);
     }
 
     private void initView() {

@@ -28,6 +28,11 @@
             android:label="@string/title_activity_description"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".activity.AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:theme="@style/AppTheme"/>
+
         <receiver android:name=".broadcasts.OnBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -44,7 +49,6 @@
         <provider
             android:name=".database.providers.BooksProvider"
             android:authorities="instinctools.android.providers.Books" />
-
     </application>
 
 </manifest>

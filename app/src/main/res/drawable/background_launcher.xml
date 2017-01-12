@@ -1,8 +1,11 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:opacity="opaque">
     <item android:drawable="@android:color/white"/>
     <item>
         <bitmap
-            android:src="@drawable/ic_github_logo"
+            android:src="@mipmap/ic_launcher"
             android:gravity="center"/>
     </item>
 </layer-list>

@@ -9,4 +9,13 @@
     <dimen name="text_view_title_margin">16dp</dimen>
     <dimen name="text_view_description_margin">8dp</dimen>
     <dimen name="recycler_item_child_layout_margin">72dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="auth_layout_margin_left">50dp</dimen>
+    <dimen name="auth_layout_margin_right">50dp</dimen>
+    <dimen name="auth_text_input_margin_top">8dp</dimen>
+    <dimen name="auth_text_input_margin_bottom">8dp</dimen>
+    <dimen name="auth_button_margin_top">30dp</dimen>
+    <dimen name="auth_image_margin_bottom">20dp</dimen>
+    <dimen name="auth_image_width_height">70dp</dimen>
+    <dimen name="auth_button_text_padding_left_right">10dp</dimen>
 </resources>

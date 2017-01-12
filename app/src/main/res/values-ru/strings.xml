@@ -4,4 +4,8 @@
     <string name="title_activity_description">Описание</string>
     <string name="action_settings">Настройки</string>
     <string name="msg_permission_external_storage_granted">Доступ запрещен. Кэширование только в оперативную память</string>
+    <string name="title_activity_auth">Авторизация Github.com</string>
+    <string name="msg_login_or_email">Имя пользователя или email</string>
+    <string name="msg_password">Пароль</string>
+    <string name="title_auth">Авторизоваться</string>
 </resources>
