@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import instinctools.android.data.Book;
+import instinctools.android.models.Book;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.books.BookTransformer;
 import instinctools.android.readers.json.transformers.books.BooksListTransformer;

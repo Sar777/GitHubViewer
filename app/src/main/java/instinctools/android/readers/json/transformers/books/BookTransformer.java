@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import instinctools.android.data.Book;
+import instinctools.android.models.Book;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 /**

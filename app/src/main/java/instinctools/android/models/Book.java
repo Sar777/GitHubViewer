@@ -1,4 +1,4 @@
-package instinctools.android.data;
+package instinctools.android.models;
 
 import android.database.Cursor;
 import android.os.Parcel;

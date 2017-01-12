@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
-import instinctools.android.data.Book;
+import instinctools.android.models.Book;
 import instinctools.android.imageloader.ImageLoader;
 
 /**

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.adapters.BookAdapter;
-import instinctools.android.data.Book;
+import instinctools.android.models.Book;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.imageloader.ImageLoader;

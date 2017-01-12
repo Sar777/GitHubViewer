@@ -17,7 +17,7 @@ import java.util.List;
 
 import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
-import instinctools.android.data.Book;
+import instinctools.android.models.Book;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.BooksProvider;
 import instinctools.android.network.HttpClientFactory;
