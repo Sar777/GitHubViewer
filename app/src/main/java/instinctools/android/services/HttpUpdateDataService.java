@@ -20,7 +20,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.models.Book;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.BooksProvider;
-import instinctools.android.network.HttpClientFactory;
+import instinctools.android.http.HttpClientFactory;
 import instinctools.android.readers.json.JsonTransformer;
 
 /**
@@ -43,6 +43,8 @@ public class HttpUpdateDataService extends IntentService {
             return;
 
         List<Book> books = JsonTransformer.transform(content, Book[].class);
+        if (books == null)
+            return;
 
         ArrayList<ContentProviderOperation> operations = new ArrayList<>(books.size());
         operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());

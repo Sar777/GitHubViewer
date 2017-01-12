@@ -9,4 +9,8 @@
     <string name="msg_login_or_email">Username or email</string>
     <string name="msg_password">Password</string>
     <string name="title_auth">Auth</string>
+    <string name="msg_empty_fields">Empty inputs</string>
+    <string name="msg_auth_title_dialog">Authorization</string>
+    <string name="msg_auth_message_dialog">Authorization. please, wait…</string>
+    <string name="msg_auth_username_or_password_fail">Auth fail. Check, please, you username and password</string>
 </resources>

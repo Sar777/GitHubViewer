@@ -33,7 +33,7 @@
             android:theme="@style/TextLabel">
 
             <EditText
-                android:id="@+id/input_email"
+                android:id="@+id/edit_text_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress|text"
@@ -50,7 +50,7 @@
             android:theme="@style/TextLabel">
 
             <EditText
-                android:id="@+id/input_password"
+                android:id="@+id/edit_text_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -60,6 +60,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
+            android:id="@+id/button_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

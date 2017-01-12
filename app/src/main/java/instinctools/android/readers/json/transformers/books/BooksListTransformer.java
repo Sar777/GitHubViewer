@@ -16,16 +16,27 @@ import instinctools.android.readers.json.transformers.ITransformer;
  * Created by orion on 2.1.17.
  */
 
-public class BooksListTransformer implements ITransformer<List<Book>, JSONObject> {
+public class BooksListTransformer implements ITransformer<List<Book>> {
     private static final String TAG = "BooksListTransformer";
 
     private static final String J_CONTAINER = "data";
 
     @Override
-    public List<Book> transform(JSONObject object) {
+    public List<Book> transform(Object object) {
+        if (!(object instanceof String))
+            return null;
+
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject((String)object);
+        } catch (JSONException e) {
+            Log.e(TAG, "Create json object error...", e);
+            return null;
+        }
+
         JSONArray dataArray = null;
         try {
-            dataArray = object.getJSONArray(J_CONTAINER);
+            dataArray = jsonObject.getJSONArray(J_CONTAINER);
         } catch (JSONException e) {
             Log.e(TAG, "Create json array object error...", e);
         }
