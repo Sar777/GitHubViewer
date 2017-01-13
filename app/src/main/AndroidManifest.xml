@@ -27,11 +27,10 @@
             android:name=".activity.DescriptionActivity"
             android:label="@string/title_activity_description"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.AuthActivity"
             android:label="@string/title_activity_auth"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
         <receiver android:name=".broadcasts.OnBootReceiver">
             <intent-filter>
@@ -47,8 +46,8 @@
         <service android:name=".services.HttpUpdateDataService" />
 
         <provider
-            android:name=".database.providers.BooksProvider"
-            android:authorities="instinctools.android.providers.Books" />
+            android:name=".database.providers.RepositoriesProvider"
+            android:authorities="instinctools.android.providers.Repositories" />
     </application>
 
 </manifest>

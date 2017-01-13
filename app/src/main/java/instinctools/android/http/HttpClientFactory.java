@@ -102,7 +102,7 @@ public class HttpClientFactory {
             return mContent;
         }
 
-        public String send() {
+        public HttpClient send() {
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) mUri.openConnection();
@@ -153,7 +153,7 @@ public class HttpClientFactory {
             }
 
             if (reader == null)
-                return mContent;
+                return this;
 
             String inputLine;
             StringBuilder response = new StringBuilder();
@@ -174,7 +174,7 @@ public class HttpClientFactory {
             connection.disconnect();
 
             mContent = response.toString();
-            return mContent;
+            return this;
         }
 
         public void send(final OnHttpClientListener listener) {

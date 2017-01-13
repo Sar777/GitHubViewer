@@ -36,8 +36,8 @@ class AsyncHttpWorker extends AsyncTask<Void, Void, Void> {
             return;
         }
 
-        if (client.getCode() == -1) {
-            mListener.onError(HttpURLConnection.HTTP_BAD_REQUEST);
+        if (client.getCode() >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            mListener.onError(client.getCode());
             return;
         }
 

@@ -6,14 +6,13 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-import instinctools.android.models.Book;
 import instinctools.android.models.github.authorization.AuthToken;
 import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.books.BookTransformer;
-import instinctools.android.readers.json.transformers.books.BooksListTransformer;
 import instinctools.android.readers.json.transformers.github.authorization.AuthTokenTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListUserRepositoriesTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserTransformer;
 
 /**
  * Created by orion on 16.12.16.
@@ -25,10 +24,7 @@ public class JsonTransformer {
     private static Map<String, Class<? extends ITransformer>> mTransformersMap = new HashMap<>();
 
     static {
-        // TODO REMOVE ME
-        mTransformersMap.put(Book[].class.getName(), BooksListTransformer.class);
-        mTransformersMap.put(Book.class.getName(), BookTransformer.class);
-
+        mTransformersMap.put(User.class.getName(), UserTransformer.class);
         mTransformersMap.put(AuthToken.class.getName(), AuthTokenTransformer.class);
         mTransformersMap.put(Repository[].class.getName(), ListUserRepositoriesTransformer.class);
     }

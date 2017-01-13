@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_programming_books">Книги о программировании</string>
+    <string name="title_my_repositories">Мои репозитории</string>
     <string name="msg_empty_list">Список пуст</string>
     <string name="title_activity_description">Описание</string>
     <string name="action_settings">Настройки</string>
@@ -12,4 +12,5 @@
     <string name="msg_auth_title_dialog">Авторизация</string>
     <string name="msg_auth_message_dialog">Происходит авторизация, пожалуйста, подождите</string>
     <string name="msg_auth_username_or_password_fail">Ошибка авторизации. Проверьте имя пользователя и пароль</string>
+    <string name="msg_auth_unknown_error">Неизвестная ошибка авторизации</string>
 </resources>

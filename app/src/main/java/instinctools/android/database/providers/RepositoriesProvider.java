@@ -17,24 +17,24 @@ import instinctools.android.database.DBHelper;
  * Created by orion on 30.12.16.
  */
 
-public class BooksProvider extends ContentProvider {
+public class RepositoriesProvider extends ContentProvider {
 
-    static final String BOOK_PATH = "books";
-    public static final String AUTHORITY = "instinctools.android.providers.Books";
-    public static final Uri BOOK_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BOOK_PATH);
+    static final String REPOSITORY_PATH = "books";
+    public static final String AUTHORITY = "instinctools.android.providers.Repositories";
+    public static final Uri REPOSITORY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + REPOSITORY_PATH);
 
-    static final String BOOK_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + BOOK_PATH;
-    static final String BOOK_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + BOOK_PATH;
+    static final String REPOSITORY_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + REPOSITORY_PATH;
+    static final String REPOSITORY_CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + AUTHORITY + "." + REPOSITORY_PATH;
 
-    static final int URI_BOOKS = 1;
-    static final int URI_BOOKS_ID = 2;
+    static final int URI_REPOSITORIES = 1;
+    static final int URI_REPOSITORIES_ID = 2;
 
     private static final UriMatcher mUriMatcher;
 
     static {
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        mUriMatcher.addURI(AUTHORITY, BOOK_PATH, URI_BOOKS);
-        mUriMatcher.addURI(AUTHORITY, BOOK_PATH + "/#", URI_BOOKS_ID);
+        mUriMatcher.addURI(AUTHORITY, REPOSITORY_PATH, URI_REPOSITORIES);
+        mUriMatcher.addURI(AUTHORITY, REPOSITORY_PATH + "/#", URI_REPOSITORIES_ID);
     }
 
     private DBHelper mDBHelper;
@@ -50,17 +50,17 @@ public class BooksProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         switch (mUriMatcher.match(uri)) {
-            case URI_BOOKS: {
+            case URI_REPOSITORIES: {
                 if (TextUtils.isEmpty(sortOrder))
-                    sortOrder = DBConstants.BOOK_ID + " ASC";
+                    sortOrder = DBConstants.REPOSITORY_ID + " ASC";
                 break;
             }
-            case URI_BOOKS_ID: {
+            case URI_REPOSITORIES_ID: {
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection))
-                    selection = DBConstants.BOOK_ID + " = " + id;
+                    selection = DBConstants.REPOSITORY_ID + " = " + id;
                 else
-                    selection = selection + " AND " + DBConstants.BOOK_ID + " = " + id;
+                    selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
 
                 break;
             }
@@ -69,20 +69,20 @@ public class BooksProvider extends ContentProvider {
         }
 
         mDB = mDBHelper.getWritableDatabase();
-        Cursor cursor = mDB.query(DBConstants.TABLE_BOOKS, projection, selection, selectionArgs, null, null, sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), BOOK_CONTENT_URI);
+        Cursor cursor = mDB.query(DBConstants.TABLE_REPOSITORIES, projection, selection, selectionArgs, null, null, sortOrder);
+        cursor.setNotificationUri(getContext().getContentResolver(), REPOSITORY_CONTENT_URI);
         return cursor;
     }
 
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        if (mUriMatcher.match(uri) != URI_BOOKS)
+        if (mUriMatcher.match(uri) != URI_REPOSITORIES)
             throw new IllegalArgumentException("Wrong URI: " + uri);
 
         mDB = mDBHelper.getWritableDatabase();
-        long rowID = mDB.insert(DBConstants.TABLE_BOOKS, null, contentValues);
-        Uri resultUri = ContentUris.withAppendedId(BOOK_CONTENT_URI, rowID);
+        long rowID = mDB.insert(DBConstants.TABLE_REPOSITORIES, null, contentValues);
+        Uri resultUri = ContentUris.withAppendedId(REPOSITORY_CONTENT_URI, rowID);
         getContext().getContentResolver().notifyChange(resultUri, null);
         return resultUri;
     }
@@ -90,21 +90,21 @@ public class BooksProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         switch (mUriMatcher.match(uri)) {
-            case URI_BOOKS:
+            case URI_REPOSITORIES:
                 break;
-            case URI_BOOKS_ID:
+            case URI_REPOSITORIES_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection))
-                    selection = DBConstants.BOOK_ID + " = " + id;
+                    selection = DBConstants.REPOSITORY_ID + " = " + id;
                 else
-                    selection = selection + " AND " + DBConstants.BOOK_ID + " = " + id;
+                    selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
 
         mDB = mDBHelper.getWritableDatabase();
-        int cnt = mDB.delete(DBConstants.TABLE_BOOKS, selection, selectionArgs);
+        int cnt = mDB.delete(DBConstants.TABLE_REPOSITORIES, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }
@@ -112,21 +112,21 @@ public class BooksProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         switch (mUriMatcher.match(uri)) {
-            case URI_BOOKS:
+            case URI_REPOSITORIES:
                 break;
-            case URI_BOOKS_ID:
+            case URI_REPOSITORIES_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection))
-                    selection = DBConstants.BOOK_ID + " = " + id;
+                    selection = DBConstants.REPOSITORY_ID + " = " + id;
                 else
-                    selection = selection + " AND " + DBConstants.BOOK_ID + " = " + id;
+                    selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
                 break;
             default:
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
 
         mDB = mDBHelper.getWritableDatabase();
-        int cnt = mDB.update(DBConstants.TABLE_BOOKS, contentValues, selection, selectionArgs);
+        int cnt = mDB.update(DBConstants.TABLE_REPOSITORIES, contentValues, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return cnt;
     }
@@ -135,10 +135,10 @@ public class BooksProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (mUriMatcher.match(uri)) {
-            case URI_BOOKS:
-                return BOOK_CONTENT_TYPE;
-            case URI_BOOKS_ID:
-                return BOOK_CONTENT_ITEM_TYPE;
+            case URI_REPOSITORIES:
+                return REPOSITORY_CONTENT_TYPE;
+            case URI_REPOSITORIES_ID:
+                return REPOSITORY_CONTENT_ITEM_TYPE;
             default:
                 break;
         }

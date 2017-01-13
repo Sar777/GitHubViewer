@@ -9,19 +9,16 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.Build;
 import android.os.RemoteException;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import instinctools.android.broadcasts.OnAlarmReceiver;
-import instinctools.android.constans.Constants;
-import instinctools.android.models.Book;
 import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.BooksProvider;
-import instinctools.android.http.HttpClientFactory;
-import instinctools.android.readers.json.JsonTransformer;
+import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.services.github.GithubServices;
 
 /**
  * Created by orion on 30.12.16.
@@ -38,28 +35,25 @@ public class HttpUpdateDataService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String content = HttpClientFactory.create(Constants.API_URL).addHeader("Accept", "application/json").setMethod("GET").send();
-        if (TextUtils.isEmpty(content))
+        List<Repository> repositories = GithubServices.getRepositoryList();
+        if (repositories == null)
             return;
 
-        List<Book> books = JsonTransformer.transform(content, Book[].class);
-        if (books == null)
-            return;
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>(repositories.size());
+        operations.add(ContentProviderOperation.newDelete(RepositoriesProvider.REPOSITORY_CONTENT_URI).build());
 
-        ArrayList<ContentProviderOperation> operations = new ArrayList<>(books.size());
-        operations.add(ContentProviderOperation.newDelete(BooksProvider.BOOK_CONTENT_URI).build());
-
-        for (Book book : books) {
-            operations.add(ContentProviderOperation.newInsert(BooksProvider.BOOK_CONTENT_URI)
-                    .withValue(DBConstants.BOOK_ID, book.getId())
-                    .withValue(DBConstants.BOOK_TITLE, book.getTitle())
-                    .withValue(DBConstants.BOOK_DESCRIPTION, book.getDescription())
-                    .withValue(DBConstants.BOOK_IMAGE_URL, book.getImage())
+        for (Repository repository : repositories) {
+            operations.add(ContentProviderOperation.newInsert(RepositoriesProvider.REPOSITORY_CONTENT_URI)
+                    .withValue(DBConstants.REPOSITORY_ID, repository.getId())
+                    .withValue(DBConstants.REPOSITORY_NAME, repository.getName())
+                    .withValue(DBConstants.REPOSITORY_FULLNAME, repository.getFullName())
+                    .withValue(DBConstants.REPOSITORY_DESCRIPTION, repository.getDescription())
+                    .withValue(DBConstants.REPOSITORY_PRIVATE, repository.isPrivate())
                     .build());
         }
 
         try {
-            getContentResolver().applyBatch(BooksProvider.AUTHORITY, operations);
+            getContentResolver().applyBatch(RepositoriesProvider.AUTHORITY, operations);
         } catch (RemoteException | OperationApplicationException e) {
             Log.e(TAG, "Content provider exception in onHandleIntent", e);
         }

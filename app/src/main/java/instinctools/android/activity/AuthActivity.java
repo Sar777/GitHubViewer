@@ -10,16 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.net.HttpURLConnection;
-
 import instinctools.android.R;
-import instinctools.android.http.HttpClientFactory;
-import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.authorization.AuthToken;
-import instinctools.android.readers.json.JsonTransformer;
-import instinctools.android.utility.Base64Hash;
+import instinctools.android.services.github.GithubServiceListener;
+import instinctools.android.services.github.GithubServices;
 
-public class AuthActivity extends AppCompatActivity implements View.OnClickListener, OnHttpClientListener {
+public class AuthActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText mEditTextUsername;
     private EditText mEditTextPassword;
@@ -47,8 +43,8 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         if (view.getId() != R.id.button_auth)
             return;
 
-        Editable username = mEditTextUsername.getText();
-        Editable password = mEditTextPassword.getText();
+        final Editable username = mEditTextUsername.getText();
+        final Editable password = mEditTextPassword.getText();
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
             Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_empty_fields, Snackbar.LENGTH_SHORT).show();
             return;
@@ -56,56 +52,25 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.msg_auth_title_dialog), getString(R.string.msg_auth_message_dialog), true);
 
-        String userpass = "";
+        GithubServices.authorization(username.toString(), password.toString(), new GithubServiceListener<AuthToken>() {
+            @Override
+            public void onError(int code) {
+                mProgressDialog.dismiss();
+                Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_auth_unknown_error, Snackbar.LENGTH_SHORT).show();
+            }
 
-        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create("https://api.github.com/authorizations");
-        httpClient.
-                setMethod("POST").
-                //addHeader("Content-Type", "application/x-www-form-urlencoded").
-                addHeader("Authorization", "Basic " + Base64Hash.create(userpass)).
-                addHeader("Content-Type", "application/x-www-form-urlencoded").
-                setData("{\"scopes\":[\"repo\"],\"note\":\"Demo 2\"}").
-                send(this);
+            @Override
+            public void onSuccess(AuthToken token) {
+                mProgressDialog.dismiss();
 
-//        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create("https://api.github.com/authorizations/76450638");
-//        httpClient.
-//                setMethod("DELETE").
-//                //addHeader("Content-Type", "application/x-www-form-urlencoded").
-//                //        addHeader("User-Agent", "Awesome-Octocat-App").
-//                addHeader("Authorization", "Basic " + Base64Hash.create(userpass)).
-//                //addHeader("Content-Type", "application/x-www-form-urlencoded").
-//                setData("{\"scopes\":[\"repo\"],\"note\":\"Demo 2\"}").
-//                send(new OnHttpClientListener() {
+                if (token == null) {
+                    Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_auth_unknown_error, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
 
-      /*  HttpClientFactory.HttpClient httpClient = HttpClientFactory.create("https://api.github.com/authorizations/764530638");
-        httpClient.
-                setMethod("GET").
-                //addHeader("Content-Type", "application/x-www-form-urlencoded").
-                //        addHeader("User-Agent", "Awesome-Octocat-App").
-                        addHeader("Authorization", "Basic " + Base64Hash.create(userpass)).
-                //addHeader("Content-Type", "application/x-www-form-urlencoded").
-                        setData("{\"scopes\":[\"repo\"],\"note\":\"Demo 2\"}").
-                send(this);*/
-    }
-
-    @Override
-    public void onError(int errCode) {
-        mProgressDialog.dismiss();
-    }
-
-    @Override
-    public void onSuccess(int code, String content) {
-        mProgressDialog.dismiss();
-        if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_auth_username_or_password_fail, Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (code == HttpURLConnection.HTTP_CREATED) {
-            setResult(RESULT_OK);
-            AuthToken token = JsonTransformer.transform(content, AuthToken.class);
-            /// TODO REMOVE ME
-            //finish();
-        }
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
     }
 }
