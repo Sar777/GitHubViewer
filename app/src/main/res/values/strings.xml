@@ -8,7 +8,6 @@
     <string name="title_activity_auth">Auth Github.com</string>
     <string name="msg_login_or_email">Username or email</string>
     <string name="msg_password">Password</string>
-    <string name="title_auth">Auth</string>
     <string name="msg_empty_fields">Empty inputs</string>
     <string name="msg_auth_title_dialog">Authorization</string>
     <string name="msg_auth_message_dialog">Authorization. please, wait…</string>
@@ -28,12 +27,12 @@
     <string name="title_profile_bio">Bio:</string>
     <string name="title_profile_public_repositories">Public Repositories:</string>
     <string name="title_profile_public_gists">Public Gists:</string>
-    <string name="title_activity_introductions">IntroductionsActivity</string>
+    <string name="title_activity_introductions">About GitHub.com</string>
     <string name="msg_introductions_github_1">Welcome home, developers</string>
     <string name="msg_introductions_github_2">GitHub fosters a fast, flexible, and collaborative development process that lets you work on your own or with others.</string>
     <string name="msg_introductions_github_2_1">For everything you build</string>
     <string name="msg_introductions_github_2_2">Host and manage your code on GitHub. You can keep your work private or share it with the world.</string>
     <string name="msg_introductions_github_3_1">A better way to work</string>
     <string name="msg_introduction_github_3_2">From hobbyists to professionals, GitHub helps developers simplify the way they build software.</string>
-    <string name="title_introduction_sign_up_for_github">Sign up for GitHub</string>
+    <string name="title_introduction_sign_in">Sign In</string>
 </resources>

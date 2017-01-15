@@ -33,4 +33,46 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:background="#9d201b1b"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <Button
+                android:id="@+id/button_slide1"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cell" />
+
+            <Button
+                android:id="@+id/button_slide2"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cell" />
+
+            <Button
+                android:id="@+id/button_slide3"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cell" />
+
+            <Button
+                android:id="@+id/button_slide4"
+                android:layout_height="15dp"
+                android:layout_width="15dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/rounded_cell" />
+        </LinearLayout>
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

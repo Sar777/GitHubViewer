@@ -23,19 +23,4 @@ public class IntroductionPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return MAX_PAGES;
     }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "SECTION 1";
-            case 1:
-                return "SECTION 2";
-            case 2:
-                return "SECTION 3";
-            case 3:
-                return "SECTION 4";
-        }
-        return null;
-    }
 }

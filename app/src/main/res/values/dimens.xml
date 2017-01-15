@@ -34,7 +34,7 @@
     <dimen name="introductions_welcome_text_margin_top">10dp</dimen>
     <dimen name="introduction_image_prev_width">200dp</dimen>
     <dimen name="introduction_image_prev_height">300dp</dimen>
-    <dimen name="introduction_signup_button_padding">8dp</dimen>
-    <dimen name="introduction_image_github_width">300dp</dimen>
-    <dimen name="introduction_image_github_height">400dp</dimen>
+    <dimen name="introduction_signin_button_padding">8dp</dimen>
+    <dimen name="introduction_image_github_width">200dp</dimen>
+    <dimen name="introduction_image_github_height">300dp</dimen>
 </resources>

@@ -64,13 +64,13 @@
             android:id="@+id/button_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/auth_button_margin_top"
+            android:padding="@dimen/introduction_signin_button_padding"
             android:textColor="@android:color/white"
-            android:paddingLeft="@dimen/auth_button_text_padding_left_right"
-            android:paddingRight="@dimen/auth_button_text_padding_left_right"
-            android:background="@color/colorPrimary"
-            android:text="@string/title_auth"
-            android:layout_marginTop="@dimen/auth_button_margin_top"/>
+            android:textAllCaps="false"
+            android:background="@drawable/background_button_sign_in_github_selector"
+            android:text="@string/title_introduction_sign_in"/>
     </LinearLayout>
 
 </RelativeLayout>

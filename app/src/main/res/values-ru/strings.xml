@@ -7,7 +7,6 @@
     <string name="title_activity_auth">Авторизация Github.com</string>
     <string name="msg_login_or_email">Имя пользователя или email</string>
     <string name="msg_password">Пароль</string>
-    <string name="title_auth">Авторизоваться</string>
     <string name="msg_empty_fields">Заполните все поля</string>
     <string name="msg_auth_title_dialog">Авторизация</string>
     <string name="msg_auth_message_dialog">Происходит авторизация, пожалуйста, подождите</string>
@@ -15,4 +14,5 @@
     <string name="msg_auth_unknown_error">Неизвестная ошибка авторизации</string>
     <string name="title_username">Имя пользователя</string>
     <string name="title_email">Почта</string>
+    <string name="title_introduction_sign_in">Войти</string>
 </resources>

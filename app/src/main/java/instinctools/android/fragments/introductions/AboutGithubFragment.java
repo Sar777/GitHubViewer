@@ -20,7 +20,7 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
 
     private static final String ARGUMENT_PAGE_NUMBER = "ARG_PAGE_NUMBER";
 
-    private Button mButtonSignUp;
+    private Button mButtonSignIn;
 
     public AboutGithubFragment() {
     }
@@ -56,8 +56,8 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(resId, container, false);
 
         if (resId == R.layout.fragment_intro_github_4) {
-            mButtonSignUp = (Button) view.findViewById(R.id.button_signUp);
-            mButtonSignUp.setOnClickListener(this);
+            mButtonSignIn = (Button) view.findViewById(R.id.button_signIn);
+            mButtonSignIn.setOnClickListener(this);
         }
 
         return view;
@@ -65,7 +65,7 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (view.getId() != R.id.button_signUp)
+        if (view.getId() != R.id.button_signIn)
             return;
 
         PersistantStorage.addProperty(Constants.PROPERTY_FIRST_RUN, true);
