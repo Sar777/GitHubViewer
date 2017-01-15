@@ -110,9 +110,7 @@ public class GithubServices {
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_USER_URL).
                 setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN"));
-
-        client.send();
+                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN")).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;
@@ -141,6 +139,35 @@ public class GithubServices {
 
                 User user = JsonTransformer.transform(content, User.class);
                 listener.onSuccess(user);
+            }
+        });
+    }
+
+    public static boolean logout() {
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(API_AUTH_URL + "/" + PersistantStorage.getProperty("AUTH_TOKEN_ID")).
+                setMethod("DELETE").
+                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN")).send();
+
+
+        return client.getCode() == HttpURLConnection.HTTP_NO_CONTENT;
+    }
+
+    public static void logout(final GithubServiceListener<Boolean> listener) {
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(API_AUTH_URL + "/" + PersistantStorage.getProperty("AUTH_TOKEN_ID")).
+                setMethod("DELETE").
+                addHeader("Authorization", "Basic " + PersistantStorage.getProperty("AUTH_BASIC"));
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+                listener.onError(errCode);
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
             }
         });
     }
