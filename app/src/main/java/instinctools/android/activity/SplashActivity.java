@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import instinctools.android.R;
+import instinctools.android.constans.Constants;
 import instinctools.android.models.github.authorization.AuthToken;
 import instinctools.android.services.github.GithubServices;
+import instinctools.android.storages.PersistantStorage;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -16,6 +18,11 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        if (!PersistantStorage.getBoolProperty(Constants.PROPERTY_FIRST_RUN)) {
+            startActivity(new Intent(this, IntroductionsActivity.class));
+            return;
+        }
 
         new Thread(new Runnable() {
             @Override

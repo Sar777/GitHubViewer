@@ -14,7 +14,7 @@
         android:layout_above="@+id/layout_auth_base"
         android:layout_marginBottom="@dimen/auth_image_margin_bottom"
         android:src="@drawable/ic_github_logo"
-        android:contentDescription="" />
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:id="@+id/layout_auth_base"
@@ -23,7 +23,8 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/auth_layout_margin_left"
         android:layout_marginRight="@dimen/auth_layout_margin_right"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"

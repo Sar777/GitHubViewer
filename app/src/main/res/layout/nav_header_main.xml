@@ -20,7 +20,6 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:clickable="false"
         app:srcCompat="@drawable/user_avatar_default"
-        android:contentDescription=""
         tools:ignore="ContentDescription" />
 
     <TextView

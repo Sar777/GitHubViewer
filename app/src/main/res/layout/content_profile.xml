@@ -19,7 +19,6 @@
         android:src="@drawable/user_avatar_default"
         android:layout_marginTop="@dimen/profile_avatar_margin_top_bottom"
         android:layout_marginBottom="@dimen/profile_avatar_margin_top_bottom"
-        android:contentDescription=""
         tools:ignore="ContentDescription" />
 
     <GridLayout

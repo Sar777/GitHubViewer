@@ -3,6 +3,7 @@ package instinctools.android.services.github;
 import java.net.HttpURLConnection;
 import java.util.List;
 
+import instinctools.android.constans.Constants;
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.authorization.AuthToken;
@@ -11,10 +12,6 @@ import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.storages.PersistantStorage;
 import instinctools.android.utility.Base64Hash;
-
-/**
- * Created by orion on 13.1.17.
- */
 
 public class GithubServices {
     private static final String API_BASE_URL = "https://api.github.com";
@@ -26,7 +23,7 @@ public class GithubServices {
     public static void getRepositoryList(final GithubServiceListener<List<Repository>> listener) {
         HttpClientFactory.create(API_REPO_URL).
                 setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN")).
+                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).
                 send(new OnHttpClientListener() {
                     @Override
                     public void onError(int errCode) {
@@ -50,7 +47,7 @@ public class GithubServices {
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_REPO_URL).
                 setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN"));
+                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN));
 
         client.send();
 
@@ -96,9 +93,9 @@ public class GithubServices {
 
     public static AuthToken getAuthToken() {
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getProperty("AUTH_TOKEN_ID")).
+                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
                 setMethod("GET").
-                addHeader("Authorization", "Basic " + PersistantStorage.getProperty("AUTH_BASIC")).send();
+                addHeader("Authorization", "Basic " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_BASIC)).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;
@@ -110,7 +107,7 @@ public class GithubServices {
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_USER_URL).
                 setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN")).send();
+                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;
@@ -122,7 +119,7 @@ public class GithubServices {
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_USER_URL).
                 setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN"));
+                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN));
 
         client.send(new OnHttpClientListener() {
             @Override
@@ -145,9 +142,9 @@ public class GithubServices {
 
     public static boolean logout() {
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getProperty("AUTH_TOKEN_ID")).
+                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
                 setMethod("DELETE").
-                addHeader("Authorization", "token " + PersistantStorage.getProperty("AUTH_TOKEN")).send();
+                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).send();
 
 
         return client.getCode() == HttpURLConnection.HTTP_NO_CONTENT;
@@ -155,9 +152,9 @@ public class GithubServices {
 
     public static void logout(final GithubServiceListener<Boolean> listener) {
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getProperty("AUTH_TOKEN_ID")).
+                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
                 setMethod("DELETE").
-                addHeader("Authorization", "Basic " + PersistantStorage.getProperty("AUTH_BASIC"));
+                addHeader("Authorization", "Basic " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_BASIC));
 
         client.send(new OnHttpClientListener() {
             @Override

@@ -24,7 +24,6 @@
                 android:layout_height="@dimen/recycler_view_item_icon_size"
                 android:src="@drawable/ic_github_logo"
                 android:layout_centerVertical="true"
-                android:contentDescription=""
                 tools:ignore="ContentDescription" />
 
             <LinearLayout
