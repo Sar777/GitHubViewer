@@ -20,10 +20,6 @@ import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.services.github.GithubServices;
 
-/**
- * Created by orion on 30.12.16.
- */
-
 public class HttpUpdateDataService extends IntentService {
     private static final String TAG = "HttpUpdateDataService";
 
@@ -48,7 +44,9 @@ public class HttpUpdateDataService extends IntentService {
                     .withValue(DBConstants.REPOSITORY_NAME, repository.getName())
                     .withValue(DBConstants.REPOSITORY_FULLNAME, repository.getFullName())
                     .withValue(DBConstants.REPOSITORY_DESCRIPTION, repository.getDescription())
+                    .withValue(DBConstants.REPOSITORY_LANGUAGE, repository.getLanguage())
                     .withValue(DBConstants.REPOSITORY_PRIVATE, repository.isPrivate())
+                    .withValue(DBConstants.REPOSITORY_FORK, repository.isFork())
                     .build());
         }
 

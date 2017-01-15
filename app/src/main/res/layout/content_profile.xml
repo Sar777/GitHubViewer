@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_content_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="@dimen/profile_content_margin_left_right"
+    android:layout_marginLeft="@dimen/profile_content_margin_left_right"
+    tools:context="instinctools.android.activity.ProfileActivity"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_profile">
+
+    <ImageView
+        android:id="@+id/image_profile_avatar"
+        android:layout_width="@dimen/profile_avatar_size"
+        android:layout_height="@dimen/profile_avatar_size"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/user_avatar_default"
+        android:layout_marginTop="@dimen/profile_avatar_margin_top_bottom"
+        android:layout_marginBottom="@dimen/profile_avatar_margin_top_bottom"
+        android:contentDescription=""
+        tools:ignore="ContentDescription" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:useDefaultMargins="true"
+        android:layout_below="@+id/image_profile_avatar"
+        android:columnCount="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_login"/>
+
+        <TextView
+            android:id="@+id/text_profile_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_user_type"/>
+
+        <TextView
+            android:id="@+id/text_profile_user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_username"/>
+
+        <TextView
+            android:id="@+id/text_profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_location"/>
+
+        <TextView
+            android:id="@+id/text_profile_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_email"/>
+
+        <TextView
+            android:id="@+id/text_profile_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_bio"/>
+
+        <TextView
+            android:id="@+id/text_profile_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_public_repositories"/>
+
+        <TextView
+            android:id="@+id/text_profile_public_repo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_profile_public_gists"/>
+
+        <TextView
+            android:id="@+id/text_profile_public_gists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </GridLayout>
+</RelativeLayout>

@@ -1,34 +1,21 @@
 package instinctools.android.models.github.repositories;
 
 import android.database.Cursor;
-import android.text.TextUtils;
 
 import instinctools.android.database.DBConstants;
-
-/**
- * Created by orion on 12.1.17.
- */
 
 public class Repository {
     private int mId;
     private String mName;
     private String mFullName;
+    private String mDescription;
     private RepositoryOwner mRepositoryOwner;
     private boolean mIsPrivate;
-    private String mDescription;
+    private boolean mIsFork;
+    private String mLanguage;
+
 
     public Repository() {
-    }
-
-    public Repository(int id, String name, String fullName, String description, int isPrivate) {
-        this.mId = id;
-        this.mName = name;
-        this.mFullName = TextUtils.isEmpty(fullName) ? "" : fullName;;
-        this.mDescription = TextUtils.isEmpty(description) ? "" : description;
-        this.mIsPrivate = isPrivate != 0;
-
-        // Not used
-        this.mRepositoryOwner = new RepositoryOwner();
     }
 
     public int getId() {
@@ -55,6 +42,14 @@ public class Repository {
         this.mFullName = fullName;
     }
 
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        this.mDescription = description;
+    }
+
     public RepositoryOwner getRepositoryOwner() {
         return mRepositoryOwner;
     }
@@ -71,19 +66,32 @@ public class Repository {
         this.mIsPrivate = isPrivate;
     }
 
-    public String getDescription() {
-        return mDescription;
+    public boolean isFork() {
+        return mIsFork;
     }
 
-    public void setDescription(String description) {
-        this.mDescription = description;
+    public void setIsFork(boolean fork) {
+        this.mIsFork = fork;
+    }
+
+    public String getLanguage() {
+        return mLanguage;
+    }
+
+    public void setLanguage(String language) {
+        this.mLanguage = language;
     }
 
     public static Repository fromCursor(Cursor cursor) {
-        return new Repository(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_ID)),
-                cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_NAME)),
-                cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_FULLNAME)),
-                cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DESCRIPTION)),
-                cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_PRIVATE)));
+        Repository repository = new Repository();
+
+        repository.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_ID)));
+        repository.setName(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_NAME)));
+        repository.setFullName(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_FULLNAME)));
+        repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DESCRIPTION)));
+        repository.setLanguage(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_LANGUAGE)));
+        repository.setIsPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_PRIVATE)) != 0);
+        repository.setIsFork(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_FORK)) != 0);
+        return repository;
     }
 }

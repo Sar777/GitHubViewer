@@ -23,57 +23,70 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.database.providers.RepositoriesProvider;
-import instinctools.android.models.github.authorization.AuthToken;
+import instinctools.android.imageloader.ImageLoader;
+import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.models.github.user.User;
 import instinctools.android.services.HttpUpdateDataService;
-import instinctools.android.services.github.GithubServices;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
 
-    private static final int AUTHORIZATION_REQUEST = 1;
-
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
 
+    private static final int REQUEST_CODE_AUTHORIZATION = 1;
+
     private static final int LOADER_REPOSITORIES_ID = 1;
+    private static final int LOADER_USER_ID = 2;
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RepositoryAdapter mBookAdapter;
-    private DrawerLayout mDrawer;
+    private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AuthToken token = GithubServices.getAuthToken();
-                if (token == null) {
-                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                    startActivityForResult(intent, AUTHORIZATION_REQUEST);
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, MainActivity.this);
-                        }
-                    });
-                }
-            }
-        }).start();
-
-        setTheme(R.style.AppTheme);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initView();
+
+        Intent intentService = new Intent(this, HttpUpdateDataService.class);
+        startService(intentService);
+
+        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
+        getSupportLoaderManager().initLoader(LOADER_USER_ID, null, new LoaderManager.LoaderCallbacks<User>() {
+            @Override
+            public Loader<User> onCreateLoader(int id, Bundle args) {
+                return new AsyncUserInfoLoader(MainActivity.this);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<User> loader, User user) {
+                if (user == null) {
+                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_AUTHORIZATION);
+                    return;
+                }
+
+                // Update navigate drawer
+                updateNavBarInfo(user);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<User> loader) {
+
+            }
+        });
 
         requestExternalStoragePermissions();
     }
@@ -97,13 +110,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.setDrawerListener(toggle);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void updateNavBarInfo(User user) {
+        ImageView imageAvatar = (ImageView) mNavigationView.findViewById(R.id.image_user_avatar);
+        TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
+        TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
+
+        ImageLoader.
+                what(user.getAvatarUrl()).
+                in(imageAvatar).
+                load();
+
+        // Enable clickable
+        imageAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        textViewUsername.setText(user.getName());
+        textViewEmail.setText(user.getEmail());
     }
 
     @Override
@@ -144,6 +180,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != REQUEST_CODE_AUTHORIZATION)
+            return;
+
+        if (resultCode != RESULT_OK)
+            return;
+
+        getSupportLoaderManager().getLoader(LOADER_REPOSITORIES_ID).forceLoad();
+        getSupportLoaderManager().getLoader(LOADER_USER_ID).forceLoad();
+    }
+
     private void requestExternalStoragePermissions() {
         ActivityCompat.requestPermissions(this,
                 new String[]{
@@ -157,15 +205,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRefresh() {
         Intent intentService = new Intent(this, HttpUpdateDataService.class);
         startService(intentService);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != AUTHORIZATION_REQUEST)
-            return;
-
-        if (resultCode == RESULT_OK)
-            getSupportLoaderManager().restartLoader(LOADER_REPOSITORIES_ID, null, this);
     }
 
     @Override
@@ -199,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

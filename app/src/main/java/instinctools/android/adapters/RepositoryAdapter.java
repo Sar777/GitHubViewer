@@ -3,19 +3,17 @@ package instinctools.android.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
 import instinctools.android.models.github.repositories.Repository;
-
-/**
- * Created by orion on 16.12.16.
- */
 
 public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements View.OnClickListener {
     private Context mContext;
@@ -45,13 +43,17 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
         private TextView mTitle;
         private TextView mDescription;
         private TextView mPrivateTextView;
+        private TextView mLanguageTextView;
+        private ImageView mRepositoryType;
 
         RepositoryItemHolder(View view) {
             super(view);
 
             mTitle = (TextView) view.findViewById(R.id.text_name);
             mDescription = (TextView) view.findViewById(R.id.text_description);
+            mLanguageTextView = (TextView) view.findViewById(R.id.text_language);
             mPrivateTextView = (TextView) view.findViewById(R.id.text_private_repository);
+            mRepositoryType = (ImageView) view.findViewById(R.id.image_repository_type);
         }
 
         private void onBindViewHolder(Cursor cursor) {
@@ -62,8 +64,26 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
             else
                 mPrivateTextView.setVisibility(View.GONE);
 
+            if (item.isFork())
+                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_repo_forked));
+            else
+                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_repo));
+
             mTitle.setText(item.getFullName());
-            mDescription.setText(item.getDescription());
+
+            if (item.getDescription().isEmpty())
+                mDescription.setVisibility(View.GONE);
+            else {
+                mDescription.setVisibility(View.VISIBLE);
+                mDescription.setText(item.getDescription());
+            }
+
+            if (item.getLanguage().isEmpty())
+                mLanguageTextView.setVisibility(View.GONE);
+            else {
+                mLanguageTextView.setVisibility(View.VISIBLE);
+                mLanguageTextView.setText(item.getLanguage());
+            }
         }
     }
 

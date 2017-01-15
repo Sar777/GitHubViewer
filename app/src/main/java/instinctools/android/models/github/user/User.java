@@ -1,9 +1,5 @@
 package instinctools.android.models.github.user;
 
-/**
- * Created by orion on 13.1.17.
- */
-
 public class User {
     private int mId;
     private String mLogin;
@@ -13,8 +9,10 @@ public class User {
     private String mCompany;
     private String mLocation;
     private String mEmail;
-    private int mPublicRepos;
-    private int mPublicGists;
+    private String mType;
+    private Integer mPublicRepos;
+    private Integer mPublicGists;
+    private String mBio;
 
     public int getId() {
         return mId;
@@ -72,7 +70,7 @@ public class User {
         this.mLocation = mLocation;
     }
 
-    public String getmEmail() {
+    public String getEmail() {
         return mEmail;
     }
 
@@ -80,20 +78,36 @@ public class User {
         this.mEmail = email;
     }
 
-    public int getPublicRepos() {
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        this.mType = type;
+    }
+
+    public Integer getPublicRepos() {
         return mPublicRepos;
     }
 
-    public void setPublicRepos(int publicRepos) {
+    public void setPublicRepos(Integer publicRepos) {
         this.mPublicRepos = publicRepos;
     }
 
-    public int getPublicGists() {
+    public Integer getPublicGists() {
         return mPublicGists;
     }
 
-    public void setPublicGists(int publicGists) {
+    public void setPublicGists(Integer publicGists) {
         this.mPublicGists = publicGists;
+    }
+
+    public String getBio() {
+        return mBio;
+    }
+
+    public void setBio(String bio) {
+        this.mBio = bio;
     }
 
     @Override
@@ -107,8 +121,9 @@ public class User {
                 ", mCompany='" + mCompany + '\'' +
                 ", mLocation='" + mLocation + '\'' +
                 ", mEmail='" + mEmail + '\'' +
-                ", mPublicRepos='" + mPublicRepos + '\'' +
-                ", mPublicGists='" + mPublicGists + '\'' +
+                ", mPublicRepos=" + mPublicRepos +
+                ", mPublicGists=" + mPublicGists +
+                ", mBio='" + mBio + '\'' +
                 '}';
     }
 }

@@ -13,8 +13,9 @@
         <item name="android:windowBackground">@android:color/background_light</item>
     </style>
 
-    <style name="TransparentText" parent="@android:style/TextAppearance">
-        <item name="android:textColor">#00000000</item>
+    <style name="AppTheme.Profile" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -24,6 +25,10 @@
 
     <style name="AppTheme.Launcher" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background_launcher</item>
+    </style>
+
+    <style name="TransparentText" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#00000000</item>
     </style>
 
     <style name="TextLabel" parent="TextAppearance.AppCompat">
