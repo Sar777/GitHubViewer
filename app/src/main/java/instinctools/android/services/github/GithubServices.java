@@ -81,9 +81,9 @@ public class GithubServices {
                         AuthToken token = JsonTransformer.transform(content, AuthToken.class);
 
                         if (token != null) {
-                            PersistantStorage.addProperty("AUTH_BASIC", Base64Hash.create(email + ":" + password));
-                            PersistantStorage.addProperty("AUTH_TOKEN", token.getToken());
-                            PersistantStorage.addProperty("AUTH_TOKEN_ID", String.valueOf(token.getId()));
+                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_BASIC, Base64Hash.create(email + ":" + password));
+                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_TOKEN, token.getToken());
+                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_TOKEN_ID, String.valueOf(token.getId()));
                         }
 
                         listener.onSuccess(token);
@@ -146,8 +146,13 @@ public class GithubServices {
                 setMethod("DELETE").
                 addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).send();
 
+        if (client.getCode() != HttpURLConnection.HTTP_NO_CONTENT)
+            return false;
 
-        return client.getCode() == HttpURLConnection.HTTP_NO_CONTENT;
+        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_BASIC);
+        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN);
+        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN_ID);
+        return true;
     }
 
     public static void logout(final GithubServiceListener<Boolean> listener) {
@@ -164,7 +169,15 @@ public class GithubServices {
 
             @Override
             public void onSuccess(int code, String content) {
-                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
+                if (code != HttpURLConnection.HTTP_NO_CONTENT) {
+                    listener.onSuccess(false);
+                    return;
+                }
+
+                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_BASIC);
+                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN);
+                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN_ID);
+                listener.onSuccess(true);
             }
         });
     }

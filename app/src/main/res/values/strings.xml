@@ -17,8 +17,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_username">Username:</string>
-    <string name="title_email">Email:</string>
+    <string name="title_username">Username</string>
+    <string name="title_email">Email</string>
     <string name="title_profile_login">Login:</string>
     <string name="title_profile_user_type">User Type:</string>
     <string name="title_profile_username">Username:</string>

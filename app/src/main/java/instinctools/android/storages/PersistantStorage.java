@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PersistantStorage {
-    public static final String STORAGE_NAME = "GITHUB";
+    private static final String STORAGE_NAME = "GITHUB";
 
     private static SharedPreferences mSettings = null;
     private static SharedPreferences.Editor mEditor = null;
@@ -17,6 +17,14 @@ public class PersistantStorage {
     private static void init() {
         mSettings = context.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
+        mEditor.commit();
+    }
+
+    public static void removeProperty(String name) {
+        if (mSettings == null)
+            init();
+
+        mEditor.remove(name);
         mEditor.commit();
     }
 
