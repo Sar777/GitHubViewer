@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.HttpUpdateDataService;
+import instinctools.android.services.github.GithubServiceListener;
+import instinctools.android.services.github.GithubServices;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
@@ -120,9 +123,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateNavBarInfo(User user) {
-        ImageView imageAvatar = (ImageView) mNavigationView.findViewById(R.id.image_user_avatar);
-        TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
-        TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
+        final ImageView imageAvatar = (ImageView) mNavigationView.findViewById(R.id.image_user_avatar);
+        final TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
+        final TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
+        final Button buttonSingOut = (Button) mNavigationView.findViewById(R.id.button_sign_out);
 
         ImageLoader.
                 what(user.getAvatarUrl()).
@@ -140,6 +144,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         textViewUsername.setText(user.getName());
         textViewEmail.setText(user.getEmail());
+
+        buttonSingOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonSingOut.setEnabled(false);
+                GithubServices.logout(new GithubServiceListener<Boolean>() {
+                    @Override
+                    public void onError(int code) {
+                        buttonSingOut.setEnabled(true);
+                        Snackbar.make(findViewById(R.id.content_main), R.string.msg_sign_out_unknown_error, Snackbar.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean data) {
+                        mDrawerLayout.closeDrawers();
+                        startActivityForResult(new Intent(MainActivity.this, AuthActivity.class), REQUEST_CODE_AUTHORIZATION);
+                    }
+                });
+            }
+        });
+
+        buttonSingOut.setVisibility(View.VISIBLE);
+        buttonSingOut.setEnabled(true);
     }
 
     @Override

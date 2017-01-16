@@ -15,4 +15,5 @@
     <string name="title_username">Имя пользователя</string>
     <string name="title_email">Почта</string>
     <string name="title_introduction_sign_in">Войти</string>
+    <string name="msg_sign_out_unknown_error">Ошибка выхода из учетной записи</string>
 </resources>

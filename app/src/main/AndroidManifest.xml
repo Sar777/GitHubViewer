@@ -39,6 +39,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.ProfileActivity"
+            android:label=""
             android:theme="@style/AppTheme.Profile" />
 
         <activity

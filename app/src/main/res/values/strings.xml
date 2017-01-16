@@ -35,4 +35,6 @@
     <string name="msg_introductions_github_3_1">A better way to work</string>
     <string name="msg_introduction_github_3_2">From hobbyists to professionals, GitHub helps developers simplify the way they build software.</string>
     <string name="title_introduction_sign_in">Sign In</string>
+    <string name="title_sign_out_button">Sign out</string>
+    <string name="msg_sign_out_unknown_error">Unknown error sign out</string>
 </resources>

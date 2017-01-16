@@ -30,9 +30,26 @@
         android:text="@string/title_username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/text_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_email" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/title_email" />
+
+        <Button
+            android:id="@+id/button_sign_out"
+            android:layout_width="@dimen/nav_bar_sign_out_width"
+            android:layout_height="@dimen/nav_bar_sign_out_height"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:visibility="invisible"
+            android:textSize="@dimen/nav_bar_button_sign_out_text_size"
+            android:text="@string/title_sign_out_button"
+            tools:ignore="RelativeOverlap,RtlHardcoded"
+            tools:visibility="visible"/>
+    </RelativeLayout>
 </LinearLayout>

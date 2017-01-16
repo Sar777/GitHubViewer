@@ -13,8 +13,6 @@ public class IntroductionsActivity extends AppCompatActivity {
     private IntroductionPagerAdapter mIntroductionPagerAdapter;
     private ViewPager mViewPager;
 
-    private int mSlideButtons[] = { R.id.button_slide1, R.id.button_slide2, R.id.button_slide3, R.id.button_slide4 };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
