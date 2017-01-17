@@ -6,11 +6,11 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-import instinctools.android.models.github.authorization.AuthToken;
+import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.authorization.AuthTokenTransformer;
+import instinctools.android.readers.json.transformers.github.authorization.AccessTokenTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListUserRepositoriesTransformer;
 import instinctools.android.readers.json.transformers.github.user.UserTransformer;
 
@@ -25,7 +25,7 @@ public class JsonTransformer {
 
     static {
         mTransformersMap.put(User.class.getName(), UserTransformer.class);
-        mTransformersMap.put(AuthToken.class.getName(), AuthTokenTransformer.class);
+        mTransformersMap.put(AccessToken.class.getName(), AccessTokenTransformer.class);
         mTransformersMap.put(Repository[].class.getName(), ListUserRepositoriesTransformer.class);
     }
 

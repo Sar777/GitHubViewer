@@ -1,25 +1,21 @@
 package instinctools.android.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
+import instinctools.android.App;
 import instinctools.android.R;
-import instinctools.android.models.github.authorization.AuthToken;
+import instinctools.android.constans.Constants;
+import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.GithubServices;
 
-public class AuthActivity extends AppCompatActivity implements View.OnClickListener{
-
-    private EditText mEditTextUsername;
-    private EditText mEditTextPassword;
-    private Button mButton;
+public class AuthActivity extends AppCompatActivity implements View.OnClickListener {
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -28,14 +24,40 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_auth);
 
         initView();
+
+        onNewIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent == null || TextUtils.isEmpty(intent.getDataString()))
+            return;
+
+        if (!intent.getDataString().contains(Constants.AUTH_CALLBACK_INITIAL))
+            return;
+
+        mProgressDialog = ProgressDialog.show(this, getString(R.string.msg_auth_title_dialog), getString(R.string.msg_auth_message_dialog), true);
+
+        String code = intent.getDataString().substring(intent.getDataString().indexOf("code=") + 5);
+        GithubServices.continueAuthorization(code, new GithubServiceListener<AccessToken>() {
+            @Override
+            public void onError(int code) {
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onSuccess(AccessToken token) {
+                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                mProgressDialog.dismiss();
+                finish();
+            }
+        });
+        super.onNewIntent(intent);
     }
 
     private void initView() {
-        mEditTextUsername = (EditText) findViewById(R.id.edit_text_username);
-        mEditTextPassword = (EditText) findViewById(R.id.edit_text_password);
-
-        mButton = (Button) findViewById(R.id.button_auth);
-        mButton.setOnClickListener(this);
+        Button button = (Button) findViewById(R.id.button_auth);
+        button.setOnClickListener(this);
     }
 
     @Override
@@ -43,34 +65,6 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         if (view.getId() != R.id.button_auth)
             return;
 
-        final Editable username = mEditTextUsername.getText();
-        final Editable password = mEditTextPassword.getText();
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_empty_fields, Snackbar.LENGTH_SHORT).show();
-            return;
-        }
-
-        mProgressDialog = ProgressDialog.show(this, getString(R.string.msg_auth_title_dialog), getString(R.string.msg_auth_message_dialog), true);
-
-        GithubServices.authorization(username.toString(), password.toString(), new GithubServiceListener<AuthToken>() {
-            @Override
-            public void onError(int code) {
-                mProgressDialog.dismiss();
-                Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_auth_unknown_error, Snackbar.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSuccess(AuthToken token) {
-                mProgressDialog.dismiss();
-
-                if (token == null) {
-                    Snackbar.make(findViewById(R.id.activity_auth), R.string.msg_auth_unknown_error, Snackbar.LENGTH_SHORT).show();
-                    return;
-                }
-
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+        App.launchUrl(this, GithubServices.getAuthUrl(Constants.AUTH_CALLBACK_INITIAL));
     }
 }

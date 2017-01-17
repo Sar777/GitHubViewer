@@ -20,10 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,8 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
 
-    private static final int REQUEST_CODE_AUTHORIZATION = 1;
-
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int LOADER_USER_ID = 2;
 
@@ -63,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initView();
 
+        requestExternalStoragePermissions();
+
         Intent intentService = new Intent(this, HttpUpdateDataService.class);
         startService(intentService);
 
@@ -76,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onLoadFinished(Loader<User> loader, User user) {
                 if (user == null) {
-                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE_AUTHORIZATION);
+                    startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                    finish();
                     return;
                 }
 
@@ -90,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-
-        requestExternalStoragePermissions();
     }
 
     private void initView() {
@@ -126,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final ImageView imageAvatar = (ImageView) mNavigationView.findViewById(R.id.image_user_avatar);
         final TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
         final TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
-        final Button buttonSingOut = (Button) mNavigationView.findViewById(R.id.button_sign_out);
 
         ImageLoader.
                 what(user.getAvatarUrl()).
@@ -144,29 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         textViewUsername.setText(user.getName());
         textViewEmail.setText(user.getEmail());
-
-        buttonSingOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonSingOut.setEnabled(false);
-                GithubServices.logout(new GithubServiceListener<Boolean>() {
-                    @Override
-                    public void onError(int code) {
-                        buttonSingOut.setEnabled(true);
-                        Snackbar.make(findViewById(R.id.content_main), R.string.msg_sign_out_unknown_error, Snackbar.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onSuccess(Boolean data) {
-                        mDrawerLayout.closeDrawers();
-                        startActivityForResult(new Intent(MainActivity.this, AuthActivity.class), REQUEST_CODE_AUTHORIZATION);
-                    }
-                });
-            }
-        });
-
-        buttonSingOut.setVisibility(View.VISIBLE);
-        buttonSingOut.setEnabled(true);
     }
 
     @Override
@@ -207,18 +179,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != REQUEST_CODE_AUTHORIZATION)
-            return;
-
-        if (resultCode != RESULT_OK)
-            return;
-
-        getSupportLoaderManager().getLoader(LOADER_REPOSITORIES_ID).forceLoad();
-        getSupportLoaderManager().getLoader(LOADER_USER_ID).forceLoad();
-    }
-
     private void requestExternalStoragePermissions() {
         ActivityCompat.requestPermissions(this,
                 new String[]{
@@ -244,47 +204,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.nav_logout: {
+                GithubServices.logout(new GithubServiceListener<Boolean>() {
+                    @Override
+                    public void onError(int code) {
+                        Snackbar.make(findViewById(R.id.content_main), R.string.msg_sign_out_unknown_error, Snackbar.LENGTH_SHORT).show();
+                    }
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+                    @Override
+                    public void onSuccess(Boolean data) {
+                        startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                        finish();
+                    }
+                });
+                break;
+            }
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

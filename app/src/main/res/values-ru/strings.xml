@@ -6,14 +6,15 @@
     <string name="msg_permission_external_storage_granted">Доступ запрещен. Кэширование только в оперативную память</string>
     <string name="title_activity_auth">Авторизация Github.com</string>
     <string name="msg_login_or_email">Имя пользователя или email</string>
-    <string name="msg_password">Пароль</string>
-    <string name="msg_empty_fields">Заполните все поля</string>
-    <string name="msg_auth_title_dialog">Авторизация</string>
-    <string name="msg_auth_message_dialog">Происходит авторизация, пожалуйста, подождите</string>
     <string name="msg_auth_username_or_password_fail">Ошибка авторизации. Проверьте имя пользователя и пароль</string>
     <string name="msg_auth_unknown_error">Неизвестная ошибка авторизации</string>
     <string name="title_username">Имя пользователя</string>
     <string name="title_email">Почта</string>
     <string name="title_introduction_sign_in">Войти</string>
     <string name="msg_sign_out_unknown_error">Ошибка выхода из учетной записи</string>
+    <string name="msg_auth_title_dialog">Авторизация</string>
+    <string name="msg_auth_message_dialog">Авторизация, пожалуйста, подождите...</string>
+    <string name="msg_introductions_go">Начать</string>
+    <string name="title_nav_bar_control">Управление</string>
+    <string name="title_nav_bar_count_logout">Выйти</string>
 </resources>

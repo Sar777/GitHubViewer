@@ -35,43 +35,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dip"
+        android:layout_height="@dimen/introduction_slide_button_layout_height"
         android:background="#9d201b1b"
         android:layout_gravity="bottom">
 
         <LinearLayout
+            android:id="@+id/layout_slide_buttons"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
-
-            <Button
-                android:id="@+id/button_slide1"
-                android:layout_height="15dp"
-                android:layout_width="15dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_cell" />
-
-            <Button
-                android:id="@+id/button_slide2"
-                android:layout_height="15dp"
-                android:layout_width="15dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_cell" />
-
-            <Button
-                android:id="@+id/button_slide3"
-                android:layout_height="15dp"
-                android:layout_width="15dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_cell" />
-
-            <Button
-                android:id="@+id/button_slide4"
-                android:layout_height="15dp"
-                android:layout_width="15dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_cell" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
         </LinearLayout>
     </RelativeLayout>
 

@@ -1,53 +1,95 @@
 package instinctools.android.services.github;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
 import java.net.HttpURLConnection;
 import java.util.List;
 
-import instinctools.android.constans.Constants;
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
-import instinctools.android.models.github.authorization.AuthToken;
+import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.JsonTransformer;
-import instinctools.android.storages.PersistantStorage;
+import instinctools.android.storages.GitHubSessionStorage;
 import instinctools.android.utility.Base64Hash;
 
 public class GithubServices {
+    // Constants
     private static final String API_BASE_URL = "https://api.github.com";
 
+    private static final String AUTH_URL = "https://github.com/login/oauth/authorize?";
+    private static final String TOKEN_URL = "https://github.com/login/oauth/access_token?";
+
     private static final String API_REPO_URL = API_BASE_URL + "/user/repos";
-    private static final String API_AUTH_URL = API_BASE_URL + "/authorizations";
+    private static final String API_APPLICATION_URL = API_BASE_URL + "/applications";
     private static final String API_USER_URL = API_BASE_URL + "/user";
 
-    public static void getRepositoryList(final GithubServiceListener<List<Repository>> listener) {
-        HttpClientFactory.create(API_REPO_URL).
-                setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).
-                send(new OnHttpClientListener() {
-                    @Override
-                    public void onError(int errCode) {
-                        listener.onError(errCode);
-                    }
+    private static final String FIELD_CLIENT_ID = "client_id";
+    private static final String FIELD_CLIENT_SECRET = "client_secret";
+    private static final String FIELD_SCOPES = "scope";
+    private static final String FIELD_REDIRECT_URL = "redirect_uri";
+    private static final String FIELD_CODE = "code";
+    private static final String FIELD_TOKENS = "tokens";
 
-                    @Override
-                    public void onSuccess(int code, String content) {
-                        if (code != HttpURLConnection.HTTP_OK) {
-                            listener.onError(code);
-                            return;
-                        }
+    //
+    private static GitHubSessionStorage mSessionStorage;
+    private static String mClientId;
+    private static String mClientSecret;
+    private static String mBaseCallback;
+    private static String mScopes;
 
-                        List<Repository> repositories = JsonTransformer.transform(content, Repository[].class);
-                        listener.onSuccess(repositories);
-                    }
-                });
+    public static void init(Context context, String clientId, String clientSecret, String scopes, String callbackUrl) {
+        mSessionStorage = new GitHubSessionStorage(context);
+
+        mClientId = clientId;
+        mClientSecret = clientSecret;
+        mScopes = scopes;
+
+        mBaseCallback = callbackUrl;
+    }
+
+    public static String getAuthUrl(String uriCallback) {
+        return AUTH_URL +
+                FIELD_CLIENT_ID + "=" + mClientId +
+                "&" +
+                FIELD_SCOPES + "=" + mScopes +
+                "&" +
+                FIELD_REDIRECT_URL + "=" + mBaseCallback + "/" + uriCallback;
+    }
+
+    public static String getTokenUrl(@NonNull String code) {
+        return TOKEN_URL +
+                FIELD_CLIENT_ID + "=" + mClientId +
+                "&" +
+                FIELD_CLIENT_SECRET + "=" + mClientSecret +
+                "&" +
+                FIELD_CODE + "=" + code;
+    }
+
+    public static String getResetAuthUrl() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        return String.format("%s/%s/%s/%s", API_APPLICATION_URL, mClientId, FIELD_TOKENS, getAccessToken());
+    }
+
+    private static String getFormatAccessToken() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        return "token " + mSessionStorage.getAccessToken();
     }
 
     public static List<Repository> getRepositoryList() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_REPO_URL).
-                setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN));
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
 
         client.send();
 
@@ -57,14 +99,14 @@ public class GithubServices {
         return JsonTransformer.transform(client.getContent(), Repository[].class);
     }
 
-    public static void authorization(final String email, final String password, final GithubServiceListener<AuthToken> listener) {
-        final String authData = "{\"scopes\":[\"repo\"],\"note\":\"Test APP\"}";
+    public static void continueAuthorization(final String code, final GithubServiceListener<AccessToken> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
-        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(API_AUTH_URL);
+        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(getTokenUrl(code));
         httpClient.
-                setMethod("POST").
-                addHeader("Authorization", "Basic " + Base64Hash.create(email + ":" + password)).
-                setData(authData).
+                setMethod(HttpClientFactory.METHOD_POST).
+                addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON).
                 send(new OnHttpClientListener() {
                     @Override
                     public void onError(int errCode) {
@@ -73,41 +115,24 @@ public class GithubServices {
 
                     @Override
                     public void onSuccess(int code, String content) {
-                        if (code != HttpURLConnection.HTTP_CREATED) {
-                            listener.onError(code);
+                        AccessToken token = JsonTransformer.transform(content, AccessToken.class);
+                        if (token == null)
                             return;
-                        }
 
-                        AuthToken token = JsonTransformer.transform(content, AuthToken.class);
-
-                        if (token != null) {
-                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_BASIC, Base64Hash.create(email + ":" + password));
-                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_TOKEN, token.getToken());
-                            PersistantStorage.addProperty(Constants.PROPERTY_AUTH_TOKEN_ID, String.valueOf(token.getId()));
-                        }
-
+                        mSessionStorage.saveAccessToken(token.getAcessToken());
                         listener.onSuccess(token);
                     }
                 });
     }
 
-    public static AuthToken getAuthToken() {
-        HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
-                setMethod("GET").
-                addHeader("Authorization", "Basic " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_BASIC)).send();
-
-        if (client.getCode() != HttpURLConnection.HTTP_OK)
-            return null;
-
-        return JsonTransformer.transform(client.getContent(), AuthToken.class);
-    }
-
     public static User getUser() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_USER_URL).
-                setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).send();
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;
@@ -116,10 +141,13 @@ public class GithubServices {
     }
 
     public static void getUser(final GithubServiceListener<User> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_USER_URL).
-                setMethod("GET").
-                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN));
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
 
         client.send(new OnHttpClientListener() {
             @Override
@@ -140,26 +168,21 @@ public class GithubServices {
         });
     }
 
-    public static boolean logout() {
-        HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
-                setMethod("DELETE").
-                addHeader("Authorization", "token " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN)).send();
+    public static String getAccessToken() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
-        if (client.getCode() != HttpURLConnection.HTTP_NO_CONTENT)
-            return false;
-
-        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_BASIC);
-        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN);
-        PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN_ID);
-        return true;
+        return mSessionStorage.getAccessToken();
     }
 
     public static void logout(final GithubServiceListener<Boolean> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_AUTH_URL + "/" + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_TOKEN_ID)).
-                setMethod("DELETE").
-                addHeader("Authorization", "Basic " + PersistantStorage.getStringProperty(Constants.PROPERTY_AUTH_BASIC));
+                create(getResetAuthUrl()).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, "Basic " + Base64Hash.create(mClientId + ":" + mClientSecret)).
+                setMethod(HttpClientFactory.METHOD_DELETE);
 
         client.send(new OnHttpClientListener() {
             @Override
@@ -174,9 +197,7 @@ public class GithubServices {
                     return;
                 }
 
-                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_BASIC);
-                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN);
-                PersistantStorage.removeProperty(Constants.PROPERTY_AUTH_TOKEN_ID);
+                mSessionStorage.resetAccessToken();
                 listener.onSuccess(true);
             }
         });

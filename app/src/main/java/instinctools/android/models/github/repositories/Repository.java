@@ -8,12 +8,13 @@ public class Repository {
     private int mId;
     private String mName;
     private String mFullName;
+    private String mHtmlUrl;
     private String mDescription;
+    private String mDefaultBranch;
     private RepositoryOwner mRepositoryOwner;
     private boolean mIsPrivate;
     private boolean mIsFork;
     private String mLanguage;
-
 
     public Repository() {
     }
@@ -42,12 +43,28 @@ public class Repository {
         this.mFullName = fullName;
     }
 
+    public String getHtmlUrl() {
+        return mHtmlUrl;
+    }
+
+    public void setHtmlUrl(String htmlUrl) {
+        this.mHtmlUrl = htmlUrl;
+    }
+
     public String getDescription() {
         return mDescription;
     }
 
     public void setDescription(String description) {
         this.mDescription = description;
+    }
+
+    public String getDefaultBranch() {
+        return mDefaultBranch;
+    }
+
+    public void setDefaultBranch(String defaultBranch) {
+        this.mDefaultBranch = defaultBranch;
     }
 
     public RepositoryOwner getRepositoryOwner() {
@@ -88,7 +105,9 @@ public class Repository {
         repository.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_ID)));
         repository.setName(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_NAME)));
         repository.setFullName(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_FULLNAME)));
+        repository.setHtmlUrl(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_HTML_URL)));
         repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DESCRIPTION)));
+        repository.setDefaultBranch(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DEFAULT_BRANCH)));
         repository.setLanguage(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_LANGUAGE)));
         repository.setIsPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_PRIVATE)) != 0);
         repository.setIsFork(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_FORK)) != 0);

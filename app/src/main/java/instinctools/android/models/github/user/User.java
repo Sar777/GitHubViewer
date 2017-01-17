@@ -12,6 +12,8 @@ public class User {
     private String mType;
     private Integer mPublicRepos;
     private Integer mPublicGists;
+    private String mFollowers;
+    private String mFollowing;
     private String mBio;
 
     public int getId() {
@@ -110,20 +112,19 @@ public class User {
         this.mBio = bio;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "mId=" + mId +
-                ", mLogin='" + mLogin + '\'' +
-                ", mAvatarUrl='" + mAvatarUrl + '\'' +
-                ", mGravatarId='" + mGravatarId + '\'' +
-                ", mName='" + mName + '\'' +
-                ", mCompany='" + mCompany + '\'' +
-                ", mLocation='" + mLocation + '\'' +
-                ", mEmail='" + mEmail + '\'' +
-                ", mPublicRepos=" + mPublicRepos +
-                ", mPublicGists=" + mPublicGists +
-                ", mBio='" + mBio + '\'' +
-                '}';
+    public String getFollowers() {
+        return mFollowers;
+    }
+
+    public void setFollowers(String followers) {
+        this.mFollowers = followers;
+    }
+
+    public String getFollowing() {
+        return mFollowing;
+    }
+
+    public void setFollowing(String following) {
+        this.mFollowing = following;
     }
 }

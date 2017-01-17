@@ -8,7 +8,7 @@ import instinctools.android.fragments.introductions.AboutGithubFragment;
 
 public class IntroductionPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int MAX_PAGES = 4;
+    public static final int MAX_PAGES = 4;
 
     public IntroductionPagerAdapter(FragmentManager fm) {
         super(fm);

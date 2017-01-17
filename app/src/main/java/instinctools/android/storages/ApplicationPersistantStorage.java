@@ -3,28 +3,26 @@ package instinctools.android.storages;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PersistantStorage {
-    private static final String STORAGE_NAME = "GITHUB";
+import static android.content.SharedPreferences.Editor;
+
+/**
+ * Created by orion on 17.1.17.
+ */
+
+public class ApplicationPersistantStorage {
+    public static final String STORAGE_NAME = "Application_Preferences";
 
     private static SharedPreferences mSettings = null;
-    private static SharedPreferences.Editor mEditor = null;
-    private static Context context = null;
+    private static Editor mEditor = null;
+    private static Context mContext = null;
 
     public static void init(Context context) {
-        PersistantStorage.context = context;
+        ApplicationPersistantStorage.mContext = context;
     }
 
     private static void init() {
-        mSettings = context.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
+        mSettings = mContext.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
-        mEditor.commit();
-    }
-
-    public static void removeProperty(String name) {
-        if (mSettings == null)
-            init();
-
-        mEditor.remove(name);
         mEditor.commit();
     }
 

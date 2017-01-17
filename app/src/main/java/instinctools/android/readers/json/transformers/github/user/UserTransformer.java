@@ -22,6 +22,8 @@ public class UserTransformer implements ITransformer<User> {
     private static final String J_TYPE = "type";
     private static final String J_PUBLIC_REPOS = "public_repos";
     private static final String J_PUBLIC_GISTS = "public_gists";
+    private static final String J_FOLLOWING = "following";
+    private static final String J_FOLLOWERS = "followers";
     private static final String J_PUBLIC_BIO = "bio";
 
     @Override
@@ -50,6 +52,8 @@ public class UserTransformer implements ITransformer<User> {
             user.setType(jsonObject.getString(J_TYPE));
             user.setPublicRepos(jsonObject.getInt(J_PUBLIC_REPOS));
             user.setPublicGists(jsonObject.getInt(J_PUBLIC_GISTS));
+            user.setFollowers(jsonObject.getString(J_FOLLOWERS));
+            user.setFollowing(jsonObject.getString(J_FOLLOWING));
             user.setBio(jsonObject.getString(J_PUBLIC_BIO).equals("null") ? "" : jsonObject.getString(J_PUBLIC_BIO));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

@@ -21,8 +21,19 @@ import java.util.Map;
 public class HttpClientFactory {
     private static final String TAG = "HttpClientFactory";
 
-    // Default options
-    private static final String DEFAULT_METHOD = "GET";
+    // Methods
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+    public static final String METHOD_DELETE = "DELETE";
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_PATH = "PATH";
+
+    // Headers
+    public static final String HEADER_ACCEPT = "Accept";
+    public static final String HEADER_AUTHORIZATION = "Authorization";
+
+    // Types
+    public static final String HEADER_ACCEPT_TYPE_JSON = "application/json";
 
     private HttpClientFactory() {
     }
@@ -48,7 +59,7 @@ public class HttpClientFactory {
                 Log.e(TAG, "Malformed url in constructor", e);
             }
 
-            this.mMethod = DEFAULT_METHOD;
+            this.mMethod = METHOD_GET;
             this.mCode = -1;
             this.mHeaders = new HashMap<>();
             this.mParams = new HashMap<>();
@@ -114,25 +125,24 @@ public class HttpClientFactory {
                 Log.e(TAG, "Fail http client", e);
             }
 
-            if (mMethod == "POST") {
-                connection.setDoOutput(true);
-                DataOutputStream dataOutputStream = null;
-                try {
-                    dataOutputStream = new DataOutputStream(connection.getOutputStream());
+            if (mMethod.equals("POST")) {
+                if (mData != null) {
+                    DataOutputStream dataOutputStream = null;
+                    try {
+                        dataOutputStream = new DataOutputStream(connection.getOutputStream());
+                        dataOutputStream.writeBytes(mData);
 
-                    //dataOutputStream.writeBytes(getBuildParams());
-                    dataOutputStream.writeBytes(mData);
-
-                    dataOutputStream.flush();
-                } catch (IOException e) {
-                    Log.e(TAG, "Fail write output stream", e);
-                } finally {
-                    if (dataOutputStream != null)
-                        try {
-                            dataOutputStream.close();
-                        } catch (IOException e) {
-                            Log.e(TAG, "Fail close output stream", e);
-                        }
+                        dataOutputStream.flush();
+                    } catch (IOException e) {
+                        Log.e(TAG, "Fail write output stream", e);
+                    } finally {
+                        if (dataOutputStream != null)
+                            try {
+                                dataOutputStream.close();
+                            } catch (IOException e) {
+                                Log.e(TAG, "Fail close output stream", e);
+                            }
+                    }
                 }
             }
 

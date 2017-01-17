@@ -13,7 +13,7 @@ import instinctools.android.R;
 import instinctools.android.activity.AuthActivity;
 import instinctools.android.activity.MainActivity;
 import instinctools.android.constans.Constants;
-import instinctools.android.storages.PersistantStorage;
+import instinctools.android.storages.ApplicationPersistantStorage;
 
 public class AboutGithubFragment extends Fragment implements View.OnClickListener {
     private static final int REQUEST_CODE_AUTHORIZATION = 1;
@@ -68,7 +68,7 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
         if (view.getId() != R.id.button_signIn)
             return;
 
-        PersistantStorage.addProperty(Constants.PROPERTY_FIRST_RUN, true);
+        ApplicationPersistantStorage.addProperty(Constants.PROPERTY_FIRST_RUN, true);
 
         Intent intent = new Intent(getContext(), AuthActivity.class);
         startActivityForResult(intent, REQUEST_CODE_AUTHORIZATION);
