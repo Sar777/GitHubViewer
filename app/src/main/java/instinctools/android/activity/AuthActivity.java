@@ -17,6 +17,7 @@ import instinctools.android.services.github.GithubServices;
 
 public class AuthActivity extends AppCompatActivity implements View.OnClickListener {
     private ProgressDialog mProgressDialog;
+    private Button mButtonAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +37,15 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         if (!intent.getDataString().contains(Constants.AUTH_CALLBACK_INITIAL))
             return;
 
+        mButtonAuth.setVisibility(View.INVISIBLE);
+
         mProgressDialog = ProgressDialog.show(this, getString(R.string.msg_auth_title_dialog), getString(R.string.msg_auth_message_dialog), true);
 
         String code = intent.getDataString().substring(intent.getDataString().indexOf("code=") + 5);
         GithubServices.continueAuthorization(code, new GithubServiceListener<AccessToken>() {
             @Override
             public void onError(int code) {
+                mButtonAuth.setVisibility(View.VISIBLE);
                 mProgressDialog.dismiss();
             }
 
@@ -56,8 +60,8 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        Button button = (Button) findViewById(R.id.button_auth);
-        button.setOnClickListener(this);
+        mButtonAuth = (Button) findViewById(R.id.button_auth);
+        mButtonAuth.setOnClickListener(this);
     }
 
     @Override

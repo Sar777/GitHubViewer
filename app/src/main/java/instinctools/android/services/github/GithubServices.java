@@ -31,7 +31,7 @@ public class GithubServices {
     private static final String FIELD_SCOPES = "scope";
     private static final String FIELD_REDIRECT_URL = "redirect_uri";
     private static final String FIELD_CODE = "code";
-    private static final String FIELD_TOKENS = "tokens";
+    private static final String FIELD_GRANTS = "grants";
 
     //
     private static GitHubSessionStorage mSessionStorage;
@@ -68,11 +68,11 @@ public class GithubServices {
                 FIELD_CODE + "=" + code;
     }
 
-    public static String getResetAuthUrl() {
+    public static String getResetGrantUrl() {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
-        return String.format("%s/%s/%s/%s", API_APPLICATION_URL, mClientId, FIELD_TOKENS, getAccessToken());
+        return String.format("%s/%s/%s/%s", API_APPLICATION_URL, mClientId, FIELD_GRANTS, getAccessToken());
     }
 
     private static String getFormatAccessToken() {
@@ -180,7 +180,7 @@ public class GithubServices {
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(getResetAuthUrl()).
+                create(getResetGrantUrl()).
                 addHeader(HttpClientFactory.HEADER_AUTHORIZATION, "Basic " + Base64Hash.create(mClientId + ":" + mClientSecret)).
                 setMethod(HttpClientFactory.METHOD_DELETE);
 
