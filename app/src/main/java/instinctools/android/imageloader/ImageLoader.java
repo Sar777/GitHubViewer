@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -18,10 +19,6 @@ import instinctools.android.App;
 import instinctools.android.cache.BitmapCacheMgr;
 import instinctools.android.constans.Constants;
 import instinctools.android.executors.ImageTaskExecutor;
-
-/**
- * Created by orion on 22.12.16.
- */
 
 public class ImageLoader {
     private static final String TAG = "ImageLoader";
@@ -47,7 +44,7 @@ public class ImageLoader {
         private WeakReference<ImageView> mImageViewReference;
         private ImagePlaceholder mImagePlaceholder;
 
-        public ImageTarget(String url) {
+        ImageTarget(String url) {
             this.mUrl = url;
         }
 
@@ -56,7 +53,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget error(@NonNull int drawId) {
+        public ImageTarget error(int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 
@@ -64,7 +61,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget loading(@NonNull int drawId) {
+        public ImageTarget loading(int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 
@@ -78,6 +75,9 @@ public class ImageLoader {
         }
 
         public void load(@NonNull ImageLoadingStateListener listener) {
+            if (TextUtils.isEmpty(mUrl) || mImageViewReference.get() == null)
+                return;
+
             new ImageBitmapWorker(this, listener).executeOnExecutor(ImageBitmapExecutor);
         }
 
@@ -90,12 +90,12 @@ public class ImageLoader {
         private final ImageTarget mImageTarget;
         private final ImageLoadingStateListener mListener;
 
-        public ImageBitmapWorker(ImageTarget image) {
+        ImageBitmapWorker(ImageTarget image) {
             this.mImageTarget = image;
             this.mListener = null;
         }
 
-        public ImageBitmapWorker(ImageTarget image, ImageLoadingStateListener listener) {
+        ImageBitmapWorker(ImageTarget image, ImageLoadingStateListener listener) {
             this.mImageTarget = image;
             this.mListener = listener;
         }

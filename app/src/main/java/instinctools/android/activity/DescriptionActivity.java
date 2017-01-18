@@ -3,6 +3,7 @@ package instinctools.android.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -10,28 +11,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import instinctools.android.R;
-import instinctools.android.adapters.BookAdapter;
-import instinctools.android.data.Book;
+import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.BooksProvider;
-import instinctools.android.imageloader.ImageLoader;
+import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.http.HttpClientFactory;
+import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.misc.LinkTransformationMethod;
+import instinctools.android.models.github.repositories.Repository;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ImageView mImageViewBook;
-    private TextView mTextViewTitle;
-    private TextView mTextViewDescription;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ProgressBar mProgressBar;
+    private TextView mTextViewReadme;
 
-    private static final String BUNDLE_BOOK_ID = "ID";
+    private static final String BUNDLE_REPOSITORY_ID = "ID";
 
-    private static final int LOADER_BOOK_ID = 1;
+    private static final int LOADER_REPOSITORY_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +45,23 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         if (intent != null) {
-            long id = intent.getLongExtra(BookAdapter.EXTRA_BOOK_ID_TAG, -1);
+            long id = intent.getLongExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
 
             Bundle bundle = new Bundle();
-            bundle.putLong(BUNDLE_BOOK_ID, id);
-            getSupportLoaderManager().initLoader(LOADER_BOOK_ID, bundle, this);
+            bundle.putLong(BUNDLE_REPOSITORY_ID, id);
+            getSupportLoaderManager().initLoader(LOADER_REPOSITORY_ID, bundle, this);
         }
     }
 
     private void initView() {
-        mImageViewBook = (ImageView) findViewById(R.id.image_book);
-        mTextViewTitle = (TextView) findViewById(R.id.text_title);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        mCollapsingToolbarLayout.setTitle("");
+
         mProgressBar = (ProgressBar) findViewById(R.id.pb_description_content);
 
-        mTextViewDescription = (TextView) findViewById(R.id.text_description);
-        mTextViewDescription.setTransformationMethod(new LinkTransformationMethod());
-        mTextViewDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mTextViewReadme = (TextView) findViewById(R.id.text_readme);
+        mTextViewReadme.setTransformationMethod(new LinkTransformationMethod());
+        mTextViewReadme.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -71,10 +72,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id != LOADER_BOOK_ID)
+        if (id != LOADER_REPOSITORY_ID)
             return null;
 
-        return new CursorLoader(this, BooksProvider.BOOK_CONTENT_URI, null, DBConstants.BOOK_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_BOOK_ID))}, null);
+        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_REPOSITORY_ID))}, null);
     }
 
     @Override
@@ -84,17 +85,21 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (!cursor.moveToFirst())
             return;
 
-        Book book = Book.fromCursor(cursor);
+        Repository repository = Repository.fromCursor(cursor);
+        mCollapsingToolbarLayout.setTitle(repository.getName());
 
-        mTextViewTitle.setText(book.getTitle());
-        getSupportActionBar().setTitle(book.getTitle());
-        mTextViewDescription.setText(book.getDescription());
+        String url = String.format("https://raw.githubusercontent.com/%s/%s/README.md", repository.getFullName(), repository.getDefaultBranch());
+        HttpClientFactory.HttpClient client = HttpClientFactory.create(url);
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+            }
 
-        ImageLoader.what(book.getImage()).
-                loading(R.drawable.ic_crop_original_orange_24dp).
-                error(R.drawable.ic_clear_red_24dp).
-                in(mImageViewBook).
-                load();
+            @Override
+            public void onSuccess(int code, String content) {
+                mTextViewReadme.setText(content);
+            }
+        });
 
         if (!cursor.isClosed())
             cursor.close();

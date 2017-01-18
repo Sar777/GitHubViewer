@@ -2,11 +2,71 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <!-- -->
     <dimen name="recycler_view_item_icon_size">42dp</dimen>
     <dimen name="recycler_view_item_margin">16dp</dimen>
     <dimen name="recycler_view_item_min_root_layout_height">72dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="recycler_view_item_private_margin_left">5dp</dimen>
+    <dimen name="recycler_view_item_image_view_margin_left_right">16dp</dimen>
+    <dimen name="recycler_view_item_rep_type_padding">2dp</dimen>
+    <dimen name="recycler_item_child_layout_margin">72dp</dimen>
+    <!-- -->
     <dimen name="text_view_title_margin">16dp</dimen>
     <dimen name="text_view_description_margin">8dp</dimen>
-    <dimen name="recycler_item_child_layout_margin">72dp</dimen>
+    <!-- -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="auth_layout_margin_left">50dp</dimen>
+    <dimen name="auth_layout_margin_right">50dp</dimen>
+    <dimen name="auth_button_margin_top">30dp</dimen>
+    <dimen name="auth_image_margin_bottom">20dp</dimen>
+    <dimen name="auth_image_width_height">70dp</dimen>
+    <dimen name="auth_button_text_padding_left_right">10dp</dimen>
+    <!-- -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- -->
+    <dimen name="profile_avatar_size">80dp</dimen>
+    <dimen name="profile_content_margin_left_right">7dp</dimen>
+    <!-- -->
+    <dimen name="introductions_welcome_text_size">18sp</dimen>
+    <dimen name="introductions_welcome_text2_size">15sp</dimen>
+    <dimen name="introductions_image_github_width">200dp</dimen>
+    <dimen name="introductions_image_github_height">100dp</dimen>
+    <dimen name="introductions_image_github_margin_top">100dp</dimen>
+    <dimen name="introductions_welcome_text_margin_top">10dp</dimen>
+    <dimen name="introduction_image_prev_width">200dp</dimen>
+    <dimen name="introduction_image_prev_height">300dp</dimen>
+    <dimen name="introduction_signin_button_padding">8dp</dimen>
+    <dimen name="introduction_image_github_width">200dp</dimen>
+    <dimen name="introduction_image_github_height">300dp</dimen>
+    <!-- -->
+    <dimen name="nav_bar_sign_out_height">35dp</dimen>
+    <dimen name="nav_bar_sign_out_width">70dp</dimen>
+    <dimen name="nav_bar_button_sign_out_text_size">10sp</dimen>
+    <dimen name="nav_header_vertical_spacing2">8dp</dimen>
+    <dimen name="nav_bar_avatar_width_height">45dp</dimen>
+    <!-- -->
+    <dimen name="introduction_slide_button_width_height">15dp</dimen>
+    <dimen name="introduction_slide_button_margin">5dp</dimen>
+    <dimen name="introduction_slide_button_layout_height">40dp</dimen>
+    <!-- -->
+    <dimen name="profile_github_icon_size">30dp</dimen>
+    <dimen name="profile_cardview_information_padding">10dp</dimen>
+    <dimen name="profile_cardview_information_corner_radius">5dp</dimen>
+    <dimen name="profile_cardview_information_elevation">3dp</dimen>
+    <dimen name="profile_cardview_margin_left_right">1dp</dimen>
+    <dimen name="profile_cardview_information_margin_top">40dp</dimen>
+    <dimen name="profile_divider_margin_top_bottom">10dp</dimen>
+    <dimen name="profile_base_cardview_maring_left_right">8dp</dimen>
+    <dimen name="profile_base_cardview_height">55dp</dimen>
+    <dimen name="profile_base_cardview_corner_radius">3dp</dimen>
+    <dimen name="profile_base_cardview_elevation">3dp</dimen>
+    <dimen name="profile_base_cardview_content_padding">3dp</dimen>
+    <dimen name="profile_image_avatar_margin_left">30dp</dimen>
+    <dimen name="profile_textview_fullname_margin_bottom">50dp</dimen>
+    <dimen name="profile_divider_size">1dp</dimen>
+    <dimen name="profile_text_view_drawable_padding">10dp</dimen>
 </resources>

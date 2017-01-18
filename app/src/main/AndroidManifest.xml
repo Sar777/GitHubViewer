@@ -6,9 +6,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -16,11 +16,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        android:theme="@style/AppTheme.Launcher">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,6 +27,31 @@
             android:name=".activity.DescriptionActivity"
             android:label="@string/title_activity_description"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="application" android:host="github" android:path="/oauth" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label=""
+            android:theme="@style/AppTheme.Profile" />
+
+        <activity
+            android:name=".activity.IntroductionsActivity"
+            android:label="@string/title_activity_introductions"
+            android:theme="@style/AppTheme" />
 
         <receiver android:name=".broadcasts.OnBootReceiver">
             <intent-filter>
@@ -36,7 +60,6 @@
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".broadcasts.OnAlarmReceiver"
             android:process=":remote" />
@@ -44,8 +67,9 @@
         <service android:name=".services.HttpUpdateDataService" />
 
         <provider
-            android:name=".database.providers.BooksProvider"
-            android:authorities="instinctools.android.providers.Books" />
+            android:name=".database.providers.RepositoriesProvider"
+            android:authorities="instinctools.android.providers.Repositories"
+            android:exported="false" />
     </application>
 
 </manifest>
