@@ -71,6 +71,7 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
         ApplicationPersistantStorage.addProperty(Constants.PROPERTY_FIRST_RUN, true);
 
         Intent intent = new Intent(getContext(), AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivityForResult(intent, REQUEST_CODE_AUTHORIZATION);
     }
 
@@ -83,6 +84,7 @@ public class AboutGithubFragment extends Fragment implements View.OnClickListene
             return;
 
         Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         getActivity().finish();
     }

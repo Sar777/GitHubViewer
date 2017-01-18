@@ -74,7 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onLoadFinished(Loader<User> loader, User user) {
                 if (user == null) {
-                    startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     finish();
                     return;
                 }
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_logout: {
                 GithubServices.logout(new GithubServiceListener<Boolean>() {
@@ -217,7 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onSuccess(Boolean data) {
-                        startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                         finish();
                     }
                 });
