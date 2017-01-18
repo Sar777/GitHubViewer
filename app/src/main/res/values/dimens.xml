@@ -9,12 +9,9 @@
     <dimen name="recycler_view_item_icon_size">42dp</dimen>
     <dimen name="recycler_view_item_margin">16dp</dimen>
     <dimen name="recycler_view_item_min_root_layout_height">72dp</dimen>
-    <dimen name="recycler_view_item_container_margin_left">10dp</dimen>
-    <dimen name="recycler_view_item_cardview_margin">2dp</dimen>
-    <dimen name="recycler_view_item_cardview_content_padding">10dp</dimen>
-    <dimen name="recycler_view_item_cardview_corner_radius">5dp</dimen>
     <dimen name="recycler_view_item_private_margin_left">5dp</dimen>
-    <dimen name="recycler_view_item_rep_type_padding">3dp</dimen>
+    <dimen name="recycler_view_item_image_view_margin_left_right">16dp</dimen>
+    <dimen name="recycler_view_item_rep_type_padding">2dp</dimen>
     <dimen name="recycler_item_child_layout_margin">72dp</dimen>
     <!-- -->
     <dimen name="text_view_title_margin">16dp</dimen>
@@ -32,7 +29,7 @@
     <dimen name="nav_header_height">160dp</dimen>
     <!-- -->
     <dimen name="profile_avatar_size">80dp</dimen>
-    <dimen name="profile_content_margin_left_right">5dp</dimen>
+    <dimen name="profile_content_margin_left_right">7dp</dimen>
     <!-- -->
     <dimen name="introductions_welcome_text_size">18sp</dimen>
     <dimen name="introductions_welcome_text2_size">15sp</dimen>
@@ -59,10 +56,8 @@
     <dimen name="profile_github_icon_size">30dp</dimen>
     <dimen name="profile_cardview_information_padding">10dp</dimen>
     <dimen name="profile_cardview_information_corner_radius">5dp</dimen>
-    <dimen name="profile_cardview_information_elevation">4dp</dimen>
-    <dimen name="profile_cardview_information_margin_left_right">2dp</dimen>
-    <dimen name="profile_icons_size">20dp</dimen>
-    <dimen name="profile_email_location_margin_left">10dp</dimen>
+    <dimen name="profile_cardview_information_elevation">3dp</dimen>
+    <dimen name="profile_cardview_margin_left_right">1dp</dimen>
     <dimen name="profile_cardview_information_margin_top">40dp</dimen>
     <dimen name="profile_divider_margin_top_bottom">10dp</dimen>
     <dimen name="profile_base_cardview_maring_left_right">8dp</dimen>
@@ -73,4 +68,5 @@
     <dimen name="profile_image_avatar_margin_left">30dp</dimen>
     <dimen name="profile_textview_fullname_margin_bottom">50dp</dimen>
     <dimen name="profile_divider_size">1dp</dimen>
+    <dimen name="profile_text_view_drawable_padding">10dp</dimen>
 </resources>

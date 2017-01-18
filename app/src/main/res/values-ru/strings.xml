@@ -13,8 +13,9 @@
     <string name="title_introduction_sign_in">Войти</string>
     <string name="msg_sign_out_unknown_error">Ошибка выхода из учетной записи</string>
     <string name="msg_auth_title_dialog">Авторизация</string>
-    <string name="msg_auth_message_dialog">Авторизация, пожалуйста, подождите...</string>
+    <string name="msg_auth_message_dialog">Авторизация, пожалуйста, подождите</string>
     <string name="msg_introductions_go">Начать</string>
     <string name="title_nav_bar_control">Управление</string>
     <string name="title_nav_bar_count_logout">Выйти</string>
+    <string name="title_profile_information">Информация:</string>
 </resources>

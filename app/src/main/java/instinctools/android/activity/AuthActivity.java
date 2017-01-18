@@ -51,7 +51,9 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onSuccess(AccessToken token) {
-                startActivity(new Intent(AuthActivity.this, MainActivity.class));
+                Intent intentActivity = new Intent(AuthActivity.this, MainActivity.class);
+                intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentActivity);
                 mProgressDialog.dismiss();
                 finish();
             }

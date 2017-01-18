@@ -7,6 +7,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import instinctools.android.R;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.ImageLoadingStateListener;
 import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.user.User;
 
 public class ProfileActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<User> {
@@ -34,6 +37,9 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
     private TextView mTextViewFollowing;
     private TextView mTextViewLocation;
     private TextView mTextViewEmail;
+    private TextView mTextViewBlog;
+    private TextView mTextViewOrganization;
+    private TextView mTextViewBio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,13 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
         mTextViewFollowing = (TextView) findViewById(R.id.text_profile_following);
         mTextViewLocation = (TextView) findViewById(R.id.text_profile_location);
         mTextViewEmail = (TextView) findViewById(R.id.text_profile_email);
+
+        mTextViewBlog = (TextView) findViewById(R.id.text_profile_blog);
+        mTextViewBlog.setTransformationMethod(new LinkTransformationMethod());
+        mTextViewBlog.setMovementMethod(LinkMovementMethod.getInstance());
+
+        mTextViewOrganization = (TextView) findViewById(R.id.text_profile_organization);
+        mTextViewBio = (TextView) findViewById(R.id.text_profile_bio);
     }
 
     @Override
@@ -111,6 +124,21 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
         mTextViewFollowing.setText(user.getFollowing());
         mTextViewLocation.setText(user.getLocation());
         mTextViewEmail.setText(user.getEmail());
+
+        if (!TextUtils.isEmpty(user.getCompany()))
+            mTextViewOrganization.setText(user.getCompany());
+        else
+            mTextViewOrganization.setVisibility(View.GONE);
+
+        if (!TextUtils.isEmpty(user.getBlog()))
+            mTextViewBlog.setText(user.getBlog());
+        else
+            mTextViewBlog.setVisibility(View.GONE);
+
+        if (!TextUtils.isEmpty(user.getBio()))
+            mTextViewBio.setText(user.getBio());
+        else
+            mTextViewBio.setVisibility(View.GONE);
 
         mProgressBar.setVisibility(View.GONE);
         mContentLayout.setVisibility(View.VISIBLE);

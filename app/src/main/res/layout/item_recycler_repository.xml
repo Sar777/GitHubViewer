@@ -1,82 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/recycler_view_item_min_root_layout_height">
 
-    <android.support.v7.widget.CardView
+    <ImageView
+        android:id="@+id/image_repository_type"
+        android:layout_width="@dimen/recycler_view_item_icon_size"
+        android:layout_height="@dimen/recycler_view_item_icon_size"
+        android:layout_marginLeft="@dimen/recycler_view_item_image_view_margin_left_right"
+
+        android:src="@drawable/ic_github_logo"
+        android:layout_centerVertical="true"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/recycler_view_item_cardview_margin"
-        app:contentPadding="@dimen/recycler_view_item_cardview_content_padding"
-        app:cardCornerRadius="@dimen/recycler_view_item_cardview_corner_radius">
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/recycler_view_item_image_view_margin_left_right"
+        android:layout_marginLeft="@dimen/recycler_view_item_min_root_layout_height"
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/image_repository_type"
-                android:layout_width="@dimen/recycler_view_item_icon_size"
-                android:layout_height="@dimen/recycler_view_item_icon_size"
-                android:src="@drawable/ic_github_logo"
-                android:layout_centerVertical="true"
-                tools:ignore="ContentDescription" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignWithParentIfMissing="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/recycler_view_item_container_margin_left"
-                android:layout_toRightOf="@+id/image_repository_type"
-                android:orientation="vertical"
-                tools:ignore="RtlHardcoded">
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/text_private_repository"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/recycler_view_item_private_margin_left"
+                android:layout_toRightOf="@id/text_name"
+                android:textColor="@android:color/black"
+                android:text="@string/title_private"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:padding="@dimen/recycler_view_item_rep_type_padding"
+                android:visibility="gone"
+                android:background="@drawable/background_rectangle_radius" />
 
-                    <TextView
-                        android:id="@+id/text_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-                    <TextView
-                        android:id="@+id/text_private_repository"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_marginLeft="@dimen/recycler_view_item_private_margin_left"
-                        android:layout_toRightOf="@+id/text_name"
-                        android:textColor="@android:color/black"
-                        android:text="@string/title_private"
-                        android:padding="@dimen/recycler_view_item_rep_type_padding"
-                        android:visibility="gone"
-                        android:background="@drawable/background_rectangle_radius" />
-
-                </RelativeLayout>
-                <TextView
-                    android:id="@+id/text_readme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                <TextView
-                    android:id="@+id/text_language"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textColor="@android:color/holo_red_dark" />
-            </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        <TextView
+            android:id="@+id/text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/text_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@android:color/holo_red_dark" />
+    </LinearLayout>
 </RelativeLayout>

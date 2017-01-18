@@ -15,6 +15,7 @@ public class User {
     private String mFollowers;
     private String mFollowing;
     private String mBio;
+    private String mBlog;
 
     public int getId() {
         return mId;
@@ -110,6 +111,14 @@ public class User {
 
     public void setBio(String bio) {
         this.mBio = bio;
+    }
+
+    public String getBlog() {
+        return mBlog;
+    }
+
+    public void setBlog(String blog) {
+        this.mBlog = blog;
     }
 
     public String getFollowers() {

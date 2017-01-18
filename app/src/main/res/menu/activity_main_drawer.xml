@@ -4,7 +4,7 @@
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_sign_out"
                 android:title="@string/title_nav_bar_count_logout" />
         </menu>
     </item>

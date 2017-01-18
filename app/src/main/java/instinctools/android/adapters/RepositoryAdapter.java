@@ -50,7 +50,7 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
             super(view);
 
             mTitle = (TextView) view.findViewById(R.id.text_name);
-            mDescription = (TextView) view.findViewById(R.id.text_readme);
+            mDescription = (TextView) view.findViewById(R.id.text_description);
             mLanguageTextView = (TextView) view.findViewById(R.id.text_language);
             mPrivateTextView = (TextView) view.findViewById(R.id.text_private_repository);
             mRepositoryType = (ImageView) view.findViewById(R.id.image_repository_type);
