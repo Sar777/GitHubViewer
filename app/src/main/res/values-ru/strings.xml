@@ -22,4 +22,6 @@
     <string name="title_menu">Меню</string>
     <string name="title_watch_repositories">Отслеживаемые</string>
     <string name="title_star_repos">Избранные</string>
+    <string name="title_statistics">Статистика</string>
+    <string name="title_description">Описание</string>
 </resources>

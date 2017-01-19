@@ -22,6 +22,11 @@ class RepositoryTransformer implements ITransformer<Repository> {
     private static final String J_DESCRIPTION = "description";
     private static final String J_LANGUAGE = "language";
 
+    private static final String J_FORKS = "forks_count";
+    private static final String J_STARGAZERS = "stargazers_count";
+    private static final String J_WATCHERS = "watchers_count";
+    private static final String J_OPEN_ISSUES = "open_issues_count";
+
     @Override
     public Repository transform(Object object) {
         if (!(object instanceof JSONObject))
@@ -38,9 +43,12 @@ class RepositoryTransformer implements ITransformer<Repository> {
             repository.setDescription(jsonObject.getString(J_DESCRIPTION).equals("null") ? "" : jsonObject.getString(J_DESCRIPTION));
             repository.setDefaultBranch(jsonObject.getString(J_DEFAULT_BRANCH));
             repository.setLanguage(jsonObject.getString(J_LANGUAGE).equals("null") ? "" : jsonObject.getString(J_LANGUAGE));
+            repository.setForks(jsonObject.getInt(J_FORKS));
+            repository.setStargazers(jsonObject.getInt(J_STARGAZERS));
+            repository.setWatchers(jsonObject.getInt(J_WATCHERS));
+            repository.setOpenIssues(jsonObject.getInt(J_OPEN_ISSUES));
             repository.setIsPrivate(jsonObject.getBoolean(J_IS_PRIVATE));
             repository.setIsFork(jsonObject.getBoolean(J_IS_FORK));
-
             repository.setRepositoryOwner(new RepositoryOwnerTransformer().transform(jsonObject.getJSONObject(J_REPOSITORY_OWNER)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

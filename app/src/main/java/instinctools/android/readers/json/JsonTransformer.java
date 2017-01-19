@@ -7,18 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import instinctools.android.models.github.authorization.AccessToken;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.repositories.RepositoryReadme;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.github.authorization.AccessTokenTransformer;
+import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformers;
 import instinctools.android.readers.json.transformers.github.repository.ListUserRepositoriesTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
 import instinctools.android.readers.json.transformers.github.user.UserTransformer;
-
-/**
- * Created by orion on 16.12.16.
- */
 
 public class JsonTransformer {
     private static final String TAG = "JsonTransformer";
@@ -30,6 +28,7 @@ public class JsonTransformer {
         mTransformersMap.put(AccessToken.class.getName(), AccessTokenTransformer.class);
         mTransformersMap.put(Repository[].class.getName(), ListUserRepositoriesTransformer.class);
         mTransformersMap.put(RepositoryReadme.class.getName(), RepositoryReadmeTransformer.class);
+        mTransformersMap.put(ErrorResponse.class.getName(), ErrorResponseTransformers.class);
     }
 
     public static <Model, T> Model transform(@NonNull String json, Class<T> clazz) {

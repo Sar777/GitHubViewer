@@ -14,6 +14,10 @@ public class DBConstants {
     public static final String REPOSITORY_DESCRIPTION = "description";
     public static final String REPOSITORY_DEFAULT_BRANCH = "default_branch";
     public static final String REPOSITORY_LANGUAGE = "language";
+    public static final String REPOSITORY_FORKS = "forks_count";
+    public static final String REPOSITORY_STARGAZERS = "stargazers_count";
+    public static final String REPOSITORY_WATCHERS = "watchers_count";
+    public static final String REPOSITORY_OPEN_ISSUES = "open_issues_count";
     public static final String REPOSITORY_FORK = "fork";
     public static final String REPOSITORY_PRIVATE = "private";
 
@@ -25,11 +29,6 @@ public class DBConstants {
     public static final String REPOSITORY_OWNER_LOGIN = "login";
     public static final String REPOSITORY_OWNER_AVATAR_URL_ID = "avatar_url";
 
-    // Watch repositories
-    public static final String TABLE_REPOSITORY_WATCH = "watch_repositories";
-    // Star repositories
-    public static final String TABLE_REPOSITORY_STAR = "star_repositories";
-
     static final String TABLE_REPOSITORIES_CREATE = "CREATE TABLE " + TABLE_REPOSITORIES + "("
             + REPOSITORY_ID + " INTEGER, "
             + REPOSITORY_TYPE + " INTEGER, "
@@ -39,6 +38,10 @@ public class DBConstants {
             + REPOSITORY_DESCRIPTION + " VARCHAR(255), "
             + REPOSITORY_DEFAULT_BRANCH + " VARCHAR(50), "
             + REPOSITORY_LANGUAGE + " VARCHAR(20), "
+            + REPOSITORY_FORKS + " INTEGER, "
+            + REPOSITORY_STARGAZERS + " INTEGER, "
+            + REPOSITORY_WATCHERS + " INTEGER, "
+            + REPOSITORY_OPEN_ISSUES + " INTEGER, "
             + REPOSITORY_FORK + " INTEGER(1), "
             + REPOSITORY_PRIVATE + " INTEGER(1), "
             + " PRIMARY KEY (" + REPOSITORY_ID + ", " + REPOSITORY_TYPE + "))";

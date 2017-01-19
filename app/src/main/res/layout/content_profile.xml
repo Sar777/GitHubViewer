@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/profile_cardview_information_margin_top"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:text="@string/title_profile_information"/>
+        android:text="@string/title_profile_information" />
 
     <android.support.v7.widget.CardView
         android:layout_below="@id/text_profile_info"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:drawableLeft="@drawable/ic_organization"
-                android:drawablePadding="@dimen/profile_text_view_drawable_padding"
+                android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <View
@@ -58,7 +58,7 @@
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:drawableLeft="@drawable/ic_location"
-                android:drawablePadding="@dimen/profile_text_view_drawable_padding"
+                android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <View
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:autoLink="email"
                 android:drawableLeft="@drawable/ic_email"
-                android:drawablePadding="@dimen/profile_text_view_drawable_padding"
+                android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <View
@@ -90,7 +90,7 @@
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:autoLink="web"
                 android:drawableLeft="@drawable/ic_link"
-                android:drawablePadding="@dimen/profile_text_view_drawable_padding"
+                android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <View
@@ -106,7 +106,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:drawableLeft="@drawable/ic_ellipsis"
-                android:drawablePadding="@dimen/profile_text_view_drawable_padding"
+                android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

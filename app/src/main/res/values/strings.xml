@@ -33,7 +33,7 @@
     <string name="title_sign_out_button">Sign out</string>
     <string name="msg_sign_out_unknown_error">Unknown error sign out</string>
     <string name="msg_auth_title_dialog">Authorization</string>
-    <string name="msg_auth_message_dialog">Authorization, please, wait...</string>
+    <string name="msg_auth_message_dialog">Authorization, please, wait</string>
     <string name="msg_introductions_go">GO</string>
     <string name="title_nav_bar_control">Control</string>
     <string name="title_nav_bar_count_logout">Logout</string>
@@ -45,4 +45,6 @@
     <string name="title_menu">Menu</string>
     <string name="title_watch_repositories">Watch</string>
     <string name="title_star_repos">Stars</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_description">Description</string>
 </resources>

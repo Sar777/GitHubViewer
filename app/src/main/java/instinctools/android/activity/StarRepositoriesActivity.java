@@ -85,7 +85,7 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
         return new CursorLoader(this,
                 RepositoriesProvider.REPOSITORY_CONTENT_URI,
                 null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_TYPE + " = ?",
-                new String[] {String.valueOf(Constants.REPOSITORY_TYPE_STAR)},
+                new String[]{String.valueOf(Constants.REPOSITORY_TYPE_STAR)},
                 null);
     }
 

@@ -16,6 +16,10 @@ public class Repository {
     private boolean mIsPrivate;
     private boolean mIsFork;
     private String mLanguage;
+    private int mForks;
+    private int mStargazers;
+    private int mWatchers;
+    private int mOpenIssues;
 
     public Repository() {
     }
@@ -100,6 +104,38 @@ public class Repository {
         this.mLanguage = language;
     }
 
+    public int getForks() {
+        return mForks;
+    }
+
+    public void setForks(int forks) {
+        this.mForks = forks;
+    }
+
+    public int getStargazers() {
+        return mStargazers;
+    }
+
+    public void setStargazers(int stargazers) {
+        this.mStargazers = stargazers;
+    }
+
+    public int getWatchers() {
+        return mWatchers;
+    }
+
+    public void setWatchers(int watchers) {
+        this.mWatchers = watchers;
+    }
+
+    public int getOpenIssues() {
+        return mOpenIssues;
+    }
+
+    public void setOpenIssues(int openIssues) {
+        this.mOpenIssues = openIssues;
+    }
+
     public ContentValues build() {
         ContentValues values = new ContentValues();
 
@@ -110,6 +146,10 @@ public class Repository {
         values.put(DBConstants.REPOSITORY_DESCRIPTION, mDescription);
         values.put(DBConstants.REPOSITORY_DEFAULT_BRANCH, mDefaultBranch);
         values.put(DBConstants.REPOSITORY_LANGUAGE, mLanguage);
+        values.put(DBConstants.REPOSITORY_FORKS, mForks);
+        values.put(DBConstants.REPOSITORY_STARGAZERS, mStargazers);
+        values.put(DBConstants.REPOSITORY_WATCHERS, mWatchers);
+        values.put(DBConstants.REPOSITORY_OPEN_ISSUES, mOpenIssues);
         values.put(DBConstants.REPOSITORY_PRIVATE, mIsPrivate);
         values.put(DBConstants.REPOSITORY_FORK, mIsFork);
         return values;
@@ -125,6 +165,10 @@ public class Repository {
         repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DESCRIPTION)));
         repository.setDefaultBranch(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_DEFAULT_BRANCH)));
         repository.setLanguage(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_LANGUAGE)));
+        repository.setForks(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_FORKS)));
+        repository.setStargazers(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_STARGAZERS)));
+        repository.setWatchers(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_WATCHERS)));
+        repository.setOpenIssues(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_OPEN_ISSUES)));
         repository.setIsPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_PRIVATE)) != 0);
         repository.setIsFork(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_FORK)) != 0);
         repository.setRepositoryOwner(RepositoryOwner.fromCursor(cursor));

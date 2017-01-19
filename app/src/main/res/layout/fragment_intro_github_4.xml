@@ -25,6 +25,6 @@
         android:textColor="@android:color/white"
         android:textAllCaps="false"
         android:background="@drawable/background_button_sign_in_github_selector"
-        android:text="@string/msg_introductions_go"/>
+        android:text="@string/msg_introductions_go" />
 
 </LinearLayout>

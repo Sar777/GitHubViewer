@@ -3,7 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_view_margin">16dp</dimen>
+    <dimen name="text_view_drawable_padding">10dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <!-- -->
     <dimen name="recycler_view_item_icon_size">42dp</dimen>
@@ -29,7 +30,7 @@
     <dimen name="nav_header_height">160dp</dimen>
     <!-- -->
     <dimen name="profile_avatar_size">80dp</dimen>
-    <dimen name="profile_content_margin_left_right">7dp</dimen>
+    <dimen name="profile_content_margin_left_right">6dp</dimen>
     <!-- -->
     <dimen name="introductions_welcome_text_size">18sp</dimen>
     <dimen name="introductions_welcome_text2_size">15sp</dimen>
@@ -68,5 +69,16 @@
     <dimen name="profile_image_avatar_margin_left">30dp</dimen>
     <dimen name="profile_textview_fullname_margin_bottom">50dp</dimen>
     <dimen name="profile_divider_size">1dp</dimen>
-    <dimen name="profile_text_view_drawable_padding">10dp</dimen>
+    <!-- -->
+    <dimen name="description_content_margin_left_right">6dp</dimen>
+    <dimen name="description_divider_size">1dp</dimen>
+    <dimen name="description_cardview_padding">10dp</dimen>
+    <dimen name="description_cardview_card_cornes_radius">5dp</dimen>
+    <dimen name="description_cardview_card_elevation">3dp</dimen>
+    <dimen name="description_cardview_margin_bottom_top">8dp</dimen>
+    <dimen name="description_cardview_margin_left_right">1dp</dimen>
+    <dimen name="description_margin_title_bottom">15dp</dimen>
+    <dimen name="description_text_view_margin_top_bottom">8dp</dimen>
+    <dimen name="description_title_text_view_margin_bottom_top">10dp</dimen>
+    <dimen name="description_title_text_view_margin_left_right">1dp</dimen>
 </resources>

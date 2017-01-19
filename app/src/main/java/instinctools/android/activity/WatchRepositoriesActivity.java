@@ -85,7 +85,7 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
         return new CursorLoader(this,
                 RepositoriesProvider.REPOSITORY_CONTENT_URI,
                 null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_TYPE + " = ?",
-                new String[] {String.valueOf(Constants.REPOSITORY_TYPE_WATCH)},
+                new String[]{String.valueOf(Constants.REPOSITORY_TYPE_WATCH)},
                 null);
     }
 

@@ -9,8 +9,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,19 +18,22 @@ import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
-import instinctools.android.http.HttpClientFactory;
-import instinctools.android.http.OnHttpClientListener;
-import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.repositories.Repository;
-import instinctools.android.models.github.repositories.RepositoryReadme;
-import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.repository.GithubServiceRepository;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    // View
+    private ViewGroup mLayoutCardView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ProgressBar mProgressBar;
-    private TextView mTextViewReadme;
+    private TextView mTextViewFullName;
+    private TextView mTextViewDescription;
+    private TextView mTextViewLanguage;
+    private TextView mTextViewDefaultBranch;
+    private TextView mTextViewForks;
+    private TextView mTextViewStargazers;
+    private TextView mTextViewWatchers;
+    private TextView mTextViewOpenIssues;
 
     private static final String BUNDLE_REPOSITORY_ID = "ID";
 
@@ -61,11 +64,20 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         mCollapsingToolbarLayout.setTitle("");
 
+        mLayoutCardView = (ViewGroup) findViewById(R.id.layout_description_cards);
+        mLayoutCardView.setVisibility(View.INVISIBLE);
+
         mProgressBar = (ProgressBar) findViewById(R.id.pb_description_content);
 
-        mTextViewReadme = (TextView) findViewById(R.id.text_readme);
-        mTextViewReadme.setTransformationMethod(new LinkTransformationMethod());
-        mTextViewReadme.setMovementMethod(LinkMovementMethod.getInstance());
+        mTextViewFullName = (TextView) findViewById(R.id.text_description_fullname);
+        mTextViewDescription = (TextView) findViewById(R.id.text_description_description);
+        mTextViewLanguage = (TextView) findViewById(R.id.text_description_language);
+        mTextViewDefaultBranch = (TextView) findViewById(R.id.text_description_default_branch);
+        //
+        mTextViewForks = (TextView) findViewById(R.id.text_description_forks);
+        mTextViewStargazers = (TextView) findViewById(R.id.text_description_stargazers);
+        mTextViewWatchers = (TextView) findViewById(R.id.text_description_watchers);
+        mTextViewOpenIssues = (TextView) findViewById(R.id.text_description_open_issues);
     }
 
     @Override
@@ -85,6 +97,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mProgressBar.setVisibility(View.GONE);
+        mLayoutCardView.setVisibility(View.VISIBLE);
 
         if (!cursor.moveToFirst())
             return;
@@ -92,26 +105,15 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         Repository repository = Repository.fromCursor(cursor);
         mCollapsingToolbarLayout.setTitle(repository.getName());
 
-        GithubServiceRepository.getRepositoryReadme(repository.getRepositoryOwner().getLogin(), repository.getName(), new GithubServiceListener<RepositoryReadme>() {
-            @Override
-            public void onError(int code) {
-            }
-
-            @Override
-            public void onSuccess(RepositoryReadme data) {
-                new HttpClientFactory.HttpClient(data.getDownloadUrl()).send(new OnHttpClientListener() {
-                    @Override
-                    public void onError(int errCode) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(int code, String content) {
-                        mTextViewReadme.setText(content);
-                    }
-                });
-            }
-        });
+        mTextViewFullName.setText(repository.getFullName());
+        mTextViewDescription.setText(repository.getDescription());
+        mTextViewLanguage.setText(repository.getLanguage());
+        mTextViewDefaultBranch.setText(repository.getDefaultBranch());
+        //
+        mTextViewForks.setText(String.valueOf(repository.getForks()));
+        mTextViewStargazers.setText(String.valueOf(repository.getStargazers()));
+        mTextViewWatchers.setText(String.valueOf(repository.getWatchers()));
+        mTextViewOpenIssues.setText(String.valueOf(repository.getOpenIssues()));
 
         if (!cursor.isClosed())
             cursor.close();

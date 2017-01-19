@@ -34,10 +34,10 @@ public class HttpRepositoryService extends IntentService {
         ArrayList<ContentProviderOperation> operationsRepositoriesOwner = new ArrayList<>(repositories.size());
 
         operationsRepositories.add(ContentProviderOperation.newDelete(RepositoriesProvider.REPOSITORY_CONTENT_URI)
-                .withSelection(DBConstants.REPOSITORY_TYPE + "= ?", new String[] {String.valueOf(mTypeInfo)}).build());
+                .withSelection(DBConstants.REPOSITORY_TYPE + "= ?", new String[]{String.valueOf(mTypeInfo)}).build());
 
         operationsRepositoriesOwner.add(ContentProviderOperation.newDelete(RepositoriesOwnerProvider.REPOSITORY_OWNER_CONTENT_URI)
-                .withSelection(DBConstants.REPOSITORY_OWNER_TYPE + "= ?", new String[] {String.valueOf(mTypeInfo)}).build());
+                .withSelection(DBConstants.REPOSITORY_OWNER_TYPE + "= ?", new String[]{String.valueOf(mTypeInfo)}).build());
 
         for (Repository repository : repositories) {
             ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(RepositoriesProvider.REPOSITORY_CONTENT_URI)
