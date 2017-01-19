@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -18,8 +19,7 @@ import instinctools.android.database.DBHelper;
  */
 
 public class RepositoriesProvider extends ContentProvider {
-
-    static final String REPOSITORY_PATH = "books";
+    static final String REPOSITORY_PATH = "repositories";
     public static final String AUTHORITY = "instinctools.android.providers.Repositories";
     public static final Uri REPOSITORY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + REPOSITORY_PATH);
 
@@ -49,27 +49,27 @@ public class RepositoriesProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        switch (mUriMatcher.match(uri)) {
-            case URI_REPOSITORIES: {
-                if (TextUtils.isEmpty(sortOrder))
-                    sortOrder = DBConstants.REPOSITORY_ID + " ASC";
-                break;
-            }
-            case URI_REPOSITORIES_ID: {
-                String id = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection))
-                    selection = DBConstants.REPOSITORY_ID + " = " + id;
-                else
-                    selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(DBConstants.TABLE_REPOSITORIES + " LEFT JOIN " + DBConstants.TABLE_REPOSITORY_OWNER
+                + " ON "
+                + DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = " + DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_REPO_ID
+                + " AND "
+                + DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_TYPE + " = " + DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_TYPE);
 
+        switch (mUriMatcher.match(uri)) {
+            case URI_REPOSITORIES:
+                if (TextUtils.isEmpty(sortOrder))
+                    sortOrder = DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " ASC";
                 break;
-            }
+            case URI_REPOSITORIES_ID:
+                builder.appendWhere(DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = " + uri.getLastPathSegment());
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported uri: " + uri);
         }
 
         mDB = mDBHelper.getWritableDatabase();
-        Cursor cursor = mDB.query(DBConstants.TABLE_REPOSITORIES, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = builder.query(mDB, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), REPOSITORY_CONTENT_URI);
         return cursor;
     }
@@ -78,7 +78,7 @@ public class RepositoriesProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         if (mUriMatcher.match(uri) != URI_REPOSITORIES)
-            throw new IllegalArgumentException("Wrong URI: " + uri);
+            throw new IllegalArgumentException("Unsupported uri: " + uri);
 
         mDB = mDBHelper.getWritableDatabase();
         long rowID = mDB.insert(DBConstants.TABLE_REPOSITORIES, null, contentValues);
@@ -100,7 +100,7 @@ public class RepositoriesProvider extends ContentProvider {
                     selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
                 break;
             default:
-                throw new IllegalArgumentException("Wrong URI: " + uri);
+                throw new IllegalArgumentException("Unsupported uri: " + uri);
         }
 
         mDB = mDBHelper.getWritableDatabase();
@@ -122,7 +122,7 @@ public class RepositoriesProvider extends ContentProvider {
                     selection = selection + " AND " + DBConstants.REPOSITORY_ID + " = " + id;
                 break;
             default:
-                throw new IllegalArgumentException("Wrong URI: " + uri);
+                throw new IllegalArgumentException("Unsupported uri: " + uri);
         }
 
         mDB = mDBHelper.getWritableDatabase();

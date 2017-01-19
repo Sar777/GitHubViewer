@@ -3,6 +3,7 @@ package instinctools.android.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,11 +22,7 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
 
     public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
 
-    private static final int VIEW_TYPE_ITEM = 1;
-    private static final int VIEW_TYPE_HEADER = 2;
-    private static final int VIEW_TYPE_EMPTY = 3;
-
-    public RepositoryAdapter(Context context, RecyclerView recyclerView, Cursor cursor) {
+    public RepositoryAdapter(Context context, RecyclerView recyclerView, @Nullable Cursor cursor) {
         super(context, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
@@ -119,16 +116,6 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository, parent, false);
         view.setOnClickListener(this);
         return new RepositoryItemHolder(view);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (mDataValid && mCursor != null) {
-            if (position == 0)
-                return mCursor.getCount() != 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_EMPTY;
-        }
-
-        return VIEW_TYPE_ITEM;
     }
 
     @Override

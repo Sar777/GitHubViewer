@@ -1,4 +1,5 @@
 <resources>
+    <string name="title_repositories">Репозитории</string>
     <string name="title_my_repositories">Мои репозитории</string>
     <string name="msg_empty_list">Список пуст</string>
     <string name="title_activity_description">Описание</string>
@@ -18,4 +19,7 @@
     <string name="title_nav_bar_control">Управление</string>
     <string name="title_nav_bar_count_logout">Выйти</string>
     <string name="title_profile_information">Информация:</string>
+    <string name="title_menu">Меню</string>
+    <string name="title_watch_repositories">Отслеживаемые</string>
+    <string name="title_star_repos">Избранные</string>
 </resources>

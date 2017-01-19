@@ -22,6 +22,9 @@ import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.models.github.repositories.RepositoryReadme;
+import instinctools.android.services.github.GithubServiceListener;
+import instinctools.android.services.github.repository.GithubServiceRepository;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -37,9 +40,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initView();
 
@@ -54,6 +54,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void initView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         mCollapsingToolbarLayout.setTitle("");
 
@@ -75,7 +79,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (id != LOADER_REPOSITORY_ID)
             return null;
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_REPOSITORY_ID))}, null);
+        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_REPOSITORY_ID))}, null);
     }
 
     @Override
@@ -88,16 +92,24 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         Repository repository = Repository.fromCursor(cursor);
         mCollapsingToolbarLayout.setTitle(repository.getName());
 
-        String url = String.format("https://raw.githubusercontent.com/%s/%s/README.md", repository.getFullName(), repository.getDefaultBranch());
-        HttpClientFactory.HttpClient client = HttpClientFactory.create(url);
-        client.send(new OnHttpClientListener() {
+        GithubServiceRepository.getRepositoryReadme(repository.getRepositoryOwner().getLogin(), repository.getName(), new GithubServiceListener<RepositoryReadme>() {
             @Override
-            public void onError(int errCode) {
+            public void onError(int code) {
             }
 
             @Override
-            public void onSuccess(int code, String content) {
-                mTextViewReadme.setText(content);
+            public void onSuccess(RepositoryReadme data) {
+                new HttpClientFactory.HttpClient(data.getDownloadUrl()).send(new OnHttpClientListener() {
+                    @Override
+                    public void onError(int errCode) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(int code, String content) {
+                        mTextViewReadme.setText(content);
+                    }
+                });
             }
         });
 

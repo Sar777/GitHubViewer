@@ -1,8 +1,10 @@
 package instinctools.android.models.github.repositories;
 
-/**
- * Created by orion on 12.1.17.
- */
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import instinctools.android.database.DBConstants;
+
 public class RepositoryOwner {
 
     private String mLogin;
@@ -31,5 +33,22 @@ public class RepositoryOwner {
 
     public void setAvatarUrl(String avatarUrl) {
         this.mAvatarUrl = avatarUrl;
+    }
+
+    public ContentValues build() {
+        ContentValues values = new ContentValues();
+        values.put(DBConstants.REPOSITORY_OWNER_ID, mId);
+        values.put(DBConstants.REPOSITORY_OWNER_LOGIN, mLogin);
+        values.put(DBConstants.REPOSITORY_OWNER_AVATAR_URL_ID, mAvatarUrl);
+        return values;
+    }
+
+    public static RepositoryOwner fromCursor(Cursor cursor) {
+        RepositoryOwner repositoryOwner = new RepositoryOwner();
+
+        repositoryOwner.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_ID)));
+        repositoryOwner.setLogin(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_LOGIN)));
+        repositoryOwner.setAvatarUrl(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_AVATAR_URL_ID)));
+        return repositoryOwner;
     }
 }

@@ -1,6 +1,8 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -28,14 +30,16 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.broadcasts.OnAlarmReceiver;
+import instinctools.android.database.providers.RepositoriesOwnerProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.user.User;
-import instinctools.android.services.HttpUpdateDataService;
+import instinctools.android.services.HttpUpdateMyRepositoriesService;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.GithubServices;
+import instinctools.android.services.github.authorization.GithubServiceAuthorization;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mBookAdapter;
+    private RepositoryAdapter mRepositoryAdapter;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         requestExternalStoragePermissions();
 
-        Intent intentService = new Intent(this, HttpUpdateDataService.class);
+        Intent intentService = new Intent(this, HttpUpdateMyRepositoriesService.class);
         startService(intentService);
 
         getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
@@ -98,13 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_books_list);
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_repositories_list);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_book_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mBookAdapter = new RepositoryAdapter(this, mRecyclerView, null);
-        mRecyclerView.setAdapter(mBookAdapter);
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -171,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mProgressBar.setVisibility(View.GONE);
         }
 
-        mBookAdapter.changeCursor(cursor);
-        mBookAdapter.notifyDataSetChanged();
+        mRepositoryAdapter.changeCursor(cursor);
+        mRepositoryAdapter.notifyDataSetChanged();
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateDataService.class);
+        Intent intentService = new Intent(this, HttpUpdateMyRepositoriesService.class);
         startService(intentService);
     }
 
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_logout: {
-                GithubServices.logout(new GithubServiceListener<Boolean>() {
+                GithubServiceAuthorization.logout(new GithubServiceListener<Boolean>() {
                     @Override
                     public void onError(int code) {
                         Snackbar.make(findViewById(R.id.content_main), R.string.msg_sign_out_unknown_error, Snackbar.LENGTH_SHORT).show();
@@ -221,14 +225,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onSuccess(Boolean data) {
-                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
+                        logout();
                     }
                 });
                 break;
             }
+            case R.id.nav_my_repositories:
+                startActivity(new Intent(this, MyRepositoriesActivity.class));
+                break;
+            case R.id.nav_my_watch_repos:
+                startActivity(new Intent(this, WatchRepositoriesActivity.class));
+                break;
+            case R.id.nav_my_star_repos:
+                startActivity(new Intent(this, StarRepositoriesActivity.class));
+                break;
             default:
                 break;
         }
@@ -236,5 +246,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logout() {
+        // Stop alarm manager
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, new Intent(this, OnAlarmReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        am.cancel(pendingIntent);
+
+        // Cleanup
+        getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
+        getContentResolver().delete(RepositoriesOwnerProvider.REPOSITORY_OWNER_CONTENT_URI, null, null);
+
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        finish();
     }
 }

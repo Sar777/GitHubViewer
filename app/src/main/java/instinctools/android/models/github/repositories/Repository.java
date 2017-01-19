@@ -1,5 +1,6 @@
 package instinctools.android.models.github.repositories;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import instinctools.android.database.DBConstants;
@@ -99,6 +100,21 @@ public class Repository {
         this.mLanguage = language;
     }
 
+    public ContentValues build() {
+        ContentValues values = new ContentValues();
+
+        values.put(DBConstants.REPOSITORY_ID, mId);
+        values.put(DBConstants.REPOSITORY_NAME, mName);
+        values.put(DBConstants.REPOSITORY_FULLNAME, mFullName);
+        values.put(DBConstants.REPOSITORY_HTML_URL, mHtmlUrl);
+        values.put(DBConstants.REPOSITORY_DESCRIPTION, mDescription);
+        values.put(DBConstants.REPOSITORY_DEFAULT_BRANCH, mDefaultBranch);
+        values.put(DBConstants.REPOSITORY_LANGUAGE, mLanguage);
+        values.put(DBConstants.REPOSITORY_PRIVATE, mIsPrivate);
+        values.put(DBConstants.REPOSITORY_FORK, mIsFork);
+        return values;
+    }
+
     public static Repository fromCursor(Cursor cursor) {
         Repository repository = new Repository();
 
@@ -111,6 +127,7 @@ public class Repository {
         repository.setLanguage(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_LANGUAGE)));
         repository.setIsPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_PRIVATE)) != 0);
         repository.setIsFork(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_FORK)) != 0);
+        repository.setRepositoryOwner(RepositoryOwner.fromCursor(cursor));
         return repository;
     }
 }

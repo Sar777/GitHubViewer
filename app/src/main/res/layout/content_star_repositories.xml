@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_main"
+    android:id="@+id/activity_stars_repositories"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="instinctools.android.activity.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    android:layout_marginTop="?attr/actionBarSize"
+    tools:context="instinctools.android.activity.StarRepositoriesActivity"
+    tools:showIn="@layout/activity_star_repositories">
 
     <ProgressBar
-        android:id="@+id/pb_main_repositories_list"
+        android:id="@+id/pb_star_repositories_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh_main_recycler"
+        android:id="@+id/swiperefresh_star_repositories_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_repository_list"
+            android:id="@+id/recycler_star_repository_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />

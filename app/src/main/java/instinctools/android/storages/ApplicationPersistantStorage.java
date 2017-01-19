@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 
 import static android.content.SharedPreferences.Editor;
 
-/**
- * Created by orion on 17.1.17.
- */
-
 public class ApplicationPersistantStorage {
     public static final String STORAGE_NAME = "Application_Preferences";
 
@@ -23,7 +19,6 @@ public class ApplicationPersistantStorage {
     private static void init() {
         mSettings = mContext.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
-        mEditor.commit();
     }
 
     public static void addProperty(String name, String value) {
@@ -31,7 +26,7 @@ public class ApplicationPersistantStorage {
             init();
 
         mEditor.putString(name, value);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     public static void addProperty(String name, Boolean value) {
@@ -39,7 +34,7 @@ public class ApplicationPersistantStorage {
             init();
 
         mEditor.putBoolean(name, value);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     public static void addProperty(String name, int value) {
@@ -47,7 +42,7 @@ public class ApplicationPersistantStorage {
             init();
 
         mEditor.putInt(name, value);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     public static void addProperty(String name, float value) {
@@ -55,7 +50,7 @@ public class ApplicationPersistantStorage {
             init();
 
         mEditor.putFloat(name, value);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     public static String getStringProperty(String name) {

@@ -11,6 +11,10 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
+    public static final int VIEW_TYPE_ITEM = 1;
+    public static final int VIEW_TYPE_HEADER = 2;
+    public static final int VIEW_TYPE_EMPTY = 3;
+
     private Context mContext;
 
     protected Cursor mCursor;
@@ -50,6 +54,16 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             return mCursor.getLong(mRowIdColumn);
         }
         return 0;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mDataValid && mCursor != null) {
+            if (position == 0)
+                return mCursor.getCount() != 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_EMPTY;
+        }
+
+        return VIEW_TYPE_ITEM;
     }
 
     @Override

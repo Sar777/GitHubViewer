@@ -13,4 +13,9 @@ public class Constants {
 
     // Property persistence storage
     public static final String PROPERTY_FIRST_RUN = "FIRST_RUN";
+
+    // For save in database
+    public static final int REPOSITORY_TYPE_MY = 0;
+    public static final int REPOSITORY_TYPE_WATCH = 1;
+    public static final int REPOSITORY_TYPE_STAR = 2;
 }
