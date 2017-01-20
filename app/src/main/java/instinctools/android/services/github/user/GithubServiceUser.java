@@ -11,12 +11,11 @@ import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.GithubServices;
 
-/**
- * Created by orion on 19.1.17.
- */
 
 public class GithubServiceUser extends GithubServices {
     private static final String API_USER_URL = API_BASE_URL + "/user";
+    private static final String API_REPO_MY_LIST_URL = API_BASE_URL + "/user/repos?affiliation=owner";
+
     private static final String API_USER_WATCH_REPOSITORIES = API_BASE_URL + "/user/subscriptions";
     private static final String API_USER_STAR_REPOSITORIES = API_BASE_URL + "/user/starred";
 
@@ -63,6 +62,21 @@ public class GithubServiceUser extends GithubServices {
         return JsonTransformer.transform(client.getContent(), User.class);
     }
 
+    public static List<Repository> getMyRepositoryList() {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(API_REPO_MY_LIST_URL).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return JsonTransformer.transform(client.getContent(), Repository[].class);
+    }
+
     public static List<Repository> getWatchRepositoryList() {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
@@ -91,5 +105,97 @@ public class GithubServiceUser extends GithubServices {
             return null;
 
         return JsonTransformer.transform(client.getContent(), Repository[].class);
+    }
+
+    public static void starredRepository(String fullName, boolean star, final GithubServiceListener<Boolean> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USER_STAR_REPOSITORIES + "/%s", fullName)).
+                setMethod(star ? HttpClientFactory.METHOD_PUT : HttpClientFactory.METHOD_DELETE).
+                addHeader(HttpClientFactory.HEADER_CONTENT_LENGHT, String.valueOf(0)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+                listener.onError(errCode);
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
+            }
+        });
+    }
+
+    public static void isStarredRepository(String fullName, final GithubServiceListener<Boolean> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USER_STAR_REPOSITORIES + "/%s", fullName)).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_CONTENT_LENGHT, String.valueOf(0)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+                listener.onError(errCode);
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
+            }
+        });
+    }
+
+    public static void watchedRepository(String fullName, boolean watch, final GithubServiceListener<Boolean> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USER_WATCH_REPOSITORIES + "/%s", fullName)).
+                setMethod(watch ? HttpClientFactory.METHOD_PUT : HttpClientFactory.METHOD_DELETE).
+                addHeader(HttpClientFactory.HEADER_CONTENT_LENGHT, String.valueOf(0)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+                listener.onError(errCode);
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
+            }
+        });
+    }
+
+    public static void isWatchedRepository(String fullName, final GithubServiceListener<Boolean> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USER_WATCH_REPOSITORIES + "/%s", fullName)).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_CONTENT_LENGHT, String.valueOf(0)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int errCode) {
+                listener.onError(errCode);
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess(code == HttpURLConnection.HTTP_NO_CONTENT);
+            }
+        });
     }
 }

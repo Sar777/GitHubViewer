@@ -11,10 +11,6 @@ import java.util.List;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-/**
- * Created by orion on 12.1.17.
- */
-
 public class ListUserRepositoriesTransformer implements ITransformer<List<Repository>> {
     private static final String TAG = "ListUserRepositories";
 

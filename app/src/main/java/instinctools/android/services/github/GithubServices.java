@@ -8,18 +8,6 @@ public class GithubServices {
     // Constants
     protected static final String API_BASE_URL = "https://api.github.com";
 
-    protected static final String AUTH_URL = "https://github.com/login/oauth/authorize?";
-    protected static final String TOKEN_URL = "https://github.com/login/oauth/access_token?";
-
-    protected static final String API_APPLICATION_URL = API_BASE_URL + "/applications";
-
-    protected static final String FIELD_CLIENT_ID = "client_id";
-    protected static final String FIELD_CLIENT_SECRET = "client_secret";
-    protected static final String FIELD_SCOPES = "scope";
-    protected static final String FIELD_REDIRECT_URL = "redirect_uri";
-    protected static final String FIELD_CODE = "code";
-    protected static final String FIELD_GRANTS = "grants";
-
     //
     protected static GitHubSessionStorage mSessionStorage;
     protected static String mClientId;

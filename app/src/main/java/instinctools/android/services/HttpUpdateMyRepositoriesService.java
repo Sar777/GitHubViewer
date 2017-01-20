@@ -7,7 +7,7 @@ import java.util.List;
 import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.repositories.Repository;
-import instinctools.android.services.github.repository.GithubServiceRepository;
+import instinctools.android.services.github.user.GithubServiceUser;
 import instinctools.android.storages.SettingsStorage;
 import instinctools.android.utility.Services;
 
@@ -23,7 +23,7 @@ public class HttpUpdateMyRepositoriesService extends HttpRepositoryService {
                 OnAlarmReceiver.REQUEST_MY_REPO_CODE,
                 SettingsStorage.getIntervalUpdateMyRepo() * 60 * 1000);
 
-        List<Repository> repositories = GithubServiceRepository.getRepositoryList();
+        List<Repository> repositories = GithubServiceUser.getMyRepositoryList();
         if (repositories == null)
             return;
 

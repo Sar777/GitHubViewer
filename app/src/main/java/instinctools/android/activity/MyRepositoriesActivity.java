@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.constans.Constants;
+import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.services.HttpUpdateMyRepositoriesService;
@@ -79,7 +81,11 @@ public class MyRepositoriesActivity extends AppCompatActivity implements LoaderM
         if (id != LOADER_REPOSITORIES_ID)
             return null;
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
+        return new CursorLoader(this,
+                RepositoriesProvider.REPOSITORY_CONTENT_URI,
+                null,
+                DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_TYPE + " = ?",
+                new String[] { String.valueOf(Constants.REPOSITORY_TYPE_MY) }, null);
     }
 
     @Override

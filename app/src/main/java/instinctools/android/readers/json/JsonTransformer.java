@@ -16,6 +16,7 @@ import instinctools.android.readers.json.transformers.github.authorization.Acces
 import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformers;
 import instinctools.android.readers.json.transformers.github.repository.ListUserRepositoriesTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
+import instinctools.android.readers.json.transformers.github.repository.RepositoryTransformer;
 import instinctools.android.readers.json.transformers.github.user.UserTransformer;
 
 public class JsonTransformer {
@@ -26,6 +27,7 @@ public class JsonTransformer {
     static {
         mTransformersMap.put(User.class.getName(), UserTransformer.class);
         mTransformersMap.put(AccessToken.class.getName(), AccessTokenTransformer.class);
+        mTransformersMap.put(Repository.class.getName(), RepositoryTransformer.class);
         mTransformersMap.put(Repository[].class.getName(), ListUserRepositoriesTransformer.class);
         mTransformersMap.put(RepositoryReadme.class.getName(), RepositoryReadmeTransformer.class);
         mTransformersMap.put(ErrorResponse.class.getName(), ErrorResponseTransformers.class);

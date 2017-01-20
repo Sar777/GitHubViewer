@@ -13,6 +13,18 @@ import instinctools.android.services.github.GithubServices;
 import instinctools.android.utility.Base64Hash;
 
 public class GithubServiceAuthorization extends GithubServices {
+    private static final String AUTH_URL = "https://github.com/login/oauth/authorize?";
+    private static final String TOKEN_URL = "https://github.com/login/oauth/access_token?";
+
+    private static final String API_APPLICATION_URL = API_BASE_URL + "/applications";
+
+    private static final String FIELD_CLIENT_ID = "client_id";
+    private static final String FIELD_CLIENT_SECRET = "client_secret";
+    private static final String FIELD_SCOPES = "scope";
+    private static final String FIELD_REDIRECT_URL = "redirect_uri";
+    private static final String FIELD_CODE = "code";
+    private static final String FIELD_GRANTS = "grants";
+
     private static String getResetGrantUrl() {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");

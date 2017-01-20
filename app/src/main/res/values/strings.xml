@@ -65,4 +65,10 @@
     <string name="title_pref_key_sync_my_repo">sync_my_repositories</string>
     <string name="title_pref_key_sync_watch_repo">sync_watch_repositories</string>
     <string name="title_pref_key_sync_stars_repo">sync_stars_repositories</string>
+
+    <string name="title_description_button_star">Star</string>
+    <string name="title_description_button_watch">Watch</string>
+    <string name="title_description_button_unstar">Unstar</string>
+    <string name="title_description_button_unwatch">Unwatch</string>
+    <string name="msg_error_loading_data">Error with loading data</string>
 </resources>

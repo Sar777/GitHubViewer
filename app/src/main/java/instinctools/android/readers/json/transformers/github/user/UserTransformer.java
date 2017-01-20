@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
+import instinctools.android.utility.CustomTextUtils;
 
 public class UserTransformer implements ITransformer<User> {
     private static final String TAG = "UserTransformer";
@@ -43,20 +44,20 @@ public class UserTransformer implements ITransformer<User> {
         User user = new User();
         try {
             user.setId(jsonObject.getInt(J_ID));
-            user.setAvatarUrl(jsonObject.getString(J_AVATAR_URL).equals("null") ? "" : jsonObject.getString(J_AVATAR_URL));
+            user.setAvatarUrl(CustomTextUtils.isEmpty(jsonObject.getString(J_AVATAR_URL)) ? "" : jsonObject.getString(J_AVATAR_URL));
             user.setLogin(jsonObject.getString(J_LOGIN));
-            user.setGravatarId(jsonObject.getString(J_GRAVATAR_ID).equals("null") ? "" : jsonObject.getString(J_GRAVATAR_ID));
-            user.setName(jsonObject.getString(J_NAME).equals("null") ? "" : jsonObject.getString(J_NAME));
-            user.setCompany(jsonObject.getString(J_COMPANY).equals("null") ? "" : jsonObject.getString(J_COMPANY));
-            user.setLocation(jsonObject.getString(J_LOCATION).equals("null") ? "" : jsonObject.getString(J_LOCATION));
-            user.setEmail(jsonObject.getString(J_EMAIL).equals("null") ? "" : jsonObject.getString(J_EMAIL));
+            user.setGravatarId(CustomTextUtils.isEmpty(jsonObject.getString(J_GRAVATAR_ID)) ? "" : jsonObject.getString(J_GRAVATAR_ID));
+            user.setName(CustomTextUtils.isEmpty(jsonObject.getString(J_NAME)) ? "None" : jsonObject.getString(J_NAME));
+            user.setCompany(CustomTextUtils.isEmpty(jsonObject.getString(J_COMPANY)) ? "None" : jsonObject.getString(J_COMPANY));
+            user.setLocation(CustomTextUtils.isEmpty(jsonObject.getString(J_LOCATION)) ? "None" : jsonObject.getString(J_LOCATION));
+            user.setEmail(CustomTextUtils.isEmpty(jsonObject.getString(J_EMAIL)) ? "None" : jsonObject.getString(J_EMAIL));
             user.setType(jsonObject.getString(J_TYPE));
             user.setPublicRepos(jsonObject.getInt(J_PUBLIC_REPOS));
             user.setPublicGists(jsonObject.getInt(J_PUBLIC_GISTS));
             user.setFollowers(jsonObject.getString(J_FOLLOWERS));
             user.setFollowing(jsonObject.getString(J_FOLLOWING));
-            user.setBio(jsonObject.getString(J_BIO).equals("null") ? "" : jsonObject.getString(J_BIO));
-            user.setBlog(jsonObject.getString(J_BLOG).equals("null") ? "" : jsonObject.getString(J_BLOG));
+            user.setBio(CustomTextUtils.isEmpty(jsonObject.getString(J_BIO)) ? "None" : jsonObject.getString(J_BIO));
+            user.setBlog(CustomTextUtils.isEmpty(jsonObject.getString(J_BLOG)) ? "None" : jsonObject.getString(J_BLOG));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);
             return null;

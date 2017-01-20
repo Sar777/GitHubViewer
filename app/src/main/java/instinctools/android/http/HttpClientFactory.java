@@ -26,6 +26,7 @@ public class HttpClientFactory {
 
     // Headers
     public static final String HEADER_ACCEPT = "Accept";
+    public static final String HEADER_CONTENT_LENGHT = "Content-Length";
     public static final String HEADER_AUTHORIZATION = "Authorization";
 
     // Types

@@ -58,7 +58,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.MyRepositoriesActivity"
-            android:label="@string/title_repositories"
+            android:label="@string/title_my_repositories"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.WatchRepositoriesActivity"
