@@ -62,9 +62,9 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 mPrivateTextView.setVisibility(View.GONE);
 
             if (item.isFork())
-                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_repo_forked));
+                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_github_repo_forked));
             else
-                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_repo));
+                mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_github_repo));
 
             mTitle.setText(item.getFullName());
 

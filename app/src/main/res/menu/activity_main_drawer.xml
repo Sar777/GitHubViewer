@@ -4,7 +4,7 @@
         <menu>
             <item
                 android:id="@+id/nav_my_repositories"
-                android:icon="@drawable/ic_repo"
+                android:icon="@drawable/ic_github_repo"
                 android:title="@string/title_my_repositories" />
         </menu>
     </item>
@@ -13,19 +13,23 @@
             <item
                 android:id="@+id/nav_my_watch_repos"
                 android:icon="@drawable/ic_eye_black_24dp"
-                android:title="Отслеживаемые" />
+                android:title="@string/title_nav_bar_watch" />
 
             <item
                 android:id="@+id/nav_my_star_repos"
                 android:icon="@drawable/ic_star_black_24dp"
-                android:title="Избранные" />
+                android:title="@string/title_nav_bar_stars" />
         </menu>
     </item>
     <item android:title="@string/title_nav_bar_control">
         <menu>
             <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_github_settings"
+                android:title="@string/title_nav_bar_settings" />
+            <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_sign_out"
+                android:icon="@drawable/ic_github_sign_out"
                 android:title="@string/title_nav_bar_count_logout" />
         </menu>
     </item>

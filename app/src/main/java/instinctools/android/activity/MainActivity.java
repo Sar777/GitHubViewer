@@ -1,8 +1,6 @@
 package instinctools.android.activity;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -40,6 +38,7 @@ import instinctools.android.models.github.user.User;
 import instinctools.android.services.HttpUpdateMyRepositoriesService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
+import instinctools.android.utility.Services;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MainActivity";
@@ -239,6 +238,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_my_star_repos:
                 startActivity(new Intent(this, StarRepositoriesActivity.class));
                 break;
+            case R.id.nav_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
             default:
                 break;
         }
@@ -250,9 +252,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void logout() {
         // Stop alarm manager
-        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(this, 0, new Intent(this, OnAlarmReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        am.cancel(pendingIntent);
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_MY_REPO_CODE);
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_WATCH_REPO_CODE);
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_STARS_REPO_CODE);
 
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);

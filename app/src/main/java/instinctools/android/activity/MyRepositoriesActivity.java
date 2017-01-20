@@ -45,7 +45,6 @@ public class MyRepositoriesActivity extends AppCompatActivity implements LoaderM
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_my_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);

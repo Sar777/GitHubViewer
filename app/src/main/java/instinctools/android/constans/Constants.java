@@ -18,4 +18,7 @@ public class Constants {
     public static final int REPOSITORY_TYPE_MY = 0;
     public static final int REPOSITORY_TYPE_WATCH = 1;
     public static final int REPOSITORY_TYPE_STAR = 2;
+
+    // Interval update repositories. Default
+    public static final int INTERVAL_UPDATE_REPO_SERVICES = 10;
 }

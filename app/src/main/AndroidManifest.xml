@@ -69,6 +69,11 @@
             android:label="@string/title_star_repos"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme" />
+
         <receiver android:name=".broadcasts.OnBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -80,11 +85,10 @@
             android:name=".broadcasts.OnAlarmReceiver"
             android:process=":remote" />
 
-
         <service android:name=".services.HttpRunAllService" />
         <service android:name=".services.HttpUpdateMyRepositoriesService" />
-        <service android:name=".services.HttpUpdateWatchRepositoryService" />
-        <service android:name=".services.HttpUpdateStarsRepositoryService" />
+        <service android:name=".services.HttpUpdateWatchRepositoriesService" />
+        <service android:name=".services.HttpUpdateStarsRepositoriesService" />
 
         <provider
             android:name=".database.providers.RepositoriesProvider"

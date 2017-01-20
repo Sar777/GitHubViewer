@@ -20,7 +20,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.HttpUpdateStarsRepositoryService;
+import instinctools.android.services.HttpUpdateStarsRepositoriesService;
 
 public class StarRepositoriesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
@@ -47,7 +47,6 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_star_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
@@ -73,7 +72,7 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateStarsRepositoryService.class);
+        Intent intentService = new Intent(this, HttpUpdateStarsRepositoriesService.class);
         startService(intentService);
     }
 

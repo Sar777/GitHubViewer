@@ -9,6 +9,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.services.github.GithubServices;
 import instinctools.android.storages.ApplicationPersistantStorage;
+import instinctools.android.storages.SettingsStorage;
 
 public class App extends Application {
     private static Context mContext;
@@ -19,6 +20,7 @@ public class App extends Application {
 
         GithubServices.init(mContext, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.SCOPES, Constants.CALLBACK_URL);
         ApplicationPersistantStorage.init(mContext);
+        SettingsStorage.init(mContext);
 
         deleteDatabase(DBConstants.DB_NAME);
     }

@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:drawableLeft="@drawable/ic_repo"
+                        android:drawableLeft="@drawable/ic_github_repo"
                         android:drawablePadding="@dimen/text_view_drawable_padding" />
 
                     <View
@@ -139,7 +139,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:drawableLeft="@drawable/ic_repo_forked"
+                        android:drawableLeft="@drawable/ic_github_repo_forked"
                         android:drawablePadding="@dimen/text_view_drawable_padding"
                         tools:ignore="RtlHardcoded" />
 

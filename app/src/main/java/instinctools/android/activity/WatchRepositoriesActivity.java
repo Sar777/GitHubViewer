@@ -20,7 +20,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.HttpUpdateWatchRepositoryService;
+import instinctools.android.services.HttpUpdateWatchRepositoriesService;
 
 public class WatchRepositoriesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -47,7 +47,6 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_watch_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
@@ -73,7 +72,7 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateWatchRepositoryService.class);
+        Intent intentService = new Intent(this, HttpUpdateWatchRepositoriesService.class);
         startService(intentService);
     }
 

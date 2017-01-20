@@ -54,7 +54,6 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mContentLayout = (ViewGroup) findViewById(R.id.layout_content_profile);
         mContentLayout.setVisibility(View.INVISIBLE);

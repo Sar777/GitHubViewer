@@ -42,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
-                android:drawableLeft="@drawable/ic_organization"
+                android:drawableLeft="@drawable/ic_github_organization"
                 android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -57,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
-                android:drawableLeft="@drawable/ic_location"
+                android:drawableLeft="@drawable/ic_github_location"
                 android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -73,7 +73,7 @@
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:autoLink="email"
-                android:drawableLeft="@drawable/ic_email"
+                android:drawableLeft="@drawable/ic_github_email"
                 android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -89,7 +89,7 @@
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:layout_marginBottom="@dimen/profile_divider_margin_top_bottom"
                 android:autoLink="web"
-                android:drawableLeft="@drawable/ic_link"
+                android:drawableLeft="@drawable/ic_github_link"
                 android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -105,7 +105,7 @@
                 android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:drawableLeft="@drawable/ic_ellipsis"
+                android:drawableLeft="@drawable/ic_github_ellipsis"
                 android:drawablePadding="@dimen/text_view_drawable_padding"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
         </LinearLayout>

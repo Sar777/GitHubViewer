@@ -3,9 +3,9 @@
     <string name="title_my_repositories">Мои репозитории</string>
     <string name="msg_empty_list">Список пуст</string>
     <string name="title_activity_description">Описание</string>
-    <string name="action_settings">Настройки</string>
     <string name="msg_permission_external_storage_granted">Доступ запрещен. Кэширование только в оперативную память</string>
     <string name="title_activity_auth">Авторизация Github.com</string>
+    <string name="title_activity_settings">Настройки</string>
     <string name="msg_login_or_email">Имя пользователя или email</string>
     <string name="msg_auth_username_or_password_fail">Ошибка авторизации. Проверьте имя пользователя и пароль</string>
     <string name="msg_auth_unknown_error">Неизвестная ошибка авторизации</string>
@@ -24,4 +24,19 @@
     <string name="title_star_repos">Избранные</string>
     <string name="title_statistics">Статистика</string>
     <string name="title_description">Описание</string>
+    <string name="title_nav_bar_settings">Настройки</string>
+    <string name="title_nav_bar_watch">Отслеживаемые</string>
+    <string name="title_nav_bar_stars">Избранные</string>
+    <!-- Preference -->
+    <string name="title_pref_header_data_sync">Синхронизация</string>
+    <string name="title_pref_header_general">Общие</string>
+    <string name="title_pref_header_data_sync_summary">Промежутки обновления данных</string>
+    <string name="title_pref_header_general_summary">Общие настройки приложения</string>
+    <string name="title_pref_category_repositories">Репозитории</string>
+    <string name="title_pref_category_repo_my_repo">Мои</string>
+    <string name="title_pref_category_repo_watch_repo">Отслеживаемые</string>
+    <string name="title_pref_category_repo_stars_repo">Избранные</string>
+    <string name="title_pref_category_repo_my_summary">Промежуток между обновлением списка моих репозиториев</string>
+    <string name="title_pref_category_repo_watch_summary">Промежуток между обновлением списка списка отслеживаемых репозиториев</string>
+    <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
 </resources>

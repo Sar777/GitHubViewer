@@ -59,7 +59,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         mCollapsingToolbarLayout.setTitle("");
