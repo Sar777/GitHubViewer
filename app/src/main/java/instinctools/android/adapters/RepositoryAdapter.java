@@ -42,6 +42,8 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
         private TextView mDescription;
         private TextView mPrivateTextView;
         private TextView mLanguageTextView;
+        private TextView mWatchTextView;
+        private TextView mStarTextView;
         private ImageView mRepositoryType;
 
         RepositoryItemHolder(View view) {
@@ -50,6 +52,8 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
             mTitle = (TextView) view.findViewById(R.id.text_name);
             mDescription = (TextView) view.findViewById(R.id.text_description);
             mLanguageTextView = (TextView) view.findViewById(R.id.text_language);
+            mWatchTextView = (TextView) view.findViewById(R.id.text_repo_watch);
+            mStarTextView = (TextView) view.findViewById(R.id.text_repo_star);
             mPrivateTextView = (TextView) view.findViewById(R.id.text_private_repository);
             mRepositoryType = (ImageView) view.findViewById(R.id.image_repository_type);
         }
@@ -68,6 +72,9 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_github_repo));
 
             mTitle.setText(item.getFullName());
+
+            mWatchTextView.setText(String.valueOf(item.getWatchers()));
+            mStarTextView.setText(String.valueOf(item.getStargazers()));
 
             if (item.getDescription().isEmpty())
                 mDescription.setVisibility(View.GONE);

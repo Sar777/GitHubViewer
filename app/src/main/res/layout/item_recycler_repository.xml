@@ -63,11 +63,39 @@
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <TextView
-            android:id="@+id/text_language"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textColor="@android:color/holo_red_dark" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@android:color/holo_red_dark" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/text_repo_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/recycler_view_item_margin_left_watch_star"
+                    android:drawableLeft="@drawable/ic_github_eye"
+                    android:drawablePadding="@dimen/recycler_view_item_watch_drawable_padding"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/text_repo_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_github_star"
+                    android:drawablePadding="@dimen/recycler_view_item_watch_drawable_padding"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+            </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
