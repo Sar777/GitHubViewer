@@ -35,6 +35,7 @@ import instinctools.android.services.HttpSearchRepositoryService;
 
 public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
     private static final int LOADER_REPOSITORIES_ID = 1;
+    private static final int QUERY_SEARCH_DELAY = 300;
 
     public static final String INTENT_SEARCH_REQUEST = "SEARCH_REQUEST";
 
@@ -69,9 +70,6 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_search_repository);
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
-
-        mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -132,6 +130,12 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
 
+        if (mRepositoryAdapter == null) {
+            mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
+            mRecyclerView.setAdapter(mRepositoryAdapter);
+            return;
+        }
+
         mRepositoryAdapter.changeCursor(cursor);
     }
 
@@ -175,7 +179,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
                 search();
             }
         };
-        mHandler.postDelayed(mTextQueryWorker, 300);
+        mHandler.postDelayed(mTextQueryWorker, QUERY_SEARCH_DELAY);
         return true;
     }
 }

@@ -18,7 +18,7 @@ public class HttpUpdateWatchRepositoriesService extends HttpRepositoryService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Services.scheduleAlarmBroadcast(this,
+        Services.rescheduleAlarmBroadcast(this,
                 OnAlarmReceiver.class,
                 OnAlarmReceiver.REQUEST_WATCH_REPO_CODE,
                 SettingsStorage.getIntervalUpdateWatchesRepo() * 60 * 1000);

@@ -18,7 +18,7 @@ public class HttpUpdateStarsRepositoriesService extends HttpRepositoryService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Services.scheduleAlarmBroadcast(this,
+        Services.rescheduleAlarmBroadcast(this,
                 OnAlarmReceiver.class,
                 OnAlarmReceiver.REQUEST_STARS_REPO_CODE,
                 SettingsStorage.getIntervalUpdateStarsRepo() * 60 * 1000);

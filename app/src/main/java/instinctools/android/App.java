@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 
 import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
 import instinctools.android.services.github.GithubServices;
 import instinctools.android.storages.ApplicationPersistantStorage;
 import instinctools.android.storages.SettingsStorage;
@@ -22,7 +21,7 @@ public class App extends Application {
         ApplicationPersistantStorage.init(mContext);
         SettingsStorage.init(mContext);
 
-        deleteDatabase(DBConstants.DB_NAME);
+        //deleteDatabase(DBConstants.DB_NAME);
     }
 
     public static void launchUrl(final Context context, final String url) {

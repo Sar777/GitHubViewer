@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         mRepositoryAdapter.changeCursor(cursor);
-        mRepositoryAdapter.notifyDataSetChanged();
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);

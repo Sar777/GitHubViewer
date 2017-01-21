@@ -9,10 +9,6 @@ import android.os.Build;
 
 import instinctools.android.broadcasts.OnAlarmReceiver;
 
-/**
- * Created by orion on 20.1.17.
- */
-
 public class Services {
     public static void stopAlarmBroadcast(Context context, Class<? extends BroadcastReceiver> clazz, int id) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -20,7 +16,9 @@ public class Services {
         am.cancel(pendingIntent);
     }
 
-    public static void scheduleAlarmBroadcast(Context context, Class<? extends BroadcastReceiver> clazz, int id, int interval) {
+    public static void rescheduleAlarmBroadcast(Context context, Class<? extends BroadcastReceiver> clazz, int id, int interval) {
+        stopAlarmBroadcast(context, clazz, id);
+
         Intent alarmIntent = new Intent(context, clazz);
         alarmIntent.putExtra(OnAlarmReceiver.REQUEST_CODE_FIELD, id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);

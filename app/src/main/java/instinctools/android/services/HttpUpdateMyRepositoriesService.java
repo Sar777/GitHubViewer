@@ -18,7 +18,7 @@ public class HttpUpdateMyRepositoriesService extends HttpRepositoryService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Services.scheduleAlarmBroadcast(this,
+        Services.rescheduleAlarmBroadcast(this,
                 OnAlarmReceiver.class,
                 OnAlarmReceiver.REQUEST_MY_REPO_CODE,
                 SettingsStorage.getIntervalUpdateMyRepo() * 60 * 1000);

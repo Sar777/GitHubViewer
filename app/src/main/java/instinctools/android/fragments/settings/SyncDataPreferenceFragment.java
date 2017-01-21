@@ -25,22 +25,19 @@ public class SyncDataPreferenceFragment extends PreferenceFragment implements Sh
         int interval = Integer.parseInt(sharedPreferences.getString(key, String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
 
         if (key.contains(getString(R.string.title_pref_key_sync_my_repo))) {
-            Services.stopAlarmBroadcast(getActivity().getApplicationContext(), OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_MY_REPO_CODE);
-            Services.scheduleAlarmBroadcast(getActivity().getApplicationContext(),
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
                     OnAlarmReceiver.class,
                     OnAlarmReceiver.REQUEST_MY_REPO_CODE,
                     interval * 60 * 1000);
 
         } else if (key.contains(getString(R.string.title_pref_key_sync_watch_repo))) {
-            Services.stopAlarmBroadcast(getActivity().getApplicationContext(), OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_WATCH_REPO_CODE);
-            Services.scheduleAlarmBroadcast(getActivity().getApplicationContext(),
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
                     OnAlarmReceiver.class,
                     OnAlarmReceiver.REQUEST_WATCH_REPO_CODE,
                     SettingsStorage.getIntervalUpdateWatchesRepo() * 60 * 1000);
 
         } else if (key.contains(getString(R.string.title_pref_key_sync_stars_repo))) {
-            Services.stopAlarmBroadcast(getActivity().getApplicationContext(), OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_STARS_REPO_CODE);
-            Services.scheduleAlarmBroadcast(getActivity().getApplicationContext(),
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
                     OnAlarmReceiver.class,
                     OnAlarmReceiver.REQUEST_STARS_REPO_CODE,
                     interval * 60 * 1000);

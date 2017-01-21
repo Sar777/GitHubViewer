@@ -22,16 +22,15 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private DataSetObserver mDataSetObserver;
 
-    public CursorRecyclerViewAdapter(String idColumnName, Context context, Cursor cursor) {
+    CursorRecyclerViewAdapter(String idColumnName, Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
         mRowIdColumnName = idColumnName;
         mRowIdColumn = mDataValid ? mCursor.getColumnIndex(mRowIdColumnName) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
-        if (mCursor != null) {
+        if (mCursor != null)
             mCursor.registerDataSetObserver(mDataSetObserver);
-        }
     }
 
     public Cursor getCursor() {
