@@ -50,7 +50,7 @@ public class RepositoriesProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(DBConstants.TABLE_REPOSITORIES + " LEFT JOIN " + DBConstants.TABLE_REPOSITORY_OWNER
+        builder.setTables(DBConstants.TABLE_REPOSITORIES + " INNER JOIN " + DBConstants.TABLE_REPOSITORY_OWNER
                 + " ON "
                 + DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = " + DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_REPO_ID
                 + " AND "

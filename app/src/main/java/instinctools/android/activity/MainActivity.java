@@ -241,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
+            case R.id.nav_search:
+                startActivity(new Intent(this, SearchActivity.class));
+                break;
             default:
                 break;
         }

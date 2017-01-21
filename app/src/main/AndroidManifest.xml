@@ -68,10 +68,13 @@
             android:name=".activity.StarRepositoriesActivity"
             android:label="@string/title_star_repos"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_search_activity"
             android:theme="@style/AppTheme" />
 
         <receiver android:name=".broadcasts.OnBootReceiver">
@@ -89,6 +92,7 @@
         <service android:name=".services.HttpUpdateMyRepositoriesService" />
         <service android:name=".services.HttpUpdateWatchRepositoriesService" />
         <service android:name=".services.HttpUpdateStarsRepositoriesService" />
+        <service android:name=".services.HttpSearchRepositoryService" />
 
         <provider
             android:name=".database.providers.RepositoriesProvider"

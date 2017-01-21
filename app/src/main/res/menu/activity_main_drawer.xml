@@ -5,7 +5,11 @@
             <item
                 android:id="@+id/nav_my_repositories"
                 android:icon="@drawable/ic_github_repo"
-                android:title="@string/title_my_repositories" />
+                android:title="@string/title_nav_bar_my_repositories" />
+            <item
+                android:id="@+id/nav_search"
+                android:icon="@drawable/ic_github_search"
+                android:title="@string/title_nav_bar_search" />
         </menu>
     </item>
     <item android:title="@string/title_repositories">

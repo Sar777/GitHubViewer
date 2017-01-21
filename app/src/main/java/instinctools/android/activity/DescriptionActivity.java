@@ -127,8 +127,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mProgressBar.setVisibility(View.GONE);
         mLayoutCardView.setVisibility(View.VISIBLE);
 
-        if (!cursor.moveToFirst())
+        if (!cursor.moveToFirst()) {
+            cursor.close();
             return;
+        }
 
         mRepository = Repository.fromCursor(cursor);
         initRepositoryData();
@@ -235,7 +237,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
             public void onError(int code) {
                 mStarred = false;
                 updateStarButton(true);
-                Snackbar.make(findViewById(R.id.swiperefresh_description), R.string.msg_error_loading_data, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -250,7 +251,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
             public void onError(int code) {
                 mWatched = false;
                 updateWatchButton(true);
-                Snackbar.make(findViewById(R.id.swiperefresh_description), R.string.msg_error_loading_data, Snackbar.LENGTH_LONG).show();
             }
 
             @Override

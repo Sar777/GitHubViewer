@@ -3,7 +3,7 @@
     <string name="title_repositories">Repositories</string>
     <string name="title_my_repositories">My Repositories</string>
     <string name="msg_empty_list">Empty list</string>
-    <string name="title_activity_description">DescriptionActivity</string>
+    <string name="title_activity_description">Description</string>
     <string name="msg_permission_external_storage_granted">External storage permissions denied</string>
     <string name="title_activity_auth">Auth Github.com</string>
     <string name="msg_login_or_email">Username or email</string>
@@ -38,6 +38,8 @@
     <string name="title_nav_bar_settings">Settings</string>
     <string name="title_nav_bar_watch">Watches</string>
     <string name="title_nav_bar_stars">Stargazers</string>
+    <string name="title_nav_bar_my_repositories">My repositories</string>
+    <string name="title_nav_bar_search">Search repositories</string>
     <string name="title_profile_followers">Followers</string>
     <string name="title_profile_gists">Gists</string>
     <string name="title_profile_repositories">Repositories</string>
@@ -71,4 +73,7 @@
     <string name="title_description_button_unstar">Unstar</string>
     <string name="title_description_button_unwatch">Unwatch</string>
     <string name="msg_error_loading_data">Error with loading data</string>
+    <string name="title_search_activity">Search</string>
+    <string name="title_search_filter">Filter</string>
+    <string name="title_search_search">Search</string>
 </resources>

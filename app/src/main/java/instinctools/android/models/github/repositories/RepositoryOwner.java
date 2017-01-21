@@ -46,9 +46,9 @@ public class RepositoryOwner {
     public static RepositoryOwner fromCursor(Cursor cursor) {
         RepositoryOwner repositoryOwner = new RepositoryOwner();
 
-        repositoryOwner.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_ID)));
-        repositoryOwner.setLogin(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_LOGIN)));
-        repositoryOwner.setAvatarUrl(cursor.getString(cursor.getColumnIndex(DBConstants.REPOSITORY_OWNER_AVATAR_URL_ID)));
+        repositoryOwner.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_ID)));
+        repositoryOwner.setLogin(cursor.getString(cursor.getColumnIndex(DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_LOGIN)));
+        repositoryOwner.setAvatarUrl(cursor.getString(cursor.getColumnIndex(DBConstants.TABLE_REPOSITORY_OWNER + "." + DBConstants.REPOSITORY_OWNER_AVATAR_URL_ID)));
         return repositoryOwner;
     }
 }

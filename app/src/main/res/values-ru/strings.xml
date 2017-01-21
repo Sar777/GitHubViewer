@@ -18,15 +18,17 @@
     <string name="msg_introductions_go">Начать</string>
     <string name="title_nav_bar_control">Управление</string>
     <string name="title_nav_bar_count_logout">Выйти</string>
+    <string name="title_nav_bar_my_repositories">Мои репозитории</string>
+    <string name="title_nav_bar_settings">Настройки</string>
+    <string name="title_nav_bar_watch">Отслеживаемые</string>
+    <string name="title_nav_bar_stars">Избранные</string>
+    <string name="title_nav_bar_search">Поиск репозиториев</string>
     <string name="title_profile_information">Информация:</string>
     <string name="title_menu">Меню</string>
     <string name="title_watch_repositories">Отслеживаемые</string>
     <string name="title_star_repos">Избранные</string>
     <string name="title_statistics">Статистика</string>
     <string name="title_description">Описание</string>
-    <string name="title_nav_bar_settings">Настройки</string>
-    <string name="title_nav_bar_watch">Отслеживаемые</string>
-    <string name="title_nav_bar_stars">Избранные</string>
     <!-- Preference -->
     <string name="title_pref_header_data_sync">Синхронизация</string>
     <string name="title_pref_header_general">Общие</string>
@@ -40,4 +42,6 @@
     <string name="title_pref_category_repo_watch_summary">Промежуток между обновлением списка списка отслеживаемых репозиториев</string>
     <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
     <string name="msg_error_loading_data">Ошибка при загрузке данных</string>
+    <string name="title_search_activity">Поиск</string>
+    <string name="title_search_filter">Фильтр</string>
 </resources>

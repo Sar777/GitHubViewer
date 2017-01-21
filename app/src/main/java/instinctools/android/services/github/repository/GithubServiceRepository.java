@@ -12,15 +12,15 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.GithubServices;
 
 public class GithubServiceRepository extends GithubServices {
-    private static final String API_REPOSITORY_README_URL = API_BASE_URL + "/repos/%s/%s/readme";
+    private static final String API_REPOSITORY_README_URL = API_BASE_URL + "/repos/%s/readme";
     private static final String API_REPOSITORY = API_BASE_URL + "/repos/%s";
 
-    public static RepositoryReadme getRepositoryReadme(String owner, String repo) {
+    public static RepositoryReadme getRepositoryReadme(String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(String.format(API_REPOSITORY_README_URL, owner, repo)).
+                create(String.format(API_REPOSITORY_README_URL, fullname)).
                 setMethod(HttpClientFactory.METHOD_GET).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
@@ -29,12 +29,12 @@ public class GithubServiceRepository extends GithubServices {
         return (RepositoryReadme) JsonTransformer.transform(client.getContent(), RepositoryReadmeTransformer.class);
     }
 
-    public static void getRepositoryReadme(String owner, String repo, final GithubServiceListener<RepositoryReadme> listener) {
+    public static void getRepositoryReadme(String fullname, final GithubServiceListener<RepositoryReadme> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(String.format(API_REPOSITORY_README_URL, owner, repo)).
+                create(String.format(API_REPOSITORY_README_URL, fullname)).
                 setMethod(HttpClientFactory.METHOD_GET);
 
         client.send(new OnHttpClientListener() {

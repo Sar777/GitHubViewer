@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionActivity;
+import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
 
 public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements View.OnClickListener {
@@ -23,7 +24,7 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
     public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
 
     public RepositoryAdapter(Context context, RecyclerView recyclerView, @Nullable Cursor cursor) {
-        super(context, cursor);
+        super(DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID, context, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
     }

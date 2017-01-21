@@ -16,16 +16,18 @@ public class ListUserRepositoriesTransformer implements ITransformer<List<Reposi
 
     @Override
     public List<Repository> transform(Object object) {
-        if (!(object instanceof String))
-            return null;
-
         JSONArray jsonArray;
-        try {
-            jsonArray = new JSONArray((String)object);
-        } catch (JSONException e) {
-            Log.e(TAG, "Create json object error...", e);
-            return null;
-        }
+        if (object instanceof String) {
+            try {
+                jsonArray = new JSONArray((String) object);
+            } catch (JSONException e) {
+                Log.e(TAG, "Create json object error...", e);
+                return null;
+            }
+        } else if (object instanceof JSONArray)
+            jsonArray = (JSONArray) object;
+        else
+            return new ArrayList<>();
 
         List<Repository> bookList = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i)
