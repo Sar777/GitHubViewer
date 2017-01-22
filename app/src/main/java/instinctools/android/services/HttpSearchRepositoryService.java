@@ -18,9 +18,14 @@ public class HttpSearchRepositoryService extends HttpRepositoryService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SearchResponse searchResponse = GithubServiceSearch.getSearchRepository((SearchRequest) intent.getParcelableExtra(SearchActivity.INTENT_SEARCH_REQUEST));
+        SearchRequest request = intent.getParcelableExtra(SearchActivity.INTENT_SEARCH_REQUEST);
+        if (request.getIn().isEmpty()) {
+            onHandleIntent(new ArrayList<Repository>());
+            return;
+        }
+
+        SearchResponse searchResponse = GithubServiceSearch.getSearchRepository(request);
         if (searchResponse == null) {
-            // Cleanup
             onHandleIntent(new ArrayList<Repository>());
             return;
         }

@@ -3,10 +3,6 @@ package instinctools.android.models.github.search;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by orion on 21.1.17.
- */
-
 public class SearchRequest implements Parcelable {
     public static final String ORDER_ASC = "asc";
     public static final String ORDER_DESC = "desc";

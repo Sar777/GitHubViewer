@@ -8,10 +8,6 @@ import org.json.JSONObject;
 import instinctools.android.models.github.authorization.AppToken;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-/**
- * Created by orion on 12.1.17.
- */
-
 public class AppTokenTransformer implements ITransformer<AppToken> {
     private static final String TAG = "AppTokenTransformer";
 

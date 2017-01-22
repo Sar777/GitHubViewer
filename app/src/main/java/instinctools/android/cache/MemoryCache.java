@@ -6,10 +6,6 @@ import android.util.Log;
 
 import java.util.Iterator;
 
-/**
- * Created by orion on 23.12.16.
- */
-
 class MemoryCache extends BitmapCache<Bitmap> {
     private static final String TAG = "MemoryCache";
 

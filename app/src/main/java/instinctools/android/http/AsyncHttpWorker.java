@@ -5,10 +5,6 @@ import android.os.AsyncTask;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 
-/**
- * Created by orion on 12.1.17.
- */
-
 class AsyncHttpWorker extends AsyncTask<Void, Void, Void> {
     private OnHttpClientListener mListener;
     private WeakReference<HttpClientFactory.HttpClient> mClientReference;

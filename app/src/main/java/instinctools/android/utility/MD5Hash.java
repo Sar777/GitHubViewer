@@ -5,10 +5,6 @@ import android.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by orion on 22.12.16.
- */
-
 public class MD5Hash {
     private static final String TAG = "MD5Hash";
 

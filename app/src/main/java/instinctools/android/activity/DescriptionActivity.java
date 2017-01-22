@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.imageloader.ImageLoader;
+import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.repository.GithubServiceRepository;
@@ -38,6 +41,8 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private TextView mTextViewStargazers;
     private TextView mTextViewWatchers;
     private TextView mTextViewOpenIssues;
+    private TextView mTextViewOwnerLogin;
+    private ImageView mImageViewOwnerAvatar;
 
     private Button mButtonStar;
     private Button mButtonWatch;
@@ -84,7 +89,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mLayoutCardView.setVisibility(View.INVISIBLE);
 
         mProgressBar = (ProgressBar) findViewById(R.id.pb_description_content);
-
+        //
+        mTextViewOwnerLogin = (TextView) findViewById(R.id.text_description_owner_login);
+        mImageViewOwnerAvatar = (ImageView) findViewById(R.id.image_description_owner_avatar);
+        //
         mTextViewFullName = (TextView) findViewById(R.id.text_description_fullname);
         mTextViewDescription = (TextView) findViewById(R.id.text_description_description);
         mTextViewLanguage = (TextView) findViewById(R.id.text_description_language);
@@ -94,7 +102,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mTextViewStargazers = (TextView) findViewById(R.id.text_description_stargazers);
         mTextViewWatchers = (TextView) findViewById(R.id.text_description_watchers);
         mTextViewOpenIssues = (TextView) findViewById(R.id.text_description_open_issues);
-
         //
         mButtonStar = (Button) findViewById(R.id.button_description_star_repo);
         mButtonWatch = (Button) findViewById(R.id.button_description_watch_repo);
@@ -216,6 +223,14 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
     private void initRepositoryData() {
         getSupportActionBar().setTitle(mRepository.getFullName());
+
+        mTextViewOwnerLogin.setText(mRepository.getRepositoryOwner().getLogin());
+        ImageLoader
+                .what(mRepository.getRepositoryOwner().getAvatarUrl())
+                .error(R.drawable.ic_github_logo)
+                .in(mImageViewOwnerAvatar)
+                .transformer(new CircleImageTransformer())
+                .load();
 
         mTextViewFullName.setText(mRepository.getName());
         mTextViewDescription.setText(mRepository.getDescription());

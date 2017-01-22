@@ -33,6 +33,7 @@ import instinctools.android.database.providers.RepositoriesOwnerProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
+import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.HttpUpdateMyRepositoriesService;
@@ -130,10 +131,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
         final TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
 
-        ImageLoader.
-                what(user.getAvatarUrl()).
-                in(imageAvatar).
-                load();
+        ImageLoader
+                .what(user.getAvatarUrl())
+                .in(imageAvatar)
+                .transformer(new CircleImageTransformer())
+                .load();
 
         // Enable clickable
         imageAvatar.setOnClickListener(new View.OnClickListener() {

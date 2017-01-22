@@ -1,9 +1,5 @@
 package instinctools.android.models.github.repositories;
 
-/**
- * Created by orion on 19.1.17.
- */
-
 public class RepositoryReadme {
     private String mType;
     private String mEncoding;

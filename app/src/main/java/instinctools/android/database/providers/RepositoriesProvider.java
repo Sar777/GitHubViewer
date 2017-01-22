@@ -14,10 +14,6 @@ import android.text.TextUtils;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.DBHelper;
 
-/**
- * Created by orion on 30.12.16.
- */
-
 public class RepositoriesProvider extends ContentProvider {
     static final String REPOSITORY_PATH = "repositories";
     public static final String AUTHORITY = "instinctools.android.providers.Repositories";

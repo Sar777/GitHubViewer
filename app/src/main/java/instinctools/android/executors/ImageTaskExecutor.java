@@ -7,10 +7,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by orion on 7.1.17.
- */
-
 public class ImageTaskExecutor extends ThreadPoolExecutor {
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
     private static final int CORE_MAX_POOL_SIZE = CPU_COUNT + 1;

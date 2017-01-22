@@ -129,7 +129,7 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-
+        
         if (mRepositoryAdapter == null) {
             mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
             mRecyclerView.setAdapter(mRepositoryAdapter);

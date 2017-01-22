@@ -18,6 +18,7 @@ import android.widget.TextView;
 import instinctools.android.R;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.ImageLoadingStateListener;
+import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.user.User;
@@ -97,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
         ImageLoader
                 .what(user.getAvatarUrl())
                 .in(mImageViewAvatar)
+                .transformer(new CircleImageTransformer())
                 .load(new ImageLoadingStateListener() {
                     @Override
                     public void onPrepare() {
