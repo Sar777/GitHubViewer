@@ -44,5 +44,4 @@
     <string name="msg_error_loading_data">Ошибка при загрузке данных</string>
     <string name="title_search_activity">Поиск</string>
     <string name="title_search_filter">Фильтр</string>
-    <string name="title_description_owner">Владелец</string>
 </resources>

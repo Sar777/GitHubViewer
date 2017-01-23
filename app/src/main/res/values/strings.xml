@@ -72,7 +72,6 @@
     <string name="title_description_button_watch">Watch</string>
     <string name="title_description_button_unstar">Unstar</string>
     <string name="title_description_button_unwatch">Unwatch</string>
-    <string name="title_description_owner">Owner</string>
     <string name="msg_error_loading_data">Error with loading data</string>
     <string name="title_search_activity">Search</string>
     <string name="title_search_filter">Filter</string>

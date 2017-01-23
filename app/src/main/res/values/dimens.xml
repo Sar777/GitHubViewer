@@ -70,7 +70,7 @@
     <dimen name="profile_textview_fullname_margin_bottom">50dp</dimen>
     <dimen name="profile_divider_size">1dp</dimen>
     <!-- -->
-    <dimen name="description_content_margin_left_right">6dp</dimen>
+    <dimen name="description_content_margin_left_right">16dp</dimen>
     <dimen name="description_divider_size">1dp</dimen>
     <dimen name="description_cardview_padding">10dp</dimen>
     <dimen name="description_cardview_card_cornes_radius">5dp</dimen>
@@ -79,8 +79,7 @@
     <dimen name="description_cardview_margin_left_right">1dp</dimen>
     <dimen name="description_margin_title_bottom">15dp</dimen>
     <dimen name="description_text_view_margin_top_bottom">8dp</dimen>
-    <dimen name="description_title_text_view_margin_bottom_top">10dp</dimen>
-    <dimen name="description_title_text_view_margin_left_right">1dp</dimen>
+    <dimen name="description_title_text_view_margin_bottom_top">16dp</dimen>
     <dimen name="description_progressbar_margin_top">150dp</dimen>
     <dimen name="description_star_watch_layout_margin_left_right">1dp</dimen>
     <dimen name="description_star_watch_button_height">30dp</dimen>
