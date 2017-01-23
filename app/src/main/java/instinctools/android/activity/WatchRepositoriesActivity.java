@@ -55,6 +55,9 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_watch_repositories_list);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
@@ -95,12 +98,6 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
-
-        if (mRepositoryAdapter == null) {
-            mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
-            mRecyclerView.setAdapter(mRepositoryAdapter);
-            return;
-        }
 
         mRepositoryAdapter.changeCursor(cursor);
     }

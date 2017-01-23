@@ -20,11 +20,6 @@ public class DBConstants {
     public static final String REPOSITORY_OPEN_ISSUES = "open_issues_count";
     public static final String REPOSITORY_FORK = "fork";
     public static final String REPOSITORY_PRIVATE = "private";
-
-    // Repositories owner
-    public static final String TABLE_REPOSITORY_OWNER = "repository_owner";
-    public static final String REPOSITORY_OWNER_REPO_ID = "_id";
-    public static final String REPOSITORY_OWNER_TYPE = "type";
     public static final String REPOSITORY_OWNER_ID = "user_id";
     public static final String REPOSITORY_OWNER_LOGIN = "login";
     public static final String REPOSITORY_OWNER_AVATAR_URL_ID = "avatar_url";
@@ -44,13 +39,8 @@ public class DBConstants {
             + REPOSITORY_OPEN_ISSUES + " INTEGER, "
             + REPOSITORY_FORK + " INTEGER(1), "
             + REPOSITORY_PRIVATE + " INTEGER(1), "
-            + " PRIMARY KEY (" + REPOSITORY_ID + ", " + REPOSITORY_TYPE + "))";
-
-    static final String TABLE_REPOSITORY_OWNER_CREATE = "CREATE TABLE " + TABLE_REPOSITORY_OWNER + "("
-            + REPOSITORY_OWNER_REPO_ID + " INTEGER, "
-            + REPOSITORY_OWNER_TYPE + " INTEGER, "
             + REPOSITORY_OWNER_ID + " INTEGER, "
             + REPOSITORY_OWNER_LOGIN + " VARCHAR(50), "
             + REPOSITORY_OWNER_AVATAR_URL_ID + " VARCHAR(255), "
-            + " PRIMARY KEY (" + REPOSITORY_OWNER_REPO_ID + ", " + REPOSITORY_OWNER_TYPE + "))";
+            + " PRIMARY KEY (" + REPOSITORY_ID + ", " + REPOSITORY_TYPE + "))";
 }

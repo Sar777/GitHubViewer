@@ -52,6 +52,9 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
         mRecyclerView.setVisibility(View.INVISIBLE);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -95,12 +98,6 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
-
-        if (mRepositoryAdapter == null) {
-            mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
-            mRecyclerView.setAdapter(mRepositoryAdapter);
-            return;
-        }
 
         mRepositoryAdapter.changeCursor(cursor);
     }

@@ -29,7 +29,6 @@ import android.widget.TextView;
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.broadcasts.OnAlarmReceiver;
-import instinctools.android.database.providers.RepositoriesOwnerProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
@@ -262,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
-        getContentResolver().delete(RepositoriesOwnerProvider.REPOSITORY_OWNER_CONTENT_URI, null, null);
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

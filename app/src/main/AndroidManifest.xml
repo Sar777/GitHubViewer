@@ -98,10 +98,6 @@
             android:name=".database.providers.RepositoriesProvider"
             android:authorities="instinctools.android.providers.Repositories"
             android:exported="false" />
-        <provider
-            android:name=".database.providers.RepositoriesOwnerProvider"
-            android:authorities="instinctools.android.providers.RepositoriesOwner"
-            android:exported="false" />
     </application>
 
 </manifest>

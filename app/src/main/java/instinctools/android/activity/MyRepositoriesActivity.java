@@ -51,6 +51,9 @@ public class MyRepositoriesActivity extends AppCompatActivity implements LoaderM
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_my_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
+
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -95,12 +98,6 @@ public class MyRepositoriesActivity extends AppCompatActivity implements LoaderM
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
-
-        if (mRepositoryAdapter == null) {
-            mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
-            mRecyclerView.setAdapter(mRepositoryAdapter);
-            return;
-        }
 
         mRepositoryAdapter.changeCursor(cursor);
     }

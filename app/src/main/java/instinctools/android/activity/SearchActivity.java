@@ -70,6 +70,10 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_search_repository);
         mRecyclerView.setVisibility(View.INVISIBLE);
+
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRecyclerView.setAdapter(mRepositoryAdapter);
+
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -129,13 +133,6 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        
-        if (mRepositoryAdapter == null) {
-            mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, cursor);
-            mRecyclerView.setAdapter(mRepositoryAdapter);
-            return;
-        }
-
         mRepositoryAdapter.changeCursor(cursor);
     }
 
