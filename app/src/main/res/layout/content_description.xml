@@ -33,7 +33,7 @@
                     android:layout_marginLeft="@dimen/description_title_text_view_margin_left_right"
                     android:layout_marginRight="@dimen/description_title_text_view_margin_left_right"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:drawableLeft="@drawable/ic_github_file"
+                    android:drawableLeft="@drawable/ic_github_person"
                     android:drawablePadding="@dimen/text_view_drawable_padding"
                     android:text="@string/title_description_owner"
                     tools:ignore="RtlHardcoded" />
