@@ -4,7 +4,7 @@ import android.content.Context;
 
 import instinctools.android.storages.GitHubSessionStorage;
 
-public class GithubServices {
+public class GithubService {
     // Constants
     protected static final String API_BASE_URL = "https://api.github.com";
 
@@ -27,14 +27,14 @@ public class GithubServices {
 
     protected static String getFormatAccessToken() {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         return "token " + mSessionStorage.getAccessToken();
     }
 
     public static String getAccessToken() {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         return mSessionStorage.getAccessToken();
     }

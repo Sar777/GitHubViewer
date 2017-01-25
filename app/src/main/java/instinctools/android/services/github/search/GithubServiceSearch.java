@@ -7,15 +7,15 @@ import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.readers.json.JsonTransformer;
+import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.GithubServices;
 
-public class GithubServiceSearch extends GithubServices {
+public class GithubServiceSearch extends GithubService {
     private static final String API_SEARCH_REPOSITORY = API_BASE_URL + "/search/repositories";
 
     public static void getSearchRepository(SearchRequest request, final GithubServiceListener<SearchResponse> listener) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_SEARCH_REPOSITORY + request).
@@ -47,7 +47,7 @@ public class GithubServiceSearch extends GithubServices {
 
     public static SearchResponse getSearchRepository(SearchRequest request) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(API_SEARCH_REPOSITORY + request).

@@ -9,15 +9,15 @@ import instinctools.android.models.github.repositories.RepositoryReadme;
 import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.GithubServices;
+import instinctools.android.services.github.GithubService;
 
-public class GithubServiceRepository extends GithubServices {
+public class GithubServiceRepository extends GithubService {
     private static final String API_REPOSITORY_README_URL = API_BASE_URL + "/repos/%s/readme";
     private static final String API_REPOSITORY = API_BASE_URL + "/repos/%s";
 
     public static RepositoryReadme getRepositoryReadme(String fullname) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY_README_URL, fullname)).
@@ -31,7 +31,7 @@ public class GithubServiceRepository extends GithubServices {
 
     public static void getRepositoryReadme(String fullname, final GithubServiceListener<RepositoryReadme> listener) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY_README_URL, fullname)).
@@ -51,14 +51,13 @@ public class GithubServiceRepository extends GithubServices {
                 }
 
                 listener.onSuccess((RepositoryReadme) JsonTransformer.transform(content, RepositoryReadme.class));
-
             }
         });
     }
 
     public static void getRepository(String fullname, final GithubServiceListener<Repository> listener) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY, fullname)).
@@ -78,7 +77,6 @@ public class GithubServiceRepository extends GithubServices {
                 }
 
                 listener.onSuccess((Repository) JsonTransformer.transform(content, Repository.class));
-
             }
         });
     }

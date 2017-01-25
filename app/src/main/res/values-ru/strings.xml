@@ -19,6 +19,7 @@
     <string name="title_nav_bar_control">Управление</string>
     <string name="title_nav_bar_count_logout">Выйти</string>
     <string name="title_nav_bar_my_repositories">Мои репозитории</string>
+    <string name="title_nav_bar_notifications">Мои оповещения</string>
     <string name="title_nav_bar_settings">Настройки</string>
     <string name="title_nav_bar_watch">Отслеживаемые</string>
     <string name="title_nav_bar_stars">Избранные</string>

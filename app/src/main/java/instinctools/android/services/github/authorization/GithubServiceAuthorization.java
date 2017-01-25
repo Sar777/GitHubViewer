@@ -8,11 +8,11 @@ import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.readers.json.JsonTransformer;
+import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.GithubServices;
 import instinctools.android.utility.Base64Hash;
 
-public class GithubServiceAuthorization extends GithubServices {
+public class GithubServiceAuthorization extends GithubService {
     private static final String AUTH_URL = "https://github.com/login/oauth/authorize?";
     private static final String TOKEN_URL = "https://github.com/login/oauth/access_token?";
 
@@ -27,7 +27,7 @@ public class GithubServiceAuthorization extends GithubServices {
 
     private static String getResetGrantUrl() {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         return String.format("%s/%s/%s/%s", API_APPLICATION_URL, mClientId, FIELD_GRANTS, getAccessToken());
     }
@@ -52,7 +52,7 @@ public class GithubServiceAuthorization extends GithubServices {
 
     public static void continueAuthorization(final String code, final GithubServiceListener<AccessToken> listener) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(getTokenUrl(code));
         httpClient.
@@ -78,7 +78,7 @@ public class GithubServiceAuthorization extends GithubServices {
 
     public static void logout(final GithubServiceListener<Boolean> listener) {
         if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubServices.init");
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(getResetGrantUrl()).

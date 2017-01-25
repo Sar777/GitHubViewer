@@ -6,7 +6,6 @@ import android.database.Cursor;
 import instinctools.android.database.DBConstants;
 
 public class RepositoryOwner {
-
     private String mLogin;
     private int mId;
     private String mAvatarUrl;

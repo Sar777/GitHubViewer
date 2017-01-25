@@ -93,10 +93,16 @@
         <service android:name=".services.HttpUpdateWatchRepositoriesService" />
         <service android:name=".services.HttpUpdateStarsRepositoriesService" />
         <service android:name=".services.HttpSearchRepositoryService" />
+        <service android:name=".services.HttpGithubNotificationsService" />
 
         <provider
             android:name=".database.providers.RepositoriesProvider"
             android:authorities="instinctools.android.providers.Repositories"
+            android:exported="false" />
+
+        <provider
+            android:name=".database.providers.NotificationsProvider"
+            android:authorities="instinctools.android.providers.Notifications"
             android:exported="false" />
     </application>
 

@@ -39,6 +39,7 @@
     <string name="title_nav_bar_watch">Watches</string>
     <string name="title_nav_bar_stars">Stargazers</string>
     <string name="title_nav_bar_my_repositories">My repositories</string>
+    <string name="title_nav_bar_notifications">My notifications</string>
     <string name="title_nav_bar_search">Search repositories</string>
     <string name="title_profile_followers">Followers</string>
     <string name="title_profile_gists">Gists</string>

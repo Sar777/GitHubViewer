@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,12 +30,15 @@ import android.widget.TextView;
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.broadcasts.OnAlarmReceiver;
+import instinctools.android.constans.Constants;
+import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.user.User;
+import instinctools.android.services.HttpGithubNotificationsService;
 import instinctools.android.services.HttpUpdateMyRepositoriesService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int LOADER_USER_ID = 2;
+    private static final int LOADER_NOTIFICATIONS_ID = 3;
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -65,35 +70,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         requestExternalStoragePermissions();
 
-        Intent intentService = new Intent(this, HttpUpdateMyRepositoriesService.class);
-        startService(intentService);
+        // TODO REMOVE ME
+        startService(new Intent(this, HttpGithubNotificationsService.class));
 
-        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
-        getSupportLoaderManager().initLoader(LOADER_USER_ID, null, new LoaderManager.LoaderCallbacks<User>() {
-            @Override
-            public Loader<User> onCreateLoader(int id, Bundle args) {
-                return new AsyncUserInfoLoader(MainActivity.this);
-            }
-
-            @Override
-            public void onLoadFinished(Loader<User> loader, User user) {
-                if (user == null) {
-                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                    return;
-                }
-
-                // Update navigate drawer
-                updateNavBarInfo(user);
-            }
-
-            @Override
-            public void onLoaderReset(Loader<User> loader) {
-
-            }
-        });
+        initLoaders();
     }
 
     private void initView() {
@@ -125,7 +105,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void updateNavBarInfo(User user) {
+    private void initLoaders() {
+        // All repositories
+        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
+        // Notifications
+        getSupportLoaderManager().initLoader(LOADER_NOTIFICATIONS_ID, null, this);
+        // User info
+        getSupportLoaderManager().initLoader(LOADER_USER_ID, null, new LoaderManager.LoaderCallbacks<User>() {
+            @Override
+            public Loader<User> onCreateLoader(int id, Bundle args) {
+                return new AsyncUserInfoLoader(MainActivity.this);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<User> loader, User user) {
+                if (user == null) {
+                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+
+                // Update navigate drawer
+                updateUserInfoNavBar(user);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<User> loader) {
+
+            }
+        });
+    }
+
+    private void updateUserInfoNavBar(User user) {
         final ImageView imageAvatar = (ImageView) mNavigationView.findViewById(R.id.image_user_avatar);
         final TextView textViewUsername = (TextView) mNavigationView.findViewById(R.id.text_username);
         final TextView textViewEmail = (TextView) mNavigationView.findViewById(R.id.text_email);
@@ -162,23 +175,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id != LOADER_REPOSITORIES_ID)
-            return null;
+        Loader<Cursor> cursor = null;
+        switch (id) {
+            case LOADER_REPOSITORIES_ID:
+                cursor = new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
+                break;
+            case LOADER_NOTIFICATIONS_ID:
+                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null, null, null);
+                break;
+            default:
+                break;
+        }
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
+        return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor.getCount() != 0) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
+
+        switch (loader.getId()) {
+            case LOADER_REPOSITORIES_ID: {
+                if (cursor.getCount() != 0) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
+                }
+
+                mRepositoryAdapter.changeCursor(cursor);
+
+                // Hidden refresh bar
+                mSwipeRefreshLayout.setRefreshing(false);
+                break;
+            }
+            case LOADER_NOTIFICATIONS_ID: {
+                ViewGroup view = (ViewGroup) mNavigationView.getMenu().findItem(R.id.nav_notification).getActionView();
+                TextView textView = (TextView) view.getChildAt(0);
+                if (cursor.getCount() >= Constants.MAX_GITHUB_NOTIFICATIONS)
+                    textView.setText(cursor.getCount() + "+");
+                else if (cursor.getCount() > 0)
+                    textView.setText(cursor.getCount());
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unsupported loader by id: " + loader.getId());
         }
-
-        mRepositoryAdapter.changeCursor(cursor);
-
-        // Hidden refresh bar
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -261,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
+        getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null);
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
