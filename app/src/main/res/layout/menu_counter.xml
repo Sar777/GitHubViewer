@@ -10,6 +10,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="@dimen/menu_counter_text_size"
+        android:textStyle="bold"
         android:background="@drawable/background_black_circle"/>
 </RelativeLayout>

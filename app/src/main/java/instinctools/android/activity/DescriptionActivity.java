@@ -29,6 +29,10 @@ import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+    private static final String BUNDLE_REPOSITORY_ID = "ID";
+    public static final String EXTRA_USERNAME = "USERNAME";
+
+    private static final int LOADER_REPOSITORY_ID = 1;
 
     // View
     private ViewGroup mLayoutCardView;
@@ -56,10 +60,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private boolean mWatched;
 
     private Repository mRepository;
-
-    private static final String BUNDLE_REPOSITORY_ID = "ID";
-
-    private static final int LOADER_REPOSITORY_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         //
         mTextViewOwnerLogin = (TextView) findViewById(R.id.text_description_owner_login);
         mImageViewOwnerAvatar = (ImageView) findViewById(R.id.image_description_owner_avatar);
+        mImageViewOwnerAvatar.setOnClickListener(this);
         //
         mTextViewFullName = (TextView) findViewById(R.id.text_description_fullname);
         mTextViewDescription = (TextView) findViewById(R.id.text_description_description);
@@ -188,6 +189,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
                     updateWatchButton(true);
                 }
             });
+        } else if (view.getId() == R.id.image_description_owner_avatar) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra(EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
+            startActivity(intent);
         }
     }
 

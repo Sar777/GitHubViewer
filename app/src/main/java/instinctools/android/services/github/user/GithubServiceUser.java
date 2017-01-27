@@ -14,12 +14,13 @@ import instinctools.android.services.github.GithubServiceListener;
 
 public class GithubServiceUser extends GithubService {
     private static final String API_USER_URL = API_BASE_URL + "/user";
+    private static final String API_USERS_URL = API_BASE_URL + "/users/%s";
     private static final String API_REPO_MY_LIST_URL = API_BASE_URL + "/user/repos?affiliation=owner";
 
     private static final String API_USER_WATCH_REPOSITORIES = API_BASE_URL + "/user/subscriptions";
     private static final String API_USER_STAR_REPOSITORIES = API_BASE_URL + "/user/starred";
 
-    public static void getUser(final GithubServiceListener<User> listener) {
+    public static void getCurrentUser(final GithubServiceListener<User> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -47,7 +48,7 @@ public class GithubServiceUser extends GithubService {
         });
     }
 
-    public static User getUser() {
+    public static User getCurrentUser() {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -55,6 +56,21 @@ public class GithubServiceUser extends GithubService {
                 create(API_USER_URL).
                 setMethod(HttpClientFactory.METHOD_GET).
                 addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return JsonTransformer.transform(client.getContent(), User.class);
+    }
+
+    public static User getUser(String username) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USERS_URL, username)).
+                setMethod(HttpClientFactory.METHOD_GET).
+                send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;

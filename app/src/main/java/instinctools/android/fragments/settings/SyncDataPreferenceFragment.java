@@ -41,6 +41,11 @@ public class SyncDataPreferenceFragment extends PreferenceFragment implements Sh
                     OnAlarmReceiver.class,
                     OnAlarmReceiver.REQUEST_STARS_REPO_CODE,
                     interval * 60 * 1000);
+        } else if (key.contains(getString(R.string.title_pref_key_sync_notifications))) {
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
+                    OnAlarmReceiver.class,
+                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD,
+                    interval * 60 * 1000);
         }
     }
 

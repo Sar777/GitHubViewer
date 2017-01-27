@@ -20,7 +20,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.HttpUpdateWatchRepositoriesService;
+import instinctools.android.services.http.repository.HttpUpdateWatchRepositoriesService;
 
 public class WatchRepositoriesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -50,12 +50,12 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_watch_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_watch_repositories_list);

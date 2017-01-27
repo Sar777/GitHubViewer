@@ -20,7 +20,7 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.HttpUpdateStarsRepositoriesService;
+import instinctools.android.services.http.repository.HttpUpdateStarsRepositoriesService;
 
 public class StarRepositoriesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
@@ -50,9 +50,9 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_star_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

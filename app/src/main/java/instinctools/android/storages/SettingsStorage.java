@@ -48,4 +48,11 @@ public class SettingsStorage {
 
         return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_stars_repo), String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
     }
+
+    public static int getIntervalUpdateNotifications() {
+        if (mSettings == null)
+            init();
+
+        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_notifications), String.valueOf(Constants.INTERVAL_UPDATE_NOTIFICATIONS)));
+    }
 }

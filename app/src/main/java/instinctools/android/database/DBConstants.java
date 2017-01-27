@@ -27,6 +27,7 @@ public class DBConstants {
     // Notifications
     public static final String TABLE_NOTIFICATIONS = "notifcations";
     public static final String NOTIFICATION_ID = "_id";
+    public static final String NOTIFICATION_TYPE = "type";
     public static final String NOTIFICATION_REPO_ID = "repo_id";
     public static final String NOTIFICATION_REPO_NAME = "repo_name";
     public static final String NOTIFICATION_REPO_FULLNAME = "repo_fullname";
@@ -42,10 +43,12 @@ public class DBConstants {
     public static final String NOTIFICATION_SUBJECT_TITLE = "subject_title";
     public static final String NOTIFICATION_SUBJECT_URL = "subject_url";
     public static final String NOTIFICATION_SUBJECT_TYPE = "subject_type";
+    public static final String NOTIFICATION_SUBJECT_LATEST_COMMENT_URL = "latest_comment_url";
     public static final String NOTIFICATION_REASON = "reason";
     public static final String NOTIFICATION_UNREAD = "unread";
     public static final String NOTIFICATION_UPDATE_AT = "update_at";
     public static final String NOTIFICATION_LAST_READ_AT = "last_read_at";
+    public static final String NOTIFICATION_URL = "url";
 
     static final String TABLE_REPOSITORIES_CREATE = "CREATE TABLE " + TABLE_REPOSITORIES + "("
             + REPOSITORY_ID + " INTEGER, "
@@ -68,7 +71,8 @@ public class DBConstants {
             + " PRIMARY KEY (" + REPOSITORY_ID + ", " + REPOSITORY_TYPE + "))";
 
     static final String TABLE_NOTIFICATION_CREATE = "CREATE TABLE " + TABLE_NOTIFICATIONS + "("
-            + NOTIFICATION_ID + " INTEGER PRIMARY KEY, "
+            + NOTIFICATION_ID + " INTEGER, "
+            + NOTIFICATION_TYPE + " INTEGER(3), "
             + NOTIFICATION_REPO_ID + " INTEGER, "
             + NOTIFICATION_REPO_NAME + " VARCHAR(30), "
             + NOTIFICATION_REPO_FULLNAME + " VARCHAR(60), "
@@ -83,9 +87,12 @@ public class DBConstants {
             + NOTIFICATION_REPO_OWNER_URL + " VARCHAR(100), "
             + NOTIFICATION_SUBJECT_TITLE + " VARCHAR(50), "
             + NOTIFICATION_SUBJECT_URL + " VARCHAR(100), "
+            + NOTIFICATION_SUBJECT_LATEST_COMMENT_URL + " VARCHAR(100), "
             + NOTIFICATION_SUBJECT_TYPE + " VARCHAR(20), "
             + NOTIFICATION_REASON + " VARCHAR(20), "
+            + NOTIFICATION_URL + " VARCHAR(100), "
             + NOTIFICATION_UNREAD + " INTEGER(1), "
             + NOTIFICATION_UPDATE_AT + " VARCHAR(30), "
-            + NOTIFICATION_LAST_READ_AT + " VARCHAR(30))";
+            + NOTIFICATION_LAST_READ_AT + " VARCHAR(30), "
+            + " PRIMARY KEY (" + NOTIFICATION_ID + ", " + NOTIFICATION_TYPE + "))";
 }

@@ -1,6 +1,7 @@
 package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import instinctools.android.database.DBConstants;
 
@@ -46,7 +47,18 @@ public class NotificationSubject {
         ContentValues values = new ContentValues();
         values.put(DBConstants.NOTIFICATION_SUBJECT_TITLE, mTitle);
         values.put(DBConstants.NOTIFICATION_SUBJECT_URL, mUrl);
+        values.put(DBConstants.NOTIFICATION_SUBJECT_LATEST_COMMENT_URL, mLatestCommentUrl);
         values.put(DBConstants.NOTIFICATION_SUBJECT_TYPE, mType);
         return values;
+    }
+
+    public static NotificationSubject fromCursor(Cursor cursor) {
+        NotificationSubject subject = new NotificationSubject();
+        subject.setTitle(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TITLE)));
+        subject.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_URL)));
+        subject.setType(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TYPE)));
+        subject.setLatestCommentUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_LATEST_COMMENT_URL)));
+
+        return subject;
     }
 }

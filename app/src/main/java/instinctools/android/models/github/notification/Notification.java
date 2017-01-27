@@ -1,9 +1,11 @@
 package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.models.github.repositories.RepositoryOwner;
 
 public class Notification {
     private Integer mId;
@@ -82,8 +84,28 @@ public class Notification {
     public ContentValues build() {
         ContentValues values = new ContentValues();
         values.put(DBConstants.NOTIFICATION_ID, mId);
+        values.put(DBConstants.NOTIFICATION_REASON, mReason);
+        values.put(DBConstants.NOTIFICATION_URL, mUrl);
+        values.put(DBConstants.NOTIFICATION_UNREAD, mUnread);
+        values.put(DBConstants.NOTIFICATION_UPDATE_AT, mUpdateAt);
+        values.put(DBConstants.NOTIFICATION_LAST_READ_AT, mLastReadAt);
         values.putAll(mRepository.build());
         values.putAll(mSubject.build());
         return values;
+    }
+
+    public static Notification fromCursor(Cursor cursor) {
+        Notification notification = new Notification();
+
+        notification.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_ID)));
+        notification.setReason(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REASON)));
+        notification.setUnread(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_UNREAD)) != 0);
+        notification.setUpdateAt(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_UPDATE_AT)));
+        notification.setLastReadAt(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_LAST_READ_AT)));
+        notification.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_URL)));
+        notification.setRepository(NotificationRepository.fromCursor(cursor));
+        notification.setSubject(NotificationSubject.fromCursor(cursor));
+
+        return notification;
     }
 }

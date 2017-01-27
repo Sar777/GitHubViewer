@@ -20,12 +20,14 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private int mRowIdColumn;
     private String mRowIdColumnName;
+    private final boolean mCanShowHeader;
 
     private DataSetObserver mDataSetObserver;
 
-    CursorRecyclerViewAdapter(String idColumnName, Context context, @Nullable Cursor cursor) {
+    CursorRecyclerViewAdapter(String idColumnName, Context context, boolean showHeader, @Nullable Cursor cursor) {
         mContext = context;
         mCursor = cursor;
+        mCanShowHeader = showHeader;
         mDataValid = cursor != null;
         mRowIdColumnName = idColumnName;
         mRowIdColumn = mDataValid ? mCursor.getColumnIndex(mRowIdColumnName) : -1;
@@ -41,24 +43,31 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor != null) {
-            return mCursor.getCount() + 1;
+            return mCanShowHeader ? mCursor.getCount() + 1 : (mCursor.getCount() != 0 ? mCursor.getCount() : mCursor.getCount() + 1);
         }
         return 0;
     }
 
     @Override
     public long getItemId(int position) {
-        if (mDataValid && mCursor != null && mCursor.moveToPosition(position - 1))
+        if (mDataValid && mCursor != null && mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
             return mCursor.getLong(mRowIdColumn != -1 ? mRowIdColumn : mCursor.getColumnIndex(mRowIdColumnName));
 
         return 0;
+    }
+
+    public Cursor getCursor(int position) {
+        if (mDataValid && mCursor != null && mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
+            return mCursor;
+
+        return null;
     }
 
     @Override
     public int getItemViewType(int position) {
         if (mDataValid && mCursor != null) {
             if (position == 0)
-                return mCursor.getCount() != 0 ? VIEW_TYPE_HEADER : VIEW_TYPE_EMPTY;
+                return mCursor.getCount() != 0 ? (mCanShowHeader ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM): VIEW_TYPE_EMPTY;
         }
 
         return VIEW_TYPE_ITEM;
@@ -76,7 +85,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         if (!mDataValid)
             throw new IllegalStateException("this should only be called when the cursor is valid");
 
-        if (!mCursor.moveToPosition(position - 1))
+        if (!mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
             return;
 
         onBindViewHolder(viewHolder, mCursor);

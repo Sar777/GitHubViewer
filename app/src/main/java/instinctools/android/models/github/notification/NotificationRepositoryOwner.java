@@ -1,6 +1,7 @@
 package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import instinctools.android.database.DBConstants;
 
@@ -49,5 +50,14 @@ public class NotificationRepositoryOwner {
         values.put(DBConstants.NOTIFICATION_REPO_OWNER_AVATAR_URL, mAvatarUrl);
         values.put(DBConstants.NOTIFICATION_REPO_OWNER_URL, mUrl);
         return values;
+    }
+
+    public static NotificationRepositoryOwner fromCursor(Cursor cursor) {
+        NotificationRepositoryOwner owner = new NotificationRepositoryOwner();
+        owner.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_OWNER_ID)));
+        owner.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_OWNER_LOGIN)));
+        owner.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_OWNER_AVATAR_URL)));
+        owner.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_OWNER_URL)));
+        return owner;
     }
 }

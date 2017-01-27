@@ -2,6 +2,15 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="Категория 1">
+        android:title="@string/title_pref_header_general">
+        <ListPreference
+            android:key="@string/title_pref_key_sync_notifications"
+            android:icon="@drawable/ic_github_notification"
+            android:defaultValue="1"
+            android:entries="@array/entries_minutes"
+            android:entryValues="@array/entry_minutes"
+            android:title="@string/title_pref_category_general_notification"
+            android:summary="@string/title_pref_category_general_notification_summary">
+        </ListPreference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -24,9 +24,10 @@ import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.user.User;
 
 public class ProfileActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<User> {
-
     private static final int LOADER_PROFILE_ID = 1;
     private static final int REQUEST_CODE_AUTHORIZATION = 1;
+
+    public static final String BUNDLE_USERNAME = "USERNAME";
 
     private ViewGroup mContentLayout;
     private ImageView mImageViewAvatar;
@@ -49,7 +50,11 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
 
         initView();
 
-        getSupportLoaderManager().initLoader(LOADER_PROFILE_ID, null, this);
+        Bundle bundle = new Bundle();
+        if (getIntent() != null)
+            bundle.putString(ProfileActivity.BUNDLE_USERNAME, getIntent().getStringExtra(DescriptionActivity.EXTRA_USERNAME));
+
+        getSupportLoaderManager().initLoader(LOADER_PROFILE_ID, bundle, this);
     }
 
     private void initView() {
@@ -84,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
         if (id != LOADER_PROFILE_ID)
             return null;
 
-        return new AsyncUserInfoLoader(this);
+        return new AsyncUserInfoLoader(this, args);
     }
 
     @Override

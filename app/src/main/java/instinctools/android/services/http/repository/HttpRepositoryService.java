@@ -1,4 +1,4 @@
-package instinctools.android.services;
+package instinctools.android.services.http.repository;
 
 import android.app.IntentService;
 import android.content.ContentProviderOperation;
@@ -38,7 +38,6 @@ public class HttpRepositoryService extends IntentService {
                     .withValue(DBConstants.REPOSITORY_TYPE, mTypeInfo)
                     .withValues(repository.build())
                     .withValues(repository.getRepositoryOwner().build());
-
 
             operationsRepositories.add(builder.build());
         }

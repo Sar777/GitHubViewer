@@ -22,7 +22,7 @@ public class HttpClientFactory {
     public static final String METHOD_POST = "POST";
     public static final String METHOD_DELETE = "DELETE";
     public static final String METHOD_PUT = "PUT";
-    public static final String METHOD_PATH = "PATH";
+    public static final String METHOD_PATCH = "PATCH";
 
     // Headers
     public static final String HEADER_ACCEPT = "Accept";

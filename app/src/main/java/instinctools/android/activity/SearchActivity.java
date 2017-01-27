@@ -31,7 +31,7 @@ import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.models.github.search.SearchRequest;
-import instinctools.android.services.HttpSearchRepositoryService;
+import instinctools.android.services.http.repository.HttpSearchRepositoryService;
 
 public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
     private static final int LOADER_REPOSITORIES_ID = 1;
@@ -71,10 +71,10 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_search_repository);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);

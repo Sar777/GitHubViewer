@@ -1,6 +1,7 @@
 package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import instinctools.android.database.DBConstants;
 
@@ -90,12 +91,30 @@ public class NotificationRepository {
     public ContentValues build() {
         ContentValues values = new ContentValues();
         values.put(DBConstants.NOTIFICATION_REPO_ID, mId);
+        values.put(DBConstants.NOTIFICATION_REPO_NAME, mName);
         values.put(DBConstants.NOTIFICATION_REPO_FULLNAME, mFullName);
         values.put(DBConstants.NOTIFICATION_REPO_DESCRIPION, mDescription);
         values.put(DBConstants.NOTIFICATION_REPO_PRIVATE, mPrivate);
         values.put(DBConstants.NOTIFICATION_REPO_FORK, mFork);
         values.put(DBConstants.NOTIFICATION_REPO_HTML_URL, mHtmlUrl);
         values.put(DBConstants.NOTIFICATION_REPO_URL, mUrl);
+        values.putAll(mOwner.build());
         return values;
+    }
+
+    public static NotificationRepository fromCursor(Cursor cursor) {
+        NotificationRepository repository = new NotificationRepository();
+
+        repository.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_ID)));
+        repository.setName(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_NAME)));
+        repository.setFullName(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_FULLNAME)));
+        repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_DESCRIPION)));
+        repository.setPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_PRIVATE)) != 0);
+        repository.setFork(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_FORK)) != 0);
+        repository.setHtmlUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_HTML_URL)));
+        repository.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_URL)));
+        repository.setOwner(NotificationRepositoryOwner.fromCursor(cursor));
+
+        return repository;
     }
 }

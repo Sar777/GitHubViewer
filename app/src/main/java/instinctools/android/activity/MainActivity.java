@@ -31,6 +31,7 @@ import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
+import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
@@ -38,8 +39,8 @@ import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.user.User;
-import instinctools.android.services.HttpGithubNotificationsService;
-import instinctools.android.services.HttpUpdateMyRepositoriesService;
+import instinctools.android.services.HttpRunAllService;
+import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
 import instinctools.android.utility.Services;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         requestExternalStoragePermissions();
 
         // TODO REMOVE ME
-        startService(new Intent(this, HttpGithubNotificationsService.class));
+        startService(new Intent(this, HttpRunAllService.class));
 
         initLoaders();
     }
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, true, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setItemIconTintList(null);
     }
 
     private void initLoaders() {
@@ -111,10 +113,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Notifications
         getSupportLoaderManager().initLoader(LOADER_NOTIFICATIONS_ID, null, this);
         // User info
-        getSupportLoaderManager().initLoader(LOADER_USER_ID, null, new LoaderManager.LoaderCallbacks<User>() {
+        getSupportLoaderManager().initLoader(LOADER_USER_ID, new Bundle(), new LoaderManager.LoaderCallbacks<User>() {
             @Override
             public Loader<User> onCreateLoader(int id, Bundle args) {
-                return new AsyncUserInfoLoader(MainActivity.this);
+                return new AsyncUserInfoLoader(MainActivity.this, args);
             }
 
             @Override
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 cursor = new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
                 break;
             case LOADER_NOTIFICATIONS_ID:
-                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null, null, null);
+                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] { String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
                 break;
             default:
                 break;
@@ -209,10 +211,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case LOADER_NOTIFICATIONS_ID: {
                 ViewGroup view = (ViewGroup) mNavigationView.getMenu().findItem(R.id.nav_notification).getActionView();
                 TextView textView = (TextView) view.getChildAt(0);
+                textView.setVisibility(View.VISIBLE);
                 if (cursor.getCount() >= Constants.MAX_GITHUB_NOTIFICATIONS)
                     textView.setText(cursor.getCount() + "+");
                 else if (cursor.getCount() > 0)
-                    textView.setText(cursor.getCount());
+                    textView.setText(String.valueOf(cursor.getCount()));
+                else
+                    textView.setVisibility(View.INVISIBLE);
                 break;
             }
             default:
@@ -282,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_search:
                 startActivity(new Intent(this, SearchActivity.class));
+                break;
+            case R.id.nav_notification:
+                startActivity(new Intent(this, NotificationActivity.class));
                 break;
             default:
                 break;

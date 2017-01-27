@@ -23,8 +23,8 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
 
     public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
 
-    public RepositoryAdapter(Context context, RecyclerView recyclerView, @Nullable Cursor cursor) {
-        super(DBConstants.REPOSITORY_ID, context, cursor);
+    public RepositoryAdapter(Context context, RecyclerView recyclerView, boolean showHeader, @Nullable Cursor cursor) {
+        super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
     }
@@ -111,11 +111,11 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_HEADER: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_header, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository_header, parent, false);
                 return new HeaderItemHolder(view);
             }
             case VIEW_TYPE_EMPTY: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_empty, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository_empty, parent, false);
                 return new EmptyItemHolder(view);
             }
             case VIEW_TYPE_ITEM:

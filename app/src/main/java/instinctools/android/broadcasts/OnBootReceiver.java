@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import instinctools.android.services.HttpUpdateMyRepositoriesService;
+import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 
 public class OnBootReceiver extends BroadcastReceiver {
     private static final String TAG = "OnBootReceiver";

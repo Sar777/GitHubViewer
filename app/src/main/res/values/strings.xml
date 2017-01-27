@@ -60,14 +60,17 @@
     <string name="title_pref_category_repositories">Repositories</string>
     <string name="title_pref_category_repo_my_repo">My</string>
     <string name="title_pref_category_repo_watch_repo">Watches</string>
-    <string name="title_pref_category_repo_stars_repo">Stargazers</string>
+    <string name="title_pref_category_repo_stars_repo">Stars</string>
+    <string name="title_pref_category_general_notification">Notification</string>
     <string name="title_pref_category_repo_my_summary">The interval between updating my list of repositories</string>
     <string name="title_pref_category_repo_watch_summary">The interval between updating watches repositories</string>
     <string name="title_pref_category_repo_stars_summary">The interval between updating stargazers repositories</string>
+    <string name="title_pref_category_general_notification_summary">The interval between updating notifications</string>
     <!-- Preference keys -->
     <string name="title_pref_key_sync_my_repo">sync_my_repositories</string>
     <string name="title_pref_key_sync_watch_repo">sync_watch_repositories</string>
     <string name="title_pref_key_sync_stars_repo">sync_stars_repositories</string>
+    <string name="title_pref_key_sync_notifications">sync_notifications</string>
 
     <string name="title_description_button_star">Star</string>
     <string name="title_description_button_watch">Watch</string>
@@ -77,4 +80,11 @@
     <string name="title_search_activity">Search</string>
     <string name="title_search_filter">Filter</string>
     <string name="title_search_search">Search</string>
+    <!-- -->
+    <string name="title_notification">Notifications</string>
+    <string name="msg_unknown_error_mark_notification">Unknown error marked notification</string>
+    <!-- Tabs -->
+    <string name="title_notification_tab_unread">Unread</string>
+    <string name="title_notification_tab_participating">Participating</string>
+    <string name="title_notification_tab_all">All</string>
 </resources>

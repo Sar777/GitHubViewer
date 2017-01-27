@@ -76,6 +76,10 @@
             android:name=".activity.SearchActivity"
             android:label="@string/title_search_activity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.NotificationActivity"
+            android:label="@string/title_notification"
+            android:theme="@style/AppTheme" />
 
         <receiver android:name=".broadcasts.OnBootReceiver">
             <intent-filter>
@@ -89,17 +93,20 @@
             android:process=":remote" />
 
         <service android:name=".services.HttpRunAllService" />
-        <service android:name=".services.HttpUpdateMyRepositoriesService" />
-        <service android:name=".services.HttpUpdateWatchRepositoriesService" />
-        <service android:name=".services.HttpUpdateStarsRepositoriesService" />
-        <service android:name=".services.HttpSearchRepositoryService" />
-        <service android:name=".services.HttpGithubNotificationsService" />
+        <!-- Repostitories -->
+        <service android:name=".services.http.repository.HttpUpdateMyRepositoriesService" />
+        <service android:name=".services.http.repository.HttpUpdateWatchRepositoriesService" />
+        <service android:name=".services.http.repository.HttpUpdateStarsRepositoriesService" />
+        <service android:name=".services.http.repository.HttpSearchRepositoryService" />
+        <!-- Notifications -->
+        <service android:name=".services.http.notification.HttpGithubUnreadNotificationService" />
+        <service android:name=".services.http.notification.HttpGithubParticipatingNotificationService" />
+        <service android:name=".services.http.notification.HttpGithubAllNotificationService" />
 
         <provider
             android:name=".database.providers.RepositoriesProvider"
             android:authorities="instinctools.android.providers.Repositories"
             android:exported="false" />
-
         <provider
             android:name=".database.providers.NotificationsProvider"
             android:authorities="instinctools.android.providers.Notifications"

@@ -1,4 +1,4 @@
-package instinctools.android.services;
+package instinctools.android.services.http.repository;
 
 import android.content.Intent;
 
@@ -10,6 +10,7 @@ import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.services.github.search.GithubServiceSearch;
+import instinctools.android.services.http.repository.HttpRepositoryService;
 
 public class HttpSearchRepositoryService extends HttpRepositoryService {
     public HttpSearchRepositoryService() {
