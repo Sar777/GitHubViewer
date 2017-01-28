@@ -86,7 +86,7 @@
                 android:layout_width="@dimen/profile_github_icon_size"
                 android:layout_height="@dimen/profile_github_icon_size"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_github_logo"
+                app:srcCompat="@drawable/ic_github_logo"
                 tools:ignore="ContentDescription" />
 
             <View

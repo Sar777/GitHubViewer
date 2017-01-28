@@ -36,7 +36,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/introduction_slide_button_layout_height"
-        android:background="#9d201b1b"
+        android:alpha="0.9"
+        android:background="@color/colorPrimary"
         android:layout_gravity="bottom">
 
         <LinearLayout
