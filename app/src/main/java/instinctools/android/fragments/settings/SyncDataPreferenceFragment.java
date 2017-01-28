@@ -9,6 +9,7 @@ import instinctools.android.R;
 import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.storages.SettingsStorage;
+import instinctools.android.utility.RandomGenerator;
 import instinctools.android.utility.Services;
 
 public class SyncDataPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -45,7 +46,17 @@ public class SyncDataPreferenceFragment extends PreferenceFragment implements Sh
             Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
                     OnAlarmReceiver.class,
                     OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD,
-                    interval * 60 * 1000);
+                    (interval * 60 * 1000) + RandomGenerator.rand(0, 3));
+
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
+                    OnAlarmReceiver.class,
+                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_ALL,
+                    (interval * 60 * 1000) + RandomGenerator.rand(1, 3));
+
+            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
+                    OnAlarmReceiver.class,
+                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING,
+                    (interval * 60 * 1000) + RandomGenerator.rand(2, 3));
         }
     }
 
