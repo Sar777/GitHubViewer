@@ -40,7 +40,7 @@ public class IssueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         void onBindViewHolder(int position) {
-            Issue issue = mIssues.get(position);
+            Issue issue = getItem(position);
 
             if (issue.getState() == IssueState.OPENED) {
                 mTextViewIssueState.setText(mContext.getString(R.string.title_opened));
@@ -79,7 +79,11 @@ public class IssueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return mIssues != null ? mIssues.size() + 1 : 1;
+        return mIssues != null ? mIssues.size() : 1;
+    }
+
+    private Issue getItem(int position) {
+        return mIssues.get(position);
     }
 
     @Override

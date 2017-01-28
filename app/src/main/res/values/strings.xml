@@ -92,6 +92,4 @@
     <!-- -->
     <string name="title_opened">OPENED</string>
     <string name="title_closed">CLOSED</string>
-    <string name="msg_description_error_loading_opened_issues">Loading error opened issues</string>
-    <string name="msg_description_error_loading_closed_issues">Loading error closed issues</string>
 </resources>

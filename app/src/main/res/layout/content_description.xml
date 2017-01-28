@@ -103,11 +103,12 @@
                             android:visibility="gone"
                             android:layout_centerInParent="true" />
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        tools:ignore="RtlHardcoded">
+                        tools:ignore="RelativeOverlap,RtlHardcoded">
 
                         <Button
                             android:id="@+id/button_description_watch_repo"
@@ -302,6 +303,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_description_issues_opened"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/description_card_view_opened_issues_height"
                     android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
@@ -344,6 +346,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_description_issues_closed"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/description_card_view_opened_issues_height"
                     android:layout_marginLeft="@dimen/description_cardview_margin_left_right"

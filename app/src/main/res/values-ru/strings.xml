@@ -50,6 +50,4 @@
     <!-- -->
     <string name="title_notification">Оповещения</string>
     <string name="msg_unknown_error_mark_notification">Ошибка удаления оповещения</string>
-    <string name="msg_description_error_loading_opened_issues">Ошиба загрузки открытых репортов</string>
-    <string name="msg_description_error_loading_closed_issues">Ошиба загрузки закрытых репортов</string>
 </resources>
