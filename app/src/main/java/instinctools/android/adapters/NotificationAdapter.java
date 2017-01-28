@@ -15,6 +15,7 @@ import android.widget.TextView;
 import instinctools.android.R;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.notification.Notification;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.notification.GithubNotifications;
@@ -44,7 +45,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         Notification notification = Notification.fromCursor(getCursor(position));
         GithubNotifications.markNotification(notification.getUrl(), new GithubServiceListener<Boolean>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 Snackbar.make(mRecyclerView, R.string.msg_unknown_error_mark_notification, Snackbar.LENGTH_SHORT).show();
             }
 

@@ -30,6 +30,7 @@ import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.models.github.repositories.Repository;
@@ -209,7 +210,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
             GithubServiceUser.starredRepository(mRepository.getFullName(), !mStarred, new GithubServiceListener<Boolean>() {
                 @Override
-                public void onError(int code) {
+                public void onError(int code, ErrorResponse response) {
                     updateStarButton(true);
                 }
 
@@ -227,7 +228,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
             GithubServiceUser.watchedRepository(mRepository.getFullName(), !mWatched, new GithubServiceListener<Boolean>() {
                 @Override
-                public void onError(int code) {
+                public void onError(int code, ErrorResponse response) {
                     updateWatchButton(true);
                 }
 
@@ -304,7 +305,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         GithubServiceUser.isStarredRepository(mRepository.getFullName(), new GithubServiceListener<Boolean>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mStarred = false;
                 updateStarButton(true);
             }
@@ -318,7 +319,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         GithubServiceUser.isWatchedRepository(mRepository.getFullName(), new GithubServiceListener<Boolean>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mWatched = false;
                 updateWatchButton(true);
             }
@@ -345,7 +346,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mCardViewIssuesOpened.setVisibility(View.GONE);
             }
 
@@ -366,7 +367,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mCardViewIssuesClosed.setVisibility(View.GONE);
             }
 
@@ -390,9 +391,9 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     public void onRefresh() {
         GithubServiceRepository.getRepository(mRepository.getFullName(), new GithubServiceListener<Repository>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mSwipeRefreshLayout.setRefreshing(false);
-                Snackbar.make(findViewById(R.id.swiperefresh_description), R.string.msg_error_loading_data, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.swiperefresh_description), response.getMessage(), Snackbar.LENGTH_LONG).show();
             }
 
             @Override

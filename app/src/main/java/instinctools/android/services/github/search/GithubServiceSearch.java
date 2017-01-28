@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.readers.json.JsonTransformer;
@@ -23,8 +24,8 @@ public class GithubServiceSearch extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override

@@ -12,6 +12,7 @@ import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.authorization.AccessToken;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.services.HttpRunAllService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
@@ -45,7 +46,7 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         String code = intent.getDataString().substring(intent.getDataString().indexOf("code=") + 5);
         GithubServiceAuthorization.continueAuthorization(code, new GithubServiceListener<AccessToken>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mButtonAuth.setVisibility(View.VISIBLE);
                 mProgressDialog.dismiss();
             }

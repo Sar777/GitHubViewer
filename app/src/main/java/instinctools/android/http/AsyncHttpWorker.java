@@ -28,12 +28,12 @@ class AsyncHttpWorker extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         HttpClientFactory.HttpClient client = mClientReference.get();
         if (client == null) {
-            mListener.onError(HttpURLConnection.HTTP_BAD_REQUEST);
+            mListener.onError(HttpURLConnection.HTTP_BAD_REQUEST, null);
             return;
         }
 
         if (client.getCode() >= HttpURLConnection.HTTP_BAD_REQUEST) {
-            mListener.onError(client.getCode());
+            mListener.onError(client.getCode(), client.getContent());
             return;
         }
 

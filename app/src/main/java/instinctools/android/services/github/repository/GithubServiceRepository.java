@@ -5,6 +5,7 @@ import java.util.List;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.models.github.repositories.Repository;
@@ -58,8 +59,8 @@ public class GithubServiceRepository extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
@@ -84,8 +85,8 @@ public class GithubServiceRepository extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
@@ -110,8 +111,8 @@ public class GithubServiceRepository extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override

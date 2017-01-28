@@ -5,6 +5,7 @@ import java.util.List;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.JsonTransformer;
@@ -31,14 +32,14 @@ public class GithubServiceUser extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
             public void onSuccess(int code, String content) {
                 if (code != HttpURLConnection.HTTP_OK) {
-                    listener.onError(code);
+                    listener.onError(code, null);
                     return;
                 }
 
@@ -135,8 +136,8 @@ public class GithubServiceUser extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
@@ -158,8 +159,8 @@ public class GithubServiceUser extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
@@ -181,8 +182,8 @@ public class GithubServiceUser extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
@@ -204,8 +205,8 @@ public class GithubServiceUser extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override

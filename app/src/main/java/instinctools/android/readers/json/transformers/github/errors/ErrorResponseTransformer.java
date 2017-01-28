@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-public class ErrorResponseTransformers implements ITransformer<ErrorResponse> {
+public class ErrorResponseTransformer implements ITransformer<ErrorResponse> {
     private static final String TAG = "ErrorRespTransform";
 
     private static final String J_MESSAGE = "message";
@@ -16,6 +16,9 @@ public class ErrorResponseTransformers implements ITransformer<ErrorResponse> {
 
     @Override
     public ErrorResponse transform(Object object) {
+        if (object == null)
+            return null;
+
         if (!(object instanceof String))
             return null;
 

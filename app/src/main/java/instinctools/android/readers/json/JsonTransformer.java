@@ -17,7 +17,7 @@ import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.github.authorization.AccessTokenTransformer;
-import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformers;
+import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformer;
 import instinctools.android.readers.json.transformers.github.issues.IssueLabelTransformer;
 import instinctools.android.readers.json.transformers.github.issues.IssueTransformer;
 import instinctools.android.readers.json.transformers.github.issues.ListIssueLabelTransformer;
@@ -45,7 +45,7 @@ public class JsonTransformer {
         mTransformersMap.put(Repository[].class.getName(), ListUserRepositoriesTransformer.class);
         mTransformersMap.put(RepositoryReadme.class.getName(), RepositoryReadmeTransformer.class);
         // Errors
-        mTransformersMap.put(ErrorResponse.class.getName(), ErrorResponseTransformers.class);
+        mTransformersMap.put(ErrorResponse.class.getName(), ErrorResponseTransformer.class);
         // Search
         mTransformersMap.put(SearchResponse.class.getName(), SearchResponseTransformer.class);
         // Notifications

@@ -1,15 +1,11 @@
 package instinctools.android.services.github.notification;
 
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.HttpURLConnection;
 import java.util.List;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.notification.Notification;
 import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.services.github.GithubService;
@@ -60,8 +56,8 @@ public class GithubNotifications extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override

@@ -38,11 +38,12 @@ import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.HttpRunAllService;
-import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
+import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 import instinctools.android.utility.Services;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_logout: {
                 GithubServiceAuthorization.logout(new GithubServiceListener<Boolean>() {
                     @Override
-                    public void onError(int code) {
+                    public void onError(int code, ErrorResponse response) {
                         Snackbar.make(findViewById(R.id.content_main), R.string.msg_sign_out_unknown_error, Snackbar.LENGTH_SHORT).show();
                     }
 

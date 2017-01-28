@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.authorization.AccessToken;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.GithubServiceListener;
@@ -60,8 +61,8 @@ public class GithubServiceAuthorization extends GithubService {
                 addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON).
                 send(new OnHttpClientListener() {
                     @Override
-                    public void onError(int errCode) {
-                        listener.onError(errCode);
+                    public void onError(int errCode, String content) {
+                        listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
                     }
 
                     @Override
@@ -87,8 +88,8 @@ public class GithubServiceAuthorization extends GithubService {
 
         client.send(new OnHttpClientListener() {
             @Override
-            public void onError(int errCode) {
-                listener.onError(errCode);
+            public void onError(int errCode, String content) {
+                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
             }
 
             @Override
