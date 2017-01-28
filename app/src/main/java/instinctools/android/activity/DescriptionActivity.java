@@ -9,6 +9,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import instinctools.android.R;
+import instinctools.android.adapters.IssueAdapter;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
+import instinctools.android.models.github.issues.Issue;
+import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.services.github.Direction;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
@@ -55,6 +65,16 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private ProgressBar mProgressBarWatch;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    // Issues
+    private RecyclerView mRecyclerViewIssuesOpened;
+    private ProgressBar mProgressBarIssuesOpened;
+
+    private RecyclerView mRecyclerViewIssuesClosed;
+    private ProgressBar mProgressBarIssuesClosed;
+
+    private IssueAdapter mIssueOpenedAdapter;
+    private IssueAdapter mIssueClosedAdapter;
 
     private boolean mStarred;
     private boolean mWatched;
@@ -112,6 +132,30 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_description);
 
+        // Opened
+        mRecyclerViewIssuesOpened = (RecyclerView) findViewById(R.id.recycler_description_issues_opened);
+        mRecyclerViewIssuesOpened.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
+        mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
+
+        mIssueOpenedAdapter = new IssueAdapter(this, null);
+        mRecyclerViewIssuesOpened.setAdapter(mIssueOpenedAdapter);
+        mRecyclerViewIssuesOpened.setLayoutManager(new LinearLayoutManager(this));
+
+        mProgressBarIssuesOpened = (ProgressBar) findViewById(R.id.pb_description_issue_opened);
+        mProgressBarIssuesOpened.setVisibility(View.VISIBLE);
+
+        // Closed
+        mRecyclerViewIssuesClosed = (RecyclerView) findViewById(R.id.recycler_description_issues_closed);
+        mRecyclerViewIssuesClosed.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
+        mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
+
+        mIssueClosedAdapter = new IssueAdapter(this, null);
+        mRecyclerViewIssuesClosed.setAdapter(mIssueClosedAdapter);
+        mRecyclerViewIssuesClosed.setLayoutManager(new LinearLayoutManager(this));
+
+        mProgressBarIssuesClosed = (ProgressBar) findViewById(R.id.pb_description_issue_closed);
+        mProgressBarIssuesClosed.setVisibility(View.VISIBLE);
+
         updateStarButton(false);
         updateWatchButton(false);
     }
@@ -145,6 +189,44 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         if (!cursor.isClosed())
             cursor.close();
+
+        GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
+            @Override
+            public void onError(int code) {
+                Snackbar.make(findViewById(R.id.swiperefresh_description), R.string.msg_description_error_loading_opened_issues, Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(List<Issue> issues) {
+                if (issues == null)
+                    issues = new ArrayList<>();
+
+                mIssueOpenedAdapter.setIssues(issues);
+                mIssueOpenedAdapter.notifyDataSetChanged();
+
+                mRecyclerViewIssuesOpened.setVisibility(View.VISIBLE);
+                mProgressBarIssuesOpened.setVisibility(View.GONE);
+            }
+        });
+
+        GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
+            @Override
+            public void onError(int code) {
+                Snackbar.make(findViewById(R.id.swiperefresh_description), R.string.msg_description_error_loading_closed_issues, Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(List<Issue> issues) {
+                if (issues == null)
+                    issues = new ArrayList<>();
+
+                mIssueClosedAdapter.setIssues(issues);
+                mIssueClosedAdapter.notifyDataSetChanged();
+
+                mRecyclerViewIssuesClosed.setVisibility(View.VISIBLE);
+                mProgressBarIssuesClosed.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -279,6 +361,12 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
                 updateWatchButton(true);
             }
         });
+
+        updateIssues();
+    }
+
+    private void updateIssues() {
+
     }
 
     @Override

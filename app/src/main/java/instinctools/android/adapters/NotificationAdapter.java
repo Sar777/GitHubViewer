@@ -6,16 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import instinctools.android.R;
 import instinctools.android.database.DBConstants;
@@ -89,7 +84,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
             int resId;
             switch (item.getSubject().getType()) {
                 case "Issue":
-                    resId = R.drawable.ic_github_issue_openned;
+                    resId = R.drawable.ic_github_issue_opened;
                     break;
                 case "PullRequest":
                     resId = R.drawable.ic_github_repo_pull_request;
