@@ -9,10 +9,6 @@ import android.view.View;
 
 import instinctools.android.R;
 
-/**
- * Created by orion on 28.12.16.
- */
-
 public class CustomTabsURLSpan extends URLSpan {
     public CustomTabsURLSpan(String url) {
         super(url);

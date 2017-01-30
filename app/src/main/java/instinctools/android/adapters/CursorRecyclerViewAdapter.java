@@ -3,13 +3,14 @@ package instinctools.android.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 
-/**
- * Created by orion on 30.12.16.
- */
-
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+
+    static final int VIEW_TYPE_ITEM = 1;
+    static final int VIEW_TYPE_HEADER = 2;
+    static final int VIEW_TYPE_EMPTY = 3;
 
     private Context mContext;
 
@@ -18,18 +19,21 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     protected boolean mDataValid;
 
     private int mRowIdColumn;
+    private String mRowIdColumnName;
+    private final boolean mCanShowHeader;
 
     private DataSetObserver mDataSetObserver;
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
+    CursorRecyclerViewAdapter(String idColumnName, Context context, boolean showHeader, @Nullable Cursor cursor) {
         mContext = context;
         mCursor = cursor;
+        mCanShowHeader = showHeader;
         mDataValid = cursor != null;
-        mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
+        mRowIdColumnName = idColumnName;
+        mRowIdColumn = mDataValid ? mCursor.getColumnIndex(mRowIdColumnName) : -1;
         mDataSetObserver = new NotifyingDataSetObserver();
-        if (mCursor != null) {
+        if (mCursor != null)
             mCursor.registerDataSetObserver(mDataSetObserver);
-        }
     }
 
     public Cursor getCursor() {
@@ -39,17 +43,34 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     @Override
     public int getItemCount() {
         if (mDataValid && mCursor != null) {
-            return mCursor.getCount() + 1;
+            return mCanShowHeader ? mCursor.getCount() + 1 : (mCursor.getCount() != 0 ? mCursor.getCount() : mCursor.getCount() + 1);
         }
         return 0;
     }
 
     @Override
     public long getItemId(int position) {
-        if (mDataValid && mCursor != null && mCursor.moveToPosition(position - 1)) {
-            return mCursor.getLong(mRowIdColumn);
-        }
+        if (mDataValid && mCursor != null && mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
+            return mCursor.getLong(mRowIdColumn != -1 ? mRowIdColumn : mCursor.getColumnIndex(mRowIdColumnName));
+
         return 0;
+    }
+
+    public Cursor getCursor(int position) {
+        if (mDataValid && mCursor != null && mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
+            return mCursor;
+
+        return null;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mDataValid && mCursor != null) {
+            if (position == 0)
+                return mCursor.getCount() != 0 ? (mCanShowHeader ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM): VIEW_TYPE_EMPTY;
+        }
+
+        return VIEW_TYPE_ITEM;
     }
 
     @Override
@@ -64,7 +85,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         if (!mDataValid)
             throw new IllegalStateException("this should only be called when the cursor is valid");
 
-        if (!mCursor.moveToPosition(position - 1))
+        if (!mCursor.moveToPosition(mCanShowHeader ? position - 1 : position))
             return;
 
         onBindViewHolder(viewHolder, mCursor);

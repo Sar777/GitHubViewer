@@ -2,7 +2,7 @@
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="@android:color/darker_gray"/>
+            <solid android:color="@android:color/darker_gray" />
             <!--shadow Color-->
         </shape>
     </item>
@@ -13,7 +13,7 @@
         android:top="0dp"
         android:bottom="2dp">
         <shape android:shape="oval">
-            <solid android:color="@android:color/white"/>//Background Color
+            <solid android:color="@android:color/white" />
         </shape>
     </item>
 </layer-list>

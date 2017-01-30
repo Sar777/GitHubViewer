@@ -7,8 +7,9 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.readers.json.transformers.ITransformer;
+import instinctools.android.utility.CustomTextUtils;
 
-class RepositoryTransformer implements ITransformer<Repository> {
+public class RepositoryTransformer implements ITransformer<Repository> {
     private static final String TAG = "RepositoryTransformer";
 
     private static final String J_ID = "id";
@@ -21,13 +22,25 @@ class RepositoryTransformer implements ITransformer<Repository> {
     private static final String J_IS_FORK = "fork";
     private static final String J_DESCRIPTION = "description";
     private static final String J_LANGUAGE = "language";
+    private static final String J_FORKS = "forks_count";
+    private static final String J_STARGAZERS = "stargazers_count";
+    private static final String J_WATCHERS = "watchers_count";
+    private static final String J_OPEN_ISSUES = "open_issues_count";
 
     @Override
     public Repository transform(Object object) {
-        if (!(object instanceof JSONObject))
+        JSONObject jsonObject;
+        if (object instanceof JSONObject)
+            jsonObject = (JSONObject)object;
+        else if (object instanceof String) {
+            try {
+                jsonObject = new JSONObject((String)object);
+            } catch (JSONException e) {
+                Log.e(TAG, "Create json object error...", e);
+                return null;
+            }
+        } else
             return null;
-
-        JSONObject jsonObject = (JSONObject)object;
 
         Repository repository = new Repository();
         try {
@@ -35,12 +48,15 @@ class RepositoryTransformer implements ITransformer<Repository> {
             repository.setName(jsonObject.getString(J_NAME));
             repository.setHtmlUrl(jsonObject.getString(J_HTML_URL));
             repository.setFullName(jsonObject.getString(J_FULLNAME));
-            repository.setDescription(jsonObject.getString(J_DESCRIPTION).equals("null") ? "" : jsonObject.getString(J_DESCRIPTION));
+            repository.setDescription(CustomTextUtils.isEmpty(jsonObject.getString(J_DESCRIPTION)) ? "Empty" : jsonObject.getString(J_DESCRIPTION));
             repository.setDefaultBranch(jsonObject.getString(J_DEFAULT_BRANCH));
-            repository.setLanguage(jsonObject.getString(J_LANGUAGE).equals("null") ? "" : jsonObject.getString(J_LANGUAGE));
+            repository.setLanguage(CustomTextUtils.isEmpty(jsonObject.getString(J_LANGUAGE)) ? "None" : jsonObject.getString(J_LANGUAGE));
+            repository.setForks(jsonObject.getInt(J_FORKS));
+            repository.setStargazers(jsonObject.getInt(J_STARGAZERS));
+            repository.setWatchers(jsonObject.getInt(J_WATCHERS));
+            repository.setOpenIssues(jsonObject.getInt(J_OPEN_ISSUES));
             repository.setIsPrivate(jsonObject.getBoolean(J_IS_PRIVATE));
             repository.setIsFork(jsonObject.getBoolean(J_IS_FORK));
-
             repository.setRepositoryOwner(new RepositoryOwnerTransformer().transform(jsonObject.getJSONObject(J_REPOSITORY_OWNER)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

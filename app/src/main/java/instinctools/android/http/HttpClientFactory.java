@@ -14,10 +14,6 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by orion on 22.12.16.
- */
-
 public class HttpClientFactory {
     private static final String TAG = "HttpClientFactory";
 
@@ -26,10 +22,11 @@ public class HttpClientFactory {
     public static final String METHOD_POST = "POST";
     public static final String METHOD_DELETE = "DELETE";
     public static final String METHOD_PUT = "PUT";
-    public static final String METHOD_PATH = "PATH";
+    public static final String METHOD_PATCH = "PATCH";
 
     // Headers
     public static final String HEADER_ACCEPT = "Accept";
+    public static final String HEADER_CONTENT_LENGHT = "Content-Length";
     public static final String HEADER_AUTHORIZATION = "Authorization";
 
     // Types
@@ -52,7 +49,7 @@ public class HttpClientFactory {
         private int mCode;
         private String mContent;
 
-        public HttpClient(String url) {
+        HttpClient(String url) {
             try {
                 this.mUri = new URL(url);
             } catch (MalformedURLException e) {
@@ -154,7 +151,7 @@ public class HttpClientFactory {
 
             BufferedReader reader = null;
             try {
-                if(mCode >= HttpURLConnection.HTTP_BAD_REQUEST)
+                if (mCode >= HttpURLConnection.HTTP_BAD_REQUEST)
                     reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 else
                     reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

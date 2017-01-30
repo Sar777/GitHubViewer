@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_my_repositories"
+        android:icon="@drawable/ic_github_repo"
+        android:title="@string/title_nav_bar_my_repositories"
+        app:itemIconTint="@android:color/black"/>
+    <item
+        android:id="@+id/nav_notification"
+        android:icon="@drawable/ic_github_notification"
+        android:title="@string/title_nav_bar_notifications"
+        app:actionLayout="@layout/menu_counter"/>
+    <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/ic_github_search"
+        android:title="@string/title_nav_bar_search" />
+
+    <item android:title="@string/title_repositories">
+        <menu>
+            <item
+                android:id="@+id/nav_my_watch_repos"
+                android:icon="@drawable/ic_eye_black_24dp"
+                android:title="@string/title_nav_bar_watch" />
+
+            <item
+                android:id="@+id/nav_my_star_repos"
+                android:icon="@drawable/ic_star_black_24dp"
+                android:title="@string/title_nav_bar_stars" />
+        </menu>
+    </item>
     <item android:title="@string/title_nav_bar_control">
         <menu>
             <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_github_settings"
+                android:title="@string/title_nav_bar_settings" />
+            <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_sign_out"
+                android:icon="@drawable/ic_github_sign_out"
                 android:title="@string/title_nav_bar_count_logout" />
         </menu>
     </item>

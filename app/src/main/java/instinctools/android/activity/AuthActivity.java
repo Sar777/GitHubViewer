@@ -12,8 +12,10 @@ import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.authorization.AccessToken;
+import instinctools.android.models.github.errors.ErrorResponse;
+import instinctools.android.services.HttpRunAllService;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.GithubServices;
+import instinctools.android.services.github.authorization.GithubServiceAuthorization;
 
 public class AuthActivity extends AppCompatActivity implements View.OnClickListener {
     private ProgressDialog mProgressDialog;
@@ -42,15 +44,16 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         mProgressDialog = ProgressDialog.show(this, getString(R.string.msg_auth_title_dialog), getString(R.string.msg_auth_message_dialog), true);
 
         String code = intent.getDataString().substring(intent.getDataString().indexOf("code=") + 5);
-        GithubServices.continueAuthorization(code, new GithubServiceListener<AccessToken>() {
+        GithubServiceAuthorization.continueAuthorization(code, new GithubServiceListener<AccessToken>() {
             @Override
-            public void onError(int code) {
+            public void onError(int code, ErrorResponse response) {
                 mButtonAuth.setVisibility(View.VISIBLE);
                 mProgressDialog.dismiss();
             }
 
             @Override
             public void onSuccess(AccessToken token) {
+                startService(new Intent(AuthActivity.this, HttpRunAllService.class));
                 Intent intentActivity = new Intent(AuthActivity.this, MainActivity.class);
                 intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentActivity);
@@ -71,6 +74,6 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
         if (view.getId() != R.id.button_auth)
             return;
 
-        App.launchUrl(this, GithubServices.getAuthUrl(Constants.AUTH_CALLBACK_INITIAL));
+        App.launchUrl(this, GithubServiceAuthorization.getAuthUrl(Constants.AUTH_CALLBACK_INITIAL));
     }
 }

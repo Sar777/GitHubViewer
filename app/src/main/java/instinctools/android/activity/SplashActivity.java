@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import instinctools.android.R;
 import instinctools.android.constans.Constants;
-import instinctools.android.services.github.GithubServices;
+import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 
 public class SplashActivity extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
-        String accessToken = GithubServices.getAccessToken();
+        String accessToken = GithubService.getAccessToken();
         Intent intent;
         if (TextUtils.isEmpty(accessToken))
             intent = new Intent(SplashActivity.this, AuthActivity.class);

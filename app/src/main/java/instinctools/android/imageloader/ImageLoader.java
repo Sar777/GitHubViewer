@@ -19,6 +19,7 @@ import instinctools.android.App;
 import instinctools.android.cache.BitmapCacheMgr;
 import instinctools.android.constans.Constants;
 import instinctools.android.executors.ImageTaskExecutor;
+import instinctools.android.imageloader.transformers.ImageTransformer;
 
 public class ImageLoader {
     private static final String TAG = "ImageLoader";
@@ -35,25 +36,26 @@ public class ImageLoader {
     private ImageLoader() {
     }
 
-    public static ImageTarget what(@NonNull String url) {
-        return new ImageTarget(url);
+    public static ImageHolder what(@NonNull String url) {
+        return new ImageHolder(url);
     }
 
-    public static class ImageTarget {
+    public static class ImageHolder {
         private String mUrl;
         private WeakReference<ImageView> mImageViewReference;
         private ImagePlaceholder mImagePlaceholder;
+        private ImageTransformer mTransformer;
 
-        ImageTarget(String url) {
+        ImageHolder(String url) {
             this.mUrl = url;
         }
 
-        public ImageTarget what(String url) {
+        public ImageHolder what(String url) {
             this.mUrl = url;
             return this;
         }
 
-        public ImageTarget error(int drawId) {
+        public ImageHolder error(int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 
@@ -61,7 +63,7 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget loading(int drawId) {
+        public ImageHolder loading(int drawId) {
             if (mImagePlaceholder == null)
                 mImagePlaceholder = new ImagePlaceholder();
 
@@ -69,8 +71,13 @@ public class ImageLoader {
             return this;
         }
 
-        public ImageTarget in(@NonNull ImageView image) {
+        public ImageHolder in(@NonNull ImageView image) {
             this.mImageViewReference = new WeakReference<>(image);
+            return this;
+        }
+
+        public ImageHolder transformer(ImageTransformer transformer) {
+            this.mTransformer = transformer;
             return this;
         }
 
@@ -87,16 +94,16 @@ public class ImageLoader {
     }
 
     private static class ImageBitmapWorker extends AsyncTask<Void, Void, Bitmap> {
-        private final ImageTarget mImageTarget;
+        private final ImageHolder mImageHolder;
         private final ImageLoadingStateListener mListener;
 
-        ImageBitmapWorker(ImageTarget image) {
-            this.mImageTarget = image;
+        ImageBitmapWorker(ImageHolder image) {
+            this.mImageHolder = image;
             this.mListener = null;
         }
 
-        ImageBitmapWorker(ImageTarget image, ImageLoadingStateListener listener) {
-            this.mImageTarget = image;
+        ImageBitmapWorker(ImageHolder image, ImageLoadingStateListener listener) {
+            this.mImageHolder = image;
             this.mListener = listener;
         }
 
@@ -104,7 +111,7 @@ public class ImageLoader {
             URL url;
             Bitmap bitmap;
             try {
-                url = new URL(mImageTarget.mUrl);
+                url = new URL(mImageHolder.mUrl);
             } catch (MalformedURLException e) {
                 Log.e(TAG, "Fail parse url for loading image", e);
                 return null;
@@ -122,12 +129,12 @@ public class ImageLoader {
 
         @Override
         protected void onPreExecute() {
-            ImagePlaceholder imagePlaceholder = mImageTarget.mImagePlaceholder;
+            ImagePlaceholder imagePlaceholder = mImageHolder.mImagePlaceholder;
             if (imagePlaceholder == null)
                 return;
 
             if (imagePlaceholder.getLoadingId() != 0) {
-                ImageView imageView = mImageTarget.mImageViewReference.get();
+                ImageView imageView = mImageHolder.mImageViewReference.get();
                 if (imageView != null)
                     imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), imagePlaceholder.getLoadingId()));
             }
@@ -138,9 +145,18 @@ public class ImageLoader {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            Bitmap bitmap = mBitmapCacheMgr.getFromCache(mImageTarget.mUrl);
-            if (bitmap == null)
+            Bitmap bitmap = mBitmapCacheMgr.getFromCache(mImageHolder.mUrl);
+            boolean cache = true;
+            if (bitmap == null) {
+                cache = false;
                 bitmap = loadingFromNetwork();
+            }
+
+            if (bitmap != null && !cache) {
+                ImageTransformer transformer = mImageHolder.mTransformer;
+                if (transformer != null)
+                    bitmap = transformer.transform(bitmap);
+            }
 
             return bitmap;
         }
@@ -148,9 +164,9 @@ public class ImageLoader {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap == null) {
-                ImagePlaceholder imagePlaceholder = mImageTarget.mImagePlaceholder;
+                ImagePlaceholder imagePlaceholder = mImageHolder.mImagePlaceholder;
                 if (imagePlaceholder != null && imagePlaceholder.getErrorId() != 0) {
-                    ImageView imageView = mImageTarget.mImageViewReference.get();
+                    ImageView imageView = mImageHolder.mImageViewReference.get();
                     if (imageView != null)
                         imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), imagePlaceholder.getErrorId()));
                 }
@@ -161,9 +177,9 @@ public class ImageLoader {
                 return;
             }
 
-            mBitmapCacheMgr.addToCache(mImageTarget.mUrl, bitmap);
+            mBitmapCacheMgr.addToCache(mImageHolder.mUrl, bitmap);
 
-            ImageView imageView = mImageTarget.mImageViewReference.get();
+            ImageView imageView = mImageHolder.mImageViewReference.get();
             if (imageView != null)
                 imageView.setImageBitmap(bitmap);
 

@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration  {
+public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
@@ -45,7 +45,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration  {
         }
     }
 
-    public void drawVertical(Canvas c, RecyclerView parent) {
+    private void drawVertical(Canvas c, RecyclerView parent) {
         final int left = parent.getPaddingLeft();
         final int right = parent.getWidth() - parent.getPaddingRight();
 
@@ -63,7 +63,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration  {
         }
     }
 
-    public void drawHorizontal(Canvas c, RecyclerView parent) {
+    private void drawHorizontal(Canvas c, RecyclerView parent) {
         final int top = parent.getPaddingTop();
         final int bottom = parent.getHeight() - parent.getPaddingBottom();
 
@@ -82,9 +82,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration  {
     }
 
     private boolean isDecorated(View view, RecyclerView parent) {
-        if (mPreventFirst && parent.getChildAdapterPosition(view) == 0)
-            return false;
+        return !(mPreventFirst && parent.getChildAdapterPosition(view) == 0);
 
-        return true;
     }
 }

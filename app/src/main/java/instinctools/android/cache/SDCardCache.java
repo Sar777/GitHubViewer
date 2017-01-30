@@ -22,10 +22,6 @@ import instinctools.android.utility.Permission;
 
 import static android.os.Environment.isExternalStorageRemovable;
 
-/**
- * Created by orion on 23.12.16.
- */
-
 public class SDCardCache extends BitmapCache<File> {
     private static final String TAG = "SDCardCache";
 

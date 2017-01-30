@@ -37,9 +37,9 @@ public class IntroductionsActivity extends AppCompatActivity implements ViewPage
         mViewPager.addOnPageChangeListener(this);
         mViewPager.setAdapter(mIntroductionPagerAdapter);
 
-        int width = (int)getResources().getDimension(R.dimen.introduction_slide_button_width_height);
-        int heigth = (int)getResources().getDimension(R.dimen.introduction_slide_button_width_height);
-        int margin = (int)getResources().getDimension(R.dimen.introduction_slide_button_margin);
+        int width = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
+        int heigth = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
+        int margin = (int) getResources().getDimension(R.dimen.introduction_slide_button_margin);
 
         ViewGroup viewGroup = (ViewGroup) findViewById(R.id.layout_slide_buttons);
 
@@ -68,8 +68,8 @@ public class IntroductionsActivity extends AppCompatActivity implements ViewPage
 
     @Override
     public void onPageSelected(int position) {
-        int width = (int)getResources().getDimension(R.dimen.introduction_slide_button_width_height);
-        int heigth = (int)getResources().getDimension(R.dimen.introduction_slide_button_width_height);
+        int width = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
+        int heigth = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
 
         for (int i = 0; i < IntroductionPagerAdapter.MAX_PAGES; ++i) {
             ViewGroup.LayoutParams layoutParams = mButtonSlides[i].getLayoutParams();
@@ -79,8 +79,8 @@ public class IntroductionsActivity extends AppCompatActivity implements ViewPage
         }
 
         ViewGroup.LayoutParams layoutParams = mButtonSlides[position].getLayoutParams();
-        layoutParams.width = (int) ((int)width * 1.3);
-        layoutParams.height = (int) ((int)width * 1.3);
+        layoutParams.width = (int) ((int) width * 1.3);
+        layoutParams.height = (int) ((int) width * 1.3);
         mButtonSlides[position].setLayoutParams(layoutParams);
     }
 

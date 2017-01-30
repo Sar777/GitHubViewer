@@ -1,9 +1,5 @@
 package instinctools.android.models.github.authorization;
 
-/**
- * Created by orion on 12.1.17.
- */
-
 public class AppToken {
     private String mUrl;
     private String mName;

@@ -9,9 +9,6 @@ import java.io.File;
 
 import instinctools.android.utility.MD5Hash;
 
-/**
- * Created by orion on 23.12.16.
- */
 public class BitmapCacheMgr {
     private static final String TAG = "BitmapCacheMgr";
 

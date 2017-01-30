@@ -12,7 +12,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
+        android:paddingTop="@dimen/app_bar_padding_top"
         android:theme="@style/AppTheme.Launcher.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -36,7 +36,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/introduction_slide_button_layout_height"
-        android:background="#9d201b1b"
+        android:alpha="0.9"
+        android:background="@color/colorPrimary"
         android:layout_gravity="bottom">
 
         <LinearLayout
@@ -46,8 +47,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="horizontal"
-            tools:ignore="UselessParent">
-        </LinearLayout>
+            tools:ignore="UselessParent" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,9 +1,5 @@
 package instinctools.android.imageloader;
 
-/**
- * Created by orion on 24.12.16.
- */
-
 public class ImagePlaceholder {
 
     private int mLoadingId;

@@ -25,7 +25,7 @@
         android:textSize="@dimen/introductions_welcome_text_size"
         android:gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-        android:text="@string/msg_introductions_github_1"/>
+        android:text="@string/msg_introductions_github_1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,5 +36,5 @@
         android:textSize="@dimen/introductions_welcome_text2_size"
         android:gravity="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-        android:text="@string/msg_introductions_github_2"/>
+        android:text="@string/msg_introductions_github_2" />
 </LinearLayout>

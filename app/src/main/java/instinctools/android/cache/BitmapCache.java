@@ -5,10 +5,6 @@ import android.graphics.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by orion on 23.12.16.
- */
-
 abstract class BitmapCache<A> {
     final Object mCacheLock = new Object();
 

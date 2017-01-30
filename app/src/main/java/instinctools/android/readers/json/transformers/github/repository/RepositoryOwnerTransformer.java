@@ -8,10 +8,6 @@ import org.json.JSONObject;
 import instinctools.android.models.github.repositories.RepositoryOwner;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-/**
- * Created by orion on 13.1.17.
- */
-
 public class RepositoryOwnerTransformer implements ITransformer<RepositoryOwner> {
     private static final String TAG = "RepositoryOwnerTrans";
 

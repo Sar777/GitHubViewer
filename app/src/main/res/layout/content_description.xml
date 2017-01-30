@@ -1,37 +1,401 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh_description"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/description_content_margin_left_right"
+    android:layout_marginLeft="@dimen/description_content_margin_left_right"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="instinctools.android.activity.DescriptionActivity"
     tools:showIn="@layout/activity_description">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:id="@+id/pb_description_content"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            style="@style/Base.Widget.AppCompat.ProgressBar" />
+            android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/text_readme"
+            <LinearLayout
+                android:id="@+id/layout_description_cards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_view_description_margin"
-                android:autoLink="web"
-                android:ellipsize="end" />
-        </LinearLayout>
+                android:orientation="vertical">
 
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginRight="@dimen/description_cardview_margin_left_right"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:id="@+id/layout_description_avatar"
+                            android:layout_width="@dimen/description_avatar_border_size"
+                            android:layout_height="@dimen/description_avatar_border_size"
+                            android:background="@drawable/background_avatar_circle"
+                            android:padding="@dimen/description_avatar_border_padding">
+
+                            <ImageView
+                                android:id="@+id/image_description_owner_avatar"
+                                android:layout_width="@dimen/description_owner_avatar_size"
+                                android:layout_height="@dimen/description_owner_avatar_size"
+                                tools:ignore="ContentDescription" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/text_description_owner_login"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/description_text_login_margin_left"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/layout_description_avatar"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    android:layout_marginLeft="@dimen/description_star_watch_layout_margin_left_right"
+                    android:layout_marginRight="@dimen/description_star_watch_layout_margin_left_right">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        tools:ignore="RtlHardcoded">
+
+                        <Button
+                            android:id="@+id/button_description_star_repo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/description_star_watch_button_height"
+                            android:layout_centerVertical="true"
+                            android:drawableLeft="@drawable/ic_star_black_24dp"
+                            android:drawablePadding="@dimen/description_star_watch_button_drawable_padding"
+                            android:paddingLeft="@dimen/description_button_star_watch_padding_left_right"
+                            android:paddingRight="@dimen/description_button_star_watch_padding_left_right"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/description_star_watch_button_text_size"
+                            android:text="@string/title_description_button_star"
+                            android:background="@drawable/background_github_button"
+                            android:visibility="invisible"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_description_star_repo"
+                            android:layout_width="@dimen/description_star_watch_progress_bar_width_height"
+                            android:layout_height="@dimen/description_star_watch_progress_bar_width_height"
+                            android:visibility="gone"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        tools:ignore="RelativeOverlap,RtlHardcoded">
+
+                        <Button
+                            android:id="@+id/button_description_watch_repo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/description_star_watch_button_height"
+                            android:layout_centerVertical="true"
+                            android:drawableLeft="@drawable/ic_eye_black_24dp"
+                            android:drawablePadding="@dimen/description_star_watch_button_drawable_padding"
+                            android:paddingLeft="@dimen/description_button_star_watch_padding_left_right"
+                            android:paddingRight="@dimen/description_button_star_watch_padding_left_right"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/description_star_watch_button_text_size"
+                            android:text="@string/title_description_button_watch"
+                            android:background="@drawable/background_github_button"
+                            android:visibility="invisible"/>
+
+                        <ProgressBar
+                            android:id="@+id/pb_description_watch_repo"
+                            android:layout_width="@dimen/description_star_watch_progress_bar_width_height"
+                            android:layout_height="@dimen/description_star_watch_progress_bar_width_height"
+                            android:visibility="gone"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginRight="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_title_text_view_margin_bottom_top"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_file"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:text="@string/title_description"
+                            tools:ignore="RtlHardcoded" />
+
+                        <TextView
+                            android:id="@+id/text_description_fullname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_repo"
+                            android:drawablePadding="@dimen/text_view_drawable_padding" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_note"
+                            android:drawablePadding="@dimen/text_view_drawable_padding" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_language"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_code"
+                            android:drawablePadding="@dimen/text_view_drawable_padding" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_default_branch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_branch"
+                            android:drawablePadding="@dimen/text_view_drawable_padding" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginRight="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginBottom="@dimen/description_cardview_margin_bottom_top"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_title_text_view_margin_bottom_top"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_graph"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:text="@string/title_statistics"
+                            tools:ignore="RtlHardcoded" />
+
+                        <TextView
+                            android:id="@+id/text_description_forks"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_repo_forked"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            tools:ignore="RtlHardcoded" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_stargazers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_star"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            tools:ignore="RtlHardcoded" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_watchers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:layout_marginBottom="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_eye"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            tools:ignore="RtlHardcoded" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/description_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+                        <TextView
+                            android:id="@+id/text_description_open_issues"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/description_text_view_margin_top_bottom"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_issue_opened"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            tools:ignore="RtlHardcoded" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_description_issues_opened"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/description_card_view_opened_issues_height"
+                    android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginRight="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginBottom="@dimen/description_cardview_margin_bottom_top"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ProgressBar
+                            android:id="@+id/pb_description_issue_opened"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"/>
+
+                        <TextView
+                            android:id="@+id/text_description_issues_opened"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_title_text_view_margin_bottom_top"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_issue_opened"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:text="@string/title_issue_opened"
+                            tools:ignore="RtlHardcoded" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_description_issues_opened"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/text_description_issues_opened"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_description_issues_closed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/description_card_view_opened_issues_height"
+                    android:layout_marginLeft="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginRight="@dimen/description_cardview_margin_left_right"
+                    android:layout_marginBottom="@dimen/description_cardview_margin_bottom_top"
+                    android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ProgressBar
+                            android:id="@+id/pb_description_issue_closed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"/>
+
+                        <TextView
+                            android:id="@+id/text_description_issues_closed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/description_title_text_view_margin_bottom_top"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:drawableLeft="@drawable/ic_github_issue_closed"
+                            android:drawablePadding="@dimen/text_view_drawable_padding"
+                            android:text="@string/title_issue_closed"
+                            tools:ignore="RtlHardcoded" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_description_issues_closed"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/text_description_issues_closed"/>
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_description_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/description_progressbar_margin_top"
+                style="@style/Base.Widget.AppCompat.ProgressBar" />
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

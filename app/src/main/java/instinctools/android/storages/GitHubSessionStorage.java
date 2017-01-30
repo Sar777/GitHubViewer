@@ -18,7 +18,6 @@ public class GitHubSessionStorage {
     private void init() {
         mSettings = mContext.getSharedPreferences(STORAGE_NAME, Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
-        mEditor.commit();
     }
 
     private void removeProperty(String name) {
@@ -26,7 +25,7 @@ public class GitHubSessionStorage {
             init();
 
         mEditor.remove(name);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     private void addProperty(String name, String value) {
@@ -34,7 +33,7 @@ public class GitHubSessionStorage {
             init();
 
         mEditor.putString(name, value);
-        mEditor.commit();
+        mEditor.apply();
     }
 
     private String getStringProperty(String name) {
