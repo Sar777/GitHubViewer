@@ -1,8 +1,7 @@
 package instinctools.android.models.github.issues;
 
-/**
- * Created by orion on 28.1.17.
- */
+import java.util.HashMap;
+import java.util.Map;
 
 public enum IssueState {
     OPENED("open"),
@@ -17,5 +16,21 @@ public enum IssueState {
     @Override
     public String toString() {
         return mState;
+    }
+
+    private static final Map<String, IssueState> mLookup = new HashMap<>();
+
+    static {
+        for (IssueState d : IssueState.values()) {
+            mLookup.put(d.toString(), d);
+        }
+    }
+
+    public static IssueState get(String state) {
+        IssueState issueState = mLookup.get(state);
+        if (issueState == null)
+            throw new IllegalArgumentException("Unknown issue state: " + state);
+
+        return issueState;
     }
 }

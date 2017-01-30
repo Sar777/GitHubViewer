@@ -41,13 +41,7 @@ public class IssueTransformer implements ITransformer<Issue> {
             issue.setId(jsonObject.getInt(J_ID));
             issue.setUrl(jsonObject.getString(J_URL));
             issue.setRepositoryUrl(jsonObject.getString(J_REPOSITORY_URL));
-            String state = jsonObject.getString(J_STATE);
-
-            if (state.equals("open"))
-                issue.setState(IssueState.OPENED);
-            else
-                issue.setState(IssueState.CLOSED);
-
+            issue.setState(IssueState.get(jsonObject.getString(J_STATE)));
             issue.setNumber(jsonObject.getInt(J_NUMBER));
             issue.setTitle(jsonObject.getString(J_TITLE));
             issue.setBody(jsonObject.getString(J_BODY));

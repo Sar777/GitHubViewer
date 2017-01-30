@@ -9,7 +9,7 @@ public class NotificationSubject {
     private String mTitle;
     private String mUrl;
     private String mLatestCommentUrl;
-    private String mType;
+    private NotificationType mType;
 
     public String getTitle() {
         return mTitle;
@@ -35,11 +35,11 @@ public class NotificationSubject {
         this.mLatestCommentUrl = latestCommentUrl;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return mType;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.mType = type;
     }
 
@@ -48,7 +48,7 @@ public class NotificationSubject {
         values.put(DBConstants.NOTIFICATION_SUBJECT_TITLE, mTitle);
         values.put(DBConstants.NOTIFICATION_SUBJECT_URL, mUrl);
         values.put(DBConstants.NOTIFICATION_SUBJECT_LATEST_COMMENT_URL, mLatestCommentUrl);
-        values.put(DBConstants.NOTIFICATION_SUBJECT_TYPE, mType);
+        values.put(DBConstants.NOTIFICATION_SUBJECT_TYPE, mType.toString());
         return values;
     }
 
@@ -56,7 +56,7 @@ public class NotificationSubject {
         NotificationSubject subject = new NotificationSubject();
         subject.setTitle(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TITLE)));
         subject.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_URL)));
-        subject.setType(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TYPE)));
+        subject.setType(NotificationType.get(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TYPE))));
         subject.setLatestCommentUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_LATEST_COMMENT_URL)));
 
         return subject;

@@ -84,13 +84,13 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
 
             int resId;
             switch (item.getSubject().getType()) {
-                case "Issue":
+                case ISSUE:
                     resId = R.drawable.ic_github_issue_opened;
                     break;
-                case "PullRequest":
+                case PULLREQUEST:
                     resId = R.drawable.ic_github_repo_pull_request;
                     break;
-                case "Commit":
+                case COMMIT:
                     resId = R.drawable.ic_github_commit;
                     break;
                 default:

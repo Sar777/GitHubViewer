@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import instinctools.android.models.github.notification.NotificationSubject;
+import instinctools.android.models.github.notification.NotificationType;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 public class NotificationSubjectTransformer implements ITransformer<NotificationSubject> {
@@ -34,7 +35,7 @@ public class NotificationSubjectTransformer implements ITransformer<Notification
         NotificationSubject notificationSubject = new NotificationSubject();
         try {
             notificationSubject.setTitle(jsonObject.getString(J_TITLE));
-            notificationSubject.setType(jsonObject.getString(J_TYPE));
+            notificationSubject.setType(NotificationType.get(jsonObject.getString(J_TYPE)));
             notificationSubject.setLatestCommentUrl(jsonObject.getString(J_LATEST_COMMENT_URL));
             notificationSubject.setUrl(jsonObject.getString(J_URL));
          } catch (JSONException e) {

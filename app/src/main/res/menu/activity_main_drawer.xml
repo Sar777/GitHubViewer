@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="@string/title_menu">
-        <menu>
-            <item
-                android:id="@+id/nav_my_repositories"
-                android:icon="@drawable/ic_github_repo"
-                android:title="@string/title_nav_bar_my_repositories"
-                app:itemIconTint="@android:color/black"/>
-            <item
-                android:id="@+id/nav_notification"
-                android:icon="@drawable/ic_github_notification"
-                android:title="@string/title_nav_bar_notifications"
-                app:actionLayout="@layout/menu_counter"/>
-            <item
-                android:id="@+id/nav_search"
-                android:icon="@drawable/ic_github_search"
-                android:title="@string/title_nav_bar_search" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/nav_my_repositories"
+        android:icon="@drawable/ic_github_repo"
+        android:title="@string/title_nav_bar_my_repositories"
+        app:itemIconTint="@android:color/black"/>
+    <item
+        android:id="@+id/nav_notification"
+        android:icon="@drawable/ic_github_notification"
+        android:title="@string/title_nav_bar_notifications"
+        app:actionLayout="@layout/menu_counter"/>
+    <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/ic_github_search"
+        android:title="@string/title_nav_bar_search" />
+
     <item android:title="@string/title_repositories">
         <menu>
             <item
