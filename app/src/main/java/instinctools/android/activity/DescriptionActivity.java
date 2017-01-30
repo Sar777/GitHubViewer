@@ -13,7 +13,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -348,7 +347,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
             public void onError(int code, ErrorResponse response) {
-                Log.e("ORION", "OP CODE: " + code);
                 mCardViewIssuesOpened.setVisibility(View.GONE);
             }
 
@@ -359,7 +357,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
                     return;
                 }
 
-                Log.e("ORION", "OP issues-2: " + issues.size());
                 mIssueOpenedAdapter.setIssues(issues);
                 mIssueOpenedAdapter.notifyDataSetChanged();
 
