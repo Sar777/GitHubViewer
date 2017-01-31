@@ -30,6 +30,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
+        setHasStableIds(true);
     }
 
     @Override

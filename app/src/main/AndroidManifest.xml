@@ -75,7 +75,17 @@
         <activity
             android:name=".activity.SearchActivity"
             android:label="@string/title_search_activity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".activity.NotificationActivity"
             android:label="@string/title_notification"
@@ -105,12 +115,18 @@
 
         <provider
             android:name=".database.providers.RepositoriesProvider"
-            android:authorities="instinctools.android.providers.Repositories"
+            android:authorities="instinctools.android.database.providers.Repositories"
             android:exported="false" />
         <provider
             android:name=".database.providers.NotificationsProvider"
-            android:authorities="instinctools.android.providers.Notifications"
+            android:authorities="instinctools.android.database.providers.Notifications"
             android:exported="false" />
+
+        <provider
+            android:name=".database.providers.SearchSuggestionsProvider"
+            android:authorities="instinctools.android.database.providers.SearchSuggestions"
+            android:exported="false" />
+
     </application>
 
 </manifest>

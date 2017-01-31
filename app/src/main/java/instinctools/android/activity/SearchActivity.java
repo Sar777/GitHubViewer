@@ -7,14 +7,18 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,11 +33,12 @@ import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.services.http.repository.HttpSearchRepositoryService;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int QUERY_SEARCH_DELAY = 300;
 
@@ -44,6 +49,8 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     private ProgressBar mProgressBar;
     private SearchView mSearchView;
     private Spinner mSpinnerSort;
+
+    private MenuItem mMenuSearch;
 
     // Models
     private RepositoryAdapter mRepositoryAdapter;
@@ -91,25 +98,26 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_search_menu, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        MenuItem mMenuSearch = menu.findItem(R.id.action_search);
         MenuItem sortItem = menu.findItem(R.id.action_sort);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        if (searchItem != null)
-            mSearchView = (SearchView) searchItem.getActionView();
+        if (mMenuSearch != null)
+            mSearchView = (SearchView) mMenuSearch.getActionView();
 
         if (mSearchView != null) {
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
+            mSearchView.setOnSuggestionListener(this);
         }
 
         if (sortItem != null)
             mSpinnerSort = (Spinner) sortItem.getActionView();
 
         if (mSpinnerSort != null) {
-            ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.entries_order, R.layout.order_item_spinner);
-            listAdapter.setDropDownViewResource(R.layout.order_item_spinner);
+            ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.entries_order, R.layout.spinner_item_search_setting);
+            listAdapter.setDropDownViewResource(R.layout.spinner_item_search_setting);
             mSpinnerSort.setOnItemSelectedListener(this);
             mSpinnerSort.setAdapter(listAdapter);
         }
@@ -133,7 +141,12 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        mRepositoryAdapter.changeCursor(cursor);
+        mRepositoryAdapter.changeCursor(cursor, true);
+
+        if (cursor.getCount() > 0 && !TextUtils.isEmpty(mSearchView.getQuery())) {
+            SearchRecentSuggestions searchSuggestions = new SearchRecentSuggestions(SearchActivity.this, SearchSuggestionsProvider.AUTHORITY, SearchSuggestionsProvider.MODE);
+            searchSuggestions.saveRecentQuery(mSearchView.getQuery().toString(), null);
+        }
     }
 
     @Override
@@ -177,6 +190,25 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
             }
         };
         mHandler.postDelayed(mTextQueryWorker, QUERY_SEARCH_DELAY);
+
         return true;
+    }
+
+    @Override
+    public boolean onSuggestionSelect(int position) {
+        return false;
+    }
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+        String suggestion = getSuggestion(position);
+        mSearchView.setQuery(suggestion, true);
+        return true;
+    }
+
+    private String getSuggestion(int position) {
+        Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
+        String suggest = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+        return suggest;
     }
 }

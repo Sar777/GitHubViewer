@@ -99,7 +99,7 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
 
-        mRepositoryAdapter.changeCursor(cursor);
+        mRepositoryAdapter.changeCursor(cursor, true);
     }
 
     @Override

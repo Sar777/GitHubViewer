@@ -99,7 +99,7 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
 
-        mRepositoryAdapter.changeCursor(cursor);
+        mRepositoryAdapter.changeCursor(cursor, true);
     }
 
     @Override

@@ -14,5 +14,7 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/title_search_search"
         app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:searchSuggestAuthority=".SearchSuggestionsProvider"
+        android:searchSuggestSelection=" ?"/>
 </menu>

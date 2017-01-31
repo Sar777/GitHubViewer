@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mProgressBar.setVisibility(View.GONE);
                 }
 
-                mRepositoryAdapter.changeCursor(cursor);
+                mRepositoryAdapter.changeCursor(cursor, true);
 
                 // Hidden refresh bar
                 mSwipeRefreshLayout.setRefreshing(false);

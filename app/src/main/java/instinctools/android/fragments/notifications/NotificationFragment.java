@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,7 +138,8 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        mNotificationAdapter.changeCursor(cursor);
+
+        mNotificationAdapter.changeCursor(cursor, !mNotificationAdapter.isValidCursor());
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);
