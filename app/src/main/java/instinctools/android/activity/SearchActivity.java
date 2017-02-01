@@ -2,7 +2,6 @@ package instinctools.android.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,22 +10,19 @@ import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
@@ -35,10 +31,9 @@ import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.models.github.search.SearchRequest;
-import instinctools.android.services.http.repository.HttpSearchRepositoryService;
+import instinctools.android.сustomViews.MaterialDialog;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
+public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, MenuItem.OnMenuItemClickListener {
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int QUERY_SEARCH_DELAY = 300;
 
@@ -48,9 +43,8 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SearchView mSearchView;
-    private Spinner mSpinnerSort;
 
-    private MenuItem mMenuSearch;
+    private PopupMenu mPopupMenu;
 
     // Models
     private RepositoryAdapter mRepositoryAdapter;
@@ -98,28 +92,22 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_search_menu, menu);
 
-        MenuItem mMenuSearch = menu.findItem(R.id.action_search);
-        MenuItem sortItem = menu.findItem(R.id.action_sort);
+        MenuItem menuSearch = menu.findItem(R.id.action_search);
+
+        MenuItem filterItem = menu.findItem(R.id.action_filter);
+        filterItem.setOnMenuItemClickListener(this);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        if (mMenuSearch != null)
-            mSearchView = (SearchView) mMenuSearch.getActionView();
+        if (menuSearch != null)
+            mSearchView = (SearchView) menuSearch.getActionView();
 
         if (mSearchView != null) {
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             mSearchView.setOnQueryTextListener(this);
             mSearchView.setOnSuggestionListener(this);
-        }
-
-        if (sortItem != null)
-            mSpinnerSort = (Spinner) sortItem.getActionView();
-
-        if (mSpinnerSort != null) {
-            ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.entries_order, R.layout.spinner_item_search_setting);
-            listAdapter.setDropDownViewResource(R.layout.spinner_item_search_setting);
-            mSpinnerSort.setOnItemSelectedListener(this);
-            mSpinnerSort.setAdapter(listAdapter);
+            mSearchView.setFocusable(true);
+            mSearchView.setIconified(false);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -167,12 +155,12 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         mRecyclerView.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        SearchRequest request = new SearchRequest(mSearchView.getQuery().toString());
+        /*SearchRequest request = new SearchRequest(mSearchView.getQuery().toString());
         request.setSort(mSpinnerSort.getSelectedItem().toString());
 
         Intent intent = new Intent(this, HttpSearchRepositoryService.class);
         intent.putExtra(INTENT_SEARCH_REQUEST, request);
-        startService(intent);
+        startService(intent);*/
     }
 
     @Override
@@ -210,5 +198,23 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
         String suggest = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
         return suggest;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        final MaterialDialog dialog = new MaterialDialog(this);
+        dialog.setTitle(getString(R.string.title_search_settings_dialog))
+                .setCustomViewResource(R.layout.dialog_search_settings)
+                .setupPositiveButton("Применить", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        dialog.dismiss();
+                    }
+
+                });
+        dialog.show();
+
+        return true;
     }
 }

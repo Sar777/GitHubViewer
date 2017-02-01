@@ -45,8 +45,10 @@
     <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
     <string name="title_pref_category_general_notification_summary">Промежуток между загрузкой оповещений</string>
     <string name="title_search_activity">Поиск</string>
-    <string name="title_search_filter">Фильтр</string>
     <!-- -->
     <string name="title_notification">Оповещения</string>
     <string name="msg_unknown_error_mark_notification">Ошибка удаления оповещения</string>
+    <string name="title_sort">Сортировки</string>
+    <!-- -->
+    <string name="title_search_settings_dialog">Настройки поиска</string>
 </resources>

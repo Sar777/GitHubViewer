@@ -77,7 +77,6 @@
     <string name="title_description_button_unstar">Unstar</string>
     <string name="title_description_button_unwatch">Unwatch</string>
     <string name="title_search_activity">Search</string>
-    <string name="title_search_filter">Filter</string>
     <string name="title_search_search">Search</string>
     <!-- -->
     <string name="title_notification">Notifications</string>
@@ -91,4 +90,7 @@
     <!-- -->
     <string name="title_opened">OPENED</string>
     <string name="title_closed">CLOSED</string>
+    <string name="title_sort">Sorting</string>
+    <!-- -->
+    <string name="title_search_settings_dialog">Settings options</string>
 </resources>

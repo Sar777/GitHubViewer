@@ -139,7 +139,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
 
-        mNotificationAdapter.changeCursor(cursor, !mNotificationAdapter.isValidCursor());
+        mNotificationAdapter.changeCursor(cursor, true);
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);

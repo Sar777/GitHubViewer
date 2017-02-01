@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_sort"
-        android:icon="@drawable/ic_arrow_drop_down_black_24dp"
-        android:title="@string/title_search_filter"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.Spinner" />
-
-    <item
         android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/ic_github_search_white"
         android:title="@string/title_search_search"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:searchSuggestAuthority=".SearchSuggestionsProvider"
         android:searchSuggestSelection=" ?"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter_search"
+        android:title="@string/title_sort"
+        app:showAsAction="ifRoom" />
 </menu>

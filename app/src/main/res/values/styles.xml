@@ -12,7 +12,7 @@
 
         <item name="android:windowBackground">@android:color/background_light</item>
     </style>
-
+    
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="tabIndicatorHeight">3dp</item>

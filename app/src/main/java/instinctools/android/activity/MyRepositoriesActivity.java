@@ -25,7 +25,6 @@ import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 
 public class MyRepositoriesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
-
     private static final int LOADER_REPOSITORIES_ID = 1;
 
     // View

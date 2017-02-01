@@ -5,15 +5,21 @@
         <item>10 minutes</item>
         <item>15 minutes</item>
     </string-array>
+
     <string-array name="entry_minutes">
         <item>5</item>
         <item>10</item>
         <item>15</item>
     </string-array>
 
-    <string-array name="entries_order">
+    <string-array name="entries_sort">
         <item>Stars</item>
         <item>Forks</item>
         <item>Size</item>
+    </string-array>
+
+    <string-array name="entries_order">
+        <item>Ask</item>
+        <item>Desc</item>
     </string-array>
 </resources>

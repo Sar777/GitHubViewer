@@ -29,10 +29,10 @@
         style="@style/AppTabLayout"
         app:tabTextAppearance="@style/AppTabTextAppearance" />
 
-    <instinctools.android.CustomViews.SwipableViewPager
+    <instinctools.android.сustomViews.SwipableViewPager
         android:id="@+id/pager_notifications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tab_layout_notifications">
-    </instinctools.android.CustomViews.SwipableViewPager>
+    </instinctools.android.сustomViews.SwipableViewPager>
 </RelativeLayout>
