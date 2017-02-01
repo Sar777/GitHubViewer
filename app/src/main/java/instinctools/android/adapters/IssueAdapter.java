@@ -1,6 +1,7 @@
 package instinctools.android.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
@@ -19,24 +21,38 @@ public class IssueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_VIEW_EMPTY = 0;
     private static final int TYPE_VIEW_ITEM = 1;
 
+    private RecyclerView mRecyclerView;
+
     private Context mContext;
     private List<Issue> mIssues;
 
-    public IssueAdapter(Context context, @Nullable List<Issue> issues) {
+    public IssueAdapter(Context context, @NonNull RecyclerView recyclerView, @Nullable List<Issue> issues) {
         this.mContext = context;
+        this.mRecyclerView = recyclerView;
         this.mIssues = issues;
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
+        ViewGroup mViewGroupItem;
         TextView mTextViewIssueState;
         TextView mTextViewIssueId;
         TextView mTextViewIssueTitle;
 
         ItemViewHolder(View view) {
             super(view);
+            mViewGroupItem = (ViewGroup) view.findViewById(R.id.layout_recycler_item_issue);
             mTextViewIssueId = (TextView) view.findViewById(R.id.text_recycler_item_issue_id);
             mTextViewIssueState = (TextView) view.findViewById(R.id.text_recycler_item_issue_state);
             mTextViewIssueTitle = (TextView) view.findViewById(R.id.text_recycler_item_issue_title);
+
+            mViewGroupItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = mRecyclerView.getChildAdapterPosition(view);
+                    Issue issue = getItem(position);
+                    App.launchUrl(mContext, issue.getHtmlUrl());
+                }
+            });
         }
 
         void onBindViewHolder(int position) {

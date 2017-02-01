@@ -140,7 +140,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mRecyclerViewIssuesOpened.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
         mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
 
-        mIssueOpenedAdapter = new IssueAdapter(this, null);
+        mIssueOpenedAdapter = new IssueAdapter(this, mRecyclerViewIssuesOpened, null);
         mRecyclerViewIssuesOpened.setAdapter(mIssueOpenedAdapter);
         mRecyclerViewIssuesOpened.setLayoutManager(new LinearLayoutManager(this));
 
@@ -154,7 +154,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mRecyclerViewIssuesClosed.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
         mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
 
-        mIssueClosedAdapter = new IssueAdapter(this, null);
+        mIssueClosedAdapter = new IssueAdapter(this, mRecyclerViewIssuesClosed, null);
         mRecyclerViewIssuesClosed.setAdapter(mIssueClosedAdapter);
         mRecyclerViewIssuesClosed.setLayoutManager(new LinearLayoutManager(this));
 

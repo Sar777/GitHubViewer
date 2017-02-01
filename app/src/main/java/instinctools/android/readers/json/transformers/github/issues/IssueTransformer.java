@@ -14,6 +14,7 @@ public class IssueTransformer implements ITransformer<Issue> {
 
     private static final String J_ID = "id";
     private static final String J_URL = "url";
+    private static final String J_HTML_URL = "html_url";
     private static final String J_REPOSITORY_URL = "repository_url";
     private static final String J_STATE = "state";
     private static final String J_NUMBER = "number";
@@ -40,6 +41,7 @@ public class IssueTransformer implements ITransformer<Issue> {
         try {
             issue.setId(jsonObject.getInt(J_ID));
             issue.setUrl(jsonObject.getString(J_URL));
+            issue.setHtmlUrl(jsonObject.getString(J_HTML_URL));
             issue.setRepositoryUrl(jsonObject.getString(J_REPOSITORY_URL));
             issue.setState(IssueState.get(jsonObject.getString(J_STATE)));
             issue.setNumber(jsonObject.getInt(J_NUMBER));

@@ -8,6 +8,7 @@ public class Issue {
 
     private Integer mId;
     private String mUrl;
+    private String mHtmlUrl;
     private String mRepositoryUrl;
     private IssueState mState;
     private Integer mNumber;
@@ -25,6 +26,14 @@ public class Issue {
 
     public String getUrl() {
         return mUrl;
+    }
+
+    public void setHtmlUrl(String url) {
+        this.mHtmlUrl = url;
+    }
+
+    public String getHtmlUrl() {
+        return mHtmlUrl;
     }
 
     public void setUrl(String url) {
