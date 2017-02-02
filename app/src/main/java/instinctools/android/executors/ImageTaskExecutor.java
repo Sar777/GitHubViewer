@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ImageTaskExecutor extends ThreadPoolExecutor {
-    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors() / 2;
     private static final int CORE_MAX_POOL_SIZE = CPU_COUNT + 1;
     private static final int KEEP_ALIVE_TIME = 1;
     private static final int MAX_QUEUE = 20;

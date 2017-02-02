@@ -25,7 +25,6 @@ public class AsyncUserInfoLoader extends AsyncTaskLoader<User> {
 
     @Override
     public User loadInBackground() {
-
         User user;
         if (!TextUtils.isEmpty(mUsername))
             user = GithubServiceUser.getUser(mUsername);

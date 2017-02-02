@@ -1,4 +1,4 @@
-package instinctools.android.readers.json.transformers.github.repository;
+package instinctools.android.readers.json.transformers.github.search;
 
 import android.util.Log;
 
@@ -8,14 +8,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.models.github.repositories.Repository;
+import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-public class ListUserRepositoriesTransformer implements ITransformer<List<Repository>> {
-    private static final String TAG = "ListUserRepositories";
+public class SearchListUsersTransformer implements ITransformer<List<User>> {
+    private static final String TAG = "SearchListUsersTrans";
 
     @Override
-    public List<Repository> transform(Object object) {
+    public List<User> transform(Object object) {
         JSONArray jsonArray;
         if (object instanceof String) {
             try {
@@ -29,14 +29,14 @@ public class ListUserRepositoriesTransformer implements ITransformer<List<Reposi
         else
             return new ArrayList<>();
 
-        List<Repository> bookList = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i)
             try {
-                bookList.add(new RepositoryTransformer().transform(jsonArray.getJSONObject(i)));
+                users.add(new SearchUserTransformer().transform(jsonArray.getJSONObject(i)));
             } catch (JSONException e) {
                 Log.e(TAG, "Json object fail", e);
             }
 
-        return bookList;
+        return users;
     }
 }

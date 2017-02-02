@@ -56,7 +56,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                     return;
 
                 mContext.getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, DBConstants.NOTIFICATION_ID + " = ?", new String[] {String.valueOf(getItemId(position))});
-                notifyItemRemoved(position);
+                //notifyItemRemoved(mCanShowHeader ? position - 1 : position);
             }
         });
     }

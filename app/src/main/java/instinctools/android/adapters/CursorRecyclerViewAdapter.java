@@ -20,7 +20,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private int mRowIdColumn;
     private String mRowIdColumnName;
-    private final boolean mCanShowHeader;
+    protected final boolean mCanShowHeader;
 
     private DataSetObserver mDataSetObserver;
 

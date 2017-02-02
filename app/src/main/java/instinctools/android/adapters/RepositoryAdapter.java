@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,14 +80,14 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
             mStarTextView.setText(String.valueOf(item.getStargazers()));
             mForkTextView.setText(String.valueOf(item.getForks()));
 
-            if (item.getDescription().isEmpty())
+            if (TextUtils.isEmpty(item.getDescription()))
                 mDescription.setVisibility(View.GONE);
             else {
                 mDescription.setVisibility(View.VISIBLE);
                 mDescription.setText(item.getDescription());
             }
 
-            if (item.getLanguage().isEmpty())
+            if (TextUtils.isEmpty(item.getLanguage()))
                 mLanguageTextView.setVisibility(View.GONE);
             else {
                 mLanguageTextView.setVisibility(View.VISIBLE);

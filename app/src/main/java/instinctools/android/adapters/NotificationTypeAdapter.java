@@ -4,12 +4,10 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import instinctools.android.R;
-import instinctools.android.enums.notifications.NotificationFragmentType;
 import instinctools.android.fragments.notifications.NotificationFragment;
+import instinctools.android.fragments.notifications.NotificationFragmentType;
 
 public class NotificationTypeAdapter extends FragmentStatePagerAdapter {
     private static final int NUM_PAGES = 3;

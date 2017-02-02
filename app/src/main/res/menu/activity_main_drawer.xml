@@ -11,10 +11,6 @@
         android:icon="@drawable/ic_github_notification"
         android:title="@string/title_nav_bar_notifications"
         app:actionLayout="@layout/menu_counter"/>
-    <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/ic_github_search_black"
-        android:title="@string/title_nav_bar_search" />
 
     <item android:title="@string/title_repositories">
         <menu>

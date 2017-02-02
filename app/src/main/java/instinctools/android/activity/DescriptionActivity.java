@@ -41,7 +41,6 @@ import instinctools.android.services.github.user.GithubServiceUser;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String BUNDLE_REPOSITORY_ID = "ID";
-    public static final String EXTRA_USERNAME = "USERNAME";
 
     private static final int LOADER_REPOSITORY_ID = 1;
 
@@ -242,7 +241,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
             });
         } else if (view.getId() == R.id.image_description_owner_avatar) {
             Intent intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra(EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
+            intent.putExtra(ProfileActivity.EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
             startActivity(intent);
         }
     }

@@ -3,17 +3,15 @@ package instinctools.android.models.github.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.models.github.repositories.Repository;
-
-public class SearchResponse {
+public class SearchResponse<T> {
     private Integer mTotalCount;
     private Boolean mIncompleteResults;
-    private List<Repository> mRepositories;
+    private List<T> mResponse;
 
     public SearchResponse() {
         this.mTotalCount = 0;
         this.mIncompleteResults = true;
-        this.mRepositories = new ArrayList<>();
+        this.mResponse = new ArrayList<>();
     }
 
     public Integer getTotalCount() {
@@ -32,11 +30,11 @@ public class SearchResponse {
         this.mIncompleteResults = incompleteResults;
     }
 
-    public List<Repository> getRepositories() {
-        return mRepositories;
+    public List<T> getResponse() {
+        return mResponse;
     }
 
-    public void setRepositories(List<Repository> repositories) {
-        this.mRepositories = repositories;
+    public void setRepositories(List<T> response) {
+        this.mResponse = response;
     }
 }

@@ -10,7 +10,7 @@ import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.utility.CustomTextUtils;
 
 public class UserTransformer implements ITransformer<User> {
-    private static final String TAG = "UserTransformer";
+    private static final String TAG = "SearchUserTransformer";
 
     private static final String J_LOGIN = "login";
     private static final String J_ID = "id";
@@ -30,16 +30,18 @@ public class UserTransformer implements ITransformer<User> {
 
     @Override
     public User transform(Object object) {
-        if (!(object instanceof String))
-            return null;
-
         JSONObject jsonObject;
-        try {
-            jsonObject = new JSONObject((String)object);
-        } catch (JSONException e) {
-            Log.e(TAG, "Create json object error...", e);
+        if (object instanceof JSONObject)
+            jsonObject = (JSONObject)object;
+        else if (object instanceof String) {
+            try {
+                jsonObject = new JSONObject((String)object);
+            } catch (JSONException e) {
+                Log.e(TAG, "Create json object error...", e);
+                return null;
+            }
+        } else
             return null;
-        }
 
         User user = new User();
         try {

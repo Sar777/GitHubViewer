@@ -90,7 +90,10 @@
     <!-- -->
     <string name="title_opened">OPENED</string>
     <string name="title_closed">CLOSED</string>
-    <string name="title_sort">Sorting</string>
     <!-- -->
-    <string name="title_search_settings_dialog">Settings options</string>
+    <string name="title_sort">Sorting</string>
+    <string name="title_order">Order</string>
+    <!-- -->
+    <string name="title_search_setting_sort">Sort by</string>
+    <string name="title_search_setting_order">Order</string>
 </resources>

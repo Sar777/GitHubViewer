@@ -107,7 +107,6 @@
         <service android:name=".services.http.repository.HttpUpdateMyRepositoriesService" />
         <service android:name=".services.http.repository.HttpUpdateWatchRepositoriesService" />
         <service android:name=".services.http.repository.HttpUpdateStarsRepositoriesService" />
-        <service android:name=".services.http.repository.HttpSearchRepositoryService" />
         <!-- Notifications -->
         <service android:name=".services.http.notification.HttpGithubUnreadNotificationService" />
         <service android:name=".services.http.notification.HttpGithubParticipatingNotificationService" />

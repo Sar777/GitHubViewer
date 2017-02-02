@@ -19,7 +19,6 @@ public class Constants {
     public static final int REPOSITORY_TYPE_MY = 0;
     public static final int REPOSITORY_TYPE_WATCH = 1;
     public static final int REPOSITORY_TYPE_STAR = 2;
-    public static final int REPOSITORY_TYPE_SEARCH = 3;
 
     public static final int NOTIFICATION_TYPE_UNREAD = 0;
     public static final int NOTIFICATION_TYPE_PARTICIPATING = 1;

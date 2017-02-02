@@ -3,94 +3,48 @@ package instinctools.android.models.github.search;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class SearchRequest implements Parcelable {
-    public static final String ORDER_ASC = "asc";
-    public static final String ORDER_DESC = "desc";
+import instinctools.android.models.github.search.enums.SearchOrderType;
+import instinctools.android.models.github.search.enums.SearchType;
 
-    public static final String SORT_STARS = "stars";
-    public static final String SORT_FORKS = "forks";
-    public static final String SORT_SIZE = "size";
+public abstract class SearchRequest implements Parcelable {
+    protected final SearchType mType;
+    protected final String mText;
+    protected SearchOrderType mOrder;
 
-    private String mIn;
-    private String mSort;
-    private String mOrder;
-
-    public SearchRequest(String in) {
-        this.mIn = in;
-        this.mOrder = ORDER_DESC;
-        this.mSort = SORT_STARS;
+    protected SearchRequest(SearchType type, String text) {
+        this.mType = type;
+        this.mText = text;
+        this.mOrder = SearchOrderType.DESC;
     }
 
     protected SearchRequest(Parcel in) {
-        mIn = in.readString();
-        mSort = in.readString();
-        mOrder = in.readString();
+        this.mType = in.readParcelable(SearchType.class.getClassLoader());
+        this.mText = in.readString();
+        this.mOrder = in.readParcelable(SearchOrderType.class.getClassLoader());
     }
 
-    public String getIn() {
-        return mIn;
+    public SearchType getType() {
+        return mType;
     }
 
-    public String getSort() {
-        return mSort;
+    public String getText() {
+        return mText;
     }
 
-    public void setSort(String sort) {
-        switch (sort.toLowerCase()) {
-            case SORT_STARS:
-            case SORT_FORKS:
-            case SORT_SIZE:
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported sort type: " + sort.toLowerCase());
-        }
-
-
-        this.mSort = sort.toLowerCase();
-    }
-
-    public String getOrder() {
+    public SearchOrderType getOrder() {
         return mOrder;
     }
 
-    public void setOrder(String order) {
-        switch (order.toLowerCase()) {
-            case ORDER_ASC:
-            case ORDER_DESC:
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported order type: " + order.toLowerCase());
-        }
-
-        this.mOrder = order.toLowerCase();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("?q=%s&sort=%s&order=%s", mIn, mSort, mOrder);
+    public void setOrder(SearchOrderType order) {
+        this.mOrder = order;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mIn);
-        dest.writeString(mSort);
-        dest.writeString(mOrder);
+        dest.writeParcelable(mType, flags);
+        dest.writeString(mText);
+        dest.writeParcelable(mOrder, flags);
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<SearchRequest> CREATOR = new Creator<SearchRequest>() {
-        @Override
-        public SearchRequest createFromParcel(Parcel in) {
-            return new SearchRequest(in);
-        }
-
-        @Override
-        public SearchRequest[] newArray(int size) {
-            return new SearchRequest[size];
-        }
-    };
+    public abstract String build();
 }

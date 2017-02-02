@@ -31,6 +31,7 @@ public class HttpClientFactory {
 
     // Types
     public static final String HEADER_ACCEPT_TYPE_JSON = "application/json";
+    public static final String HEADER_ACCEPT_TYPE_CUSTOM_GITHUB = "application/vnd.github.cloak-preview";
 
     private HttpClientFactory() {
     }

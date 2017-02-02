@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 
 import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 import instinctools.android.storages.SettingsStorage;
@@ -21,9 +20,6 @@ public class App extends Application {
         GithubService.init(mContext, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.SCOPES, Constants.CALLBACK_URL);
         ApplicationPersistantStorage.init(mContext);
         SettingsStorage.init(mContext);
-
-        // TODO REMOVE ME
-        deleteDatabase(DBConstants.DB_NAME);
     }
 
     public static void launchUrl(final Context context, final String url) {

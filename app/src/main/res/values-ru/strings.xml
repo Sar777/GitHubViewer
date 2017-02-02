@@ -48,7 +48,11 @@
     <!-- -->
     <string name="title_notification">Оповещения</string>
     <string name="msg_unknown_error_mark_notification">Ошибка удаления оповещения</string>
-    <string name="title_sort">Сортировки</string>
     <!-- -->
-    <string name="title_search_settings_dialog">Настройки поиска</string>
+    <string name="title_sort">Сортировка</string>
+    <string name="title_order">Порядок</string>
+    <!-- -->
+    <string name="title_search_setting_sort">Сортировать по</string>
+    <string name="title_search_setting_order">Выдавать по</string>
+    <string name="title_search_search">Поиск</string>
 </resources>

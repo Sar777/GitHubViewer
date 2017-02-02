@@ -1,4 +1,4 @@
-package instinctools.android.enums.notifications;
+package instinctools.android.fragments.notifications;
 
 public enum NotificationFragmentType {
     UNREAD,

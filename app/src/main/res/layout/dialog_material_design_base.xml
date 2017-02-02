@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_material_dialog"
     android:orientation="vertical"
-    android:windowMinWidthMajor="@android:dimen/dialog_min_width_major" >
+    android:windowMinWidthMajor="@android:dimen/dialog_min_width_major">
 
     <TextView
         android:id="@android:id/text1"
@@ -15,7 +17,8 @@
         android:paddingRight="24dp"
         android:textColor="@color/text_title"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="wqeqweqweqweqwe wqeqwe qwe "/>
 
     <ScrollView
         android:id="@+id/scrolltext_dialog_material"
@@ -55,7 +58,8 @@
         android:orientation="horizontal"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
+        android:paddingRight="16dp"
+        tools:ignore="RtlHardcoded">
 
         <Button
             android:id="@android:id/button1"
