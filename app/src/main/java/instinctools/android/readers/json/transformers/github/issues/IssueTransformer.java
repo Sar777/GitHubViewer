@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.readers.json.transformers.ITransformer;
+import instinctools.android.utility.GitHubDate;
 
 public class IssueTransformer implements ITransformer<Issue> {
     private static final String TAG = "IssueTransformer";
@@ -20,7 +21,12 @@ public class IssueTransformer implements ITransformer<Issue> {
     private static final String J_NUMBER = "number";
     private static final String J_TITLE = "title";
     private static final String J_BODY = "body";
+    private static final String J_COMMENTS = "comments";
+    private static final String J_PULL_REQUEST = "pull_request";
     private static final String J_LABELS = "labels";
+    private static final String J_CREATED_AT = "created_at";
+    private static final String J_UPDATED_AT = "updated_at";
+    private static final String J_CLOSED_AT = "closed_at";
 
     @Override
     public Issue transform(Object object) {
@@ -47,7 +53,18 @@ public class IssueTransformer implements ITransformer<Issue> {
             issue.setNumber(jsonObject.getInt(J_NUMBER));
             issue.setTitle(jsonObject.getString(J_TITLE));
             issue.setBody(jsonObject.getString(J_BODY));
+            issue.setComments(jsonObject.getInt(J_COMMENTS));
             issue.setLabels(new ListIssueLabelTransformer().transform(jsonObject.getJSONArray(J_LABELS)));
+            issue.setCreatedAt(GitHubDate.parse(jsonObject.getString(J_CREATED_AT)));
+
+            if (!jsonObject.isNull(J_UPDATED_AT))
+                issue.setUpdateAt(GitHubDate.parse(jsonObject.getString(J_UPDATED_AT)));
+
+            if (!jsonObject.isNull(J_CLOSED_AT))
+                issue.setClosedAt(GitHubDate.parse(jsonObject.getString(J_CLOSED_AT)));
+
+            if (!jsonObject.isNull(J_PULL_REQUEST))
+                issue.setPullRequest(new IssuePullRequestTransformer().transform(jsonObject.getJSONObject(J_PULL_REQUEST)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);
             return null;

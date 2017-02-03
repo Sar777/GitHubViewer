@@ -21,6 +21,7 @@ import instinctools.android.adapters.search.SearchTypeAdapter;
 import instinctools.android.fragments.search.SearchFragment;
 import instinctools.android.fragments.search.enums.SearchFragmentType;
 import instinctools.android.models.github.search.CommitsSearchRequest;
+import instinctools.android.models.github.search.IssuesSearchRequest;
 import instinctools.android.models.github.search.RepositoriesSearchRequest;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.UsersSearchRequest;
@@ -172,7 +173,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 request = new CommitsSearchRequest(mSearchView.getQuery().toString());
                 break;
             case ISSUES:
-                return;
+                request = new IssuesSearchRequest(mSearchView.getQuery().toString());
+                break;
             case USERS:
                 request =  new UsersSearchRequest(mSearchView.getQuery().toString());
                 break;

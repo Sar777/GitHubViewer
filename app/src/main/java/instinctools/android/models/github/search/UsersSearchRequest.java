@@ -52,6 +52,6 @@ public class UsersSearchRequest extends SearchRequest implements Parcelable {
 
     @Override
     public String build() {
-        return "/" + mType + "?q=" + mText + "&sort=" + mSort + "&order=" + mOrder;
+        return "/" + mType + "?q=" + mText + "&" + FIELD_SORT + "=" + mSort + "&" + FIELD_ORDER + "=" + mOrder;
     }
 }

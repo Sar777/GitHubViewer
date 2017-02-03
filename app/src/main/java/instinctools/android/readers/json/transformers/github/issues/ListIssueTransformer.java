@@ -29,15 +29,15 @@ public class ListIssueTransformer implements ITransformer<List<Issue>> {
         else
             return new ArrayList<>();
 
-        List<Issue> labels = new ArrayList<>();
+        List<Issue> issues = new ArrayList<>();
         try {
             for (int i = 0; i < jsonArray.length(); ++i)
-                labels.add(new IssueTransformer().transform(jsonArray.get(i)));
+                issues.add(new IssueTransformer().transform(jsonArray.get(i)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);
             return null;
         }
 
-        return labels;
+        return issues;
     }
 }

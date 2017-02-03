@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import instinctools.android.R;
 import instinctools.android.adapters.search.AbstractSearchAdapter;
 import instinctools.android.adapters.search.SearchCommitsAdapter;
+import instinctools.android.adapters.search.SearchIssuesAdapter;
 import instinctools.android.adapters.search.SearchRepositoriesAdapter;
 import instinctools.android.adapters.search.SearchUsersAdapter;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
@@ -153,7 +154,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
             case COMMITS:
                 return new SearchCommitsAdapter(getContext());
             case ISSUES:
-                return null;
+                return new SearchIssuesAdapter(getContext());
             case USERS:
                 return new SearchUsersAdapter(getContext());
             default:

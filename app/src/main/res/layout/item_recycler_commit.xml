@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/recycler_view_item_commits_margin_top_bottom"
-    android:layout_marginBottom="@dimen/recycler_view_item_commits_margin_top_bottom"
-    android:layout_marginRight="@dimen/recycler_view_item_commits_margin_right_left"
-    android:layout_marginLeft="@dimen/recycler_view_item_commits_margin_right_left">
+    android:layout_marginTop="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginBottom="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginRight="@dimen/recycler_view_item_margin_right_left"
+    android:layout_marginLeft="@dimen/recycler_view_item_margin_right_left">
 
     <RelativeLayout
         android:layout_width="@dimen/recycler_view_item_commits_avatar_author_size"

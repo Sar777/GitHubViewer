@@ -7,4 +7,9 @@
     <color name="text_title">#CC000000</color>
     <color name="text_secondary">#8C000000</color>
     <color name="light_blue">#7f7f7f</color>
+    
+    <color name="github_octicon_green">#6cc644</color>
+    <color name="github_octicon_red">#bd2c00</color>
+    <color name="github_octicon_button_green_start">#91dd70</color>
+    <color name="github_octicon_button_green_end">#55ae2e</color>
 </resources>

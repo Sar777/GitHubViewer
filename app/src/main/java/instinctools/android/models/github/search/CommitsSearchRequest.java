@@ -54,6 +54,6 @@ public class CommitsSearchRequest extends SearchRequest implements Parcelable {
 
     @Override
     public String build() {
-        return "/" + mType + "?q=" + mText + "&order=" + mOrder;
+        return "/" + mType + "?q=" + mText + "&" + FIELD_ORDER + "=" + mOrder;
     }
 }

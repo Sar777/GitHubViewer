@@ -100,10 +100,12 @@
     <dimen name="menu_counter_text_size">10sp</dimen>
     <!-- -->
     <dimen name="design_navigation_icon_size" tools:override="true">24dp</dimen>
-    <dimen name="recycler_view_item_commits_margin_top_bottom">8dp</dimen>
-    <dimen name="recycler_view_item_commits_margin_right_left">16dp</dimen>
+    <dimen name="recycler_view_item_margin_top_bottom">8dp</dimen>
+    <dimen name="recycler_view_item_margin_right_left">16dp</dimen>
     <dimen name="recycler_view_item_commits_avatar_author_size">55dp</dimen>
     <dimen name="recycler_view_item_commits_avatar_committer_size">25dp</dimen>
     <dimen name="recycler_view_item_commits_layout_margin_left">65dp</dimen>
     <dimen name="recycler_view_item_material_left_container_margin">56dp</dimen>
+    <dimen name="recycler_view_item_search_issue_comment_drawable_padding">5dp</dimen>
+    <dimen name="recycler_view_item_search_issue_comment_margin_top">5dp</dimen>
 </resources>

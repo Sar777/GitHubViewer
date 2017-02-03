@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.models.github.repositories.Repository;
 
@@ -39,6 +40,14 @@ public class SearchRepositoriesAdapter extends AbstractSearchAdapter<Repository>
             mForkTextView = (TextView) view.findViewById(R.id.text_repo_forks);
             mPrivateTextView = (TextView) view.findViewById(R.id.text_private_repository);
             mRepositoryType = (ImageView) view.findViewById(R.id.image_repository_type);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Repository repository = getItem(getAdapterPosition());
+                    App.launchUrl(mContext, repository.getHtmlUrl());
+                }
+            });
         }
 
         void onBindViewHolder(int position) {

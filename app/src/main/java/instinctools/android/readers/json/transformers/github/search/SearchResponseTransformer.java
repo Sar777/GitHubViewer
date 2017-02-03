@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.github.commits.ListCommitsTransformer;
+import instinctools.android.readers.json.transformers.github.issues.ListIssueTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListRepositoriesTransformer;
 
 public class SearchResponseTransformer implements ITransformer<SearchResponse> {
@@ -19,7 +20,7 @@ public class SearchResponseTransformer implements ITransformer<SearchResponse> {
 
     private static final String J_HAS_TYPE_REPOS = "default_branch";
     private static final String J_HAS_TYPE_COMMITS = "committer_id";
-    private static final String J_HAS_TYPE_ISSUES = "labels_url";
+    private static final String J_HAS_TYPE_ISSUES = "assignee";
     private static final String J_HAS_TYPE_USERS = "login";
 
     @Override
@@ -52,7 +53,7 @@ public class SearchResponseTransformer implements ITransformer<SearchResponse> {
                 searchResponse.setRepositories(new ListRepositoriesTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is issues
             else if (tempObject.has(J_HAS_TYPE_ISSUES))
-                throw new UnsupportedOperationException("Unsupported operation");
+                searchResponse.setRepositories(new ListIssueTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is users
             else if (tempObject.has(J_HAS_TYPE_USERS))
                 searchResponse.setRepositories(new SearchListUsersTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));

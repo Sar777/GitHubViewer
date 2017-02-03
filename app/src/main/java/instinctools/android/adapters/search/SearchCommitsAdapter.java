@@ -110,7 +110,7 @@ public class SearchCommitsAdapter extends AbstractSearchAdapter<Commit> {
 
             mTextViewMessage.setText(commit.getMessage());
 
-            String commitDate = new SimpleDateFormat("MMM dd yyyy", new Locale(Locale.getDefault().getDisplayLanguage())).format(commit.getCommitterDate());
+            String commitDate = new SimpleDateFormat("MMM dd yyyy", Locale.getDefault()).format(commit.getCommitterDate());
             if (commit.getAuthorId().equals(commit.getCommitterId()))
                 mTextViewTimeAgo.setText(String.format("%s committed %s", commit.getCommitterName(), commitDate));
             else

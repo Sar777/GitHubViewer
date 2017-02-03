@@ -7,6 +7,9 @@ import instinctools.android.models.github.search.enums.SearchOrderType;
 import instinctools.android.models.github.search.enums.SearchType;
 
 public abstract class SearchRequest implements Parcelable {
+    protected static final String FIELD_SORT = "sort";
+    protected static final String FIELD_ORDER = "order";
+
     protected final SearchType mType;
     protected final String mText;
     protected SearchOrderType mOrder;
