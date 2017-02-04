@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, true, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, true, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 

@@ -54,7 +54,7 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
         mRecyclerView.setVisibility(View.INVISIBLE);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

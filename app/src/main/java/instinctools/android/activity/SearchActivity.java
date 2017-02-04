@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import instinctools.android.R;
 import instinctools.android.adapters.search.SearchTypeAdapter;
@@ -25,7 +24,6 @@ import instinctools.android.models.github.search.IssuesSearchRequest;
 import instinctools.android.models.github.search.RepositoriesSearchRequest;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.UsersSearchRequest;
-import instinctools.android.сustomViews.MaterialDialog;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, MenuItem.OnMenuItemClickListener, ViewPager.OnPageChangeListener {
     private static final int QUERY_SEARCH_DELAY = 300;
@@ -130,20 +128,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.action_order) {
-            final MaterialDialog dialog = new MaterialDialog(this);
-            dialog.setTitle(getString(R.string.title_search_setting_order))
-                    .setCustomViewResource(R.layout.dialog_search_setting_order)
-                    .setupPositiveButton("Применить", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-
-                    });
-            dialog.show();
-        }
-
         return true;
     }
 

@@ -52,7 +52,7 @@ public class MyRepositoriesActivity extends AppCompatActivity implements LoaderM
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_my_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));

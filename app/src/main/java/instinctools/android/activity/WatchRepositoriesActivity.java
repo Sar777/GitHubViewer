@@ -57,7 +57,7 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, false, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_watch_repositories_list);

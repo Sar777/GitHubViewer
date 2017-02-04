@@ -18,24 +18,15 @@ import instinctools.android.activity.DescriptionActivity;
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
 
-public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private RecyclerView mRecyclerView;
 
     public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
 
-    public RepositoryAdapter(Context context, RecyclerView recyclerView, boolean showHeader, @Nullable Cursor cursor) {
+    public RepositoryAdapter(Context context, boolean showHeader, @Nullable Cursor cursor) {
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
         mContext = context;
-        mRecyclerView = recyclerView;
-    }
-
-    @Override
-    public void onClick(View view) {
-        int position = mRecyclerView.getChildAdapterPosition(view);
-        Intent intent = new Intent(mContext, DescriptionActivity.class);
-        intent.putExtra(EXTRA_REPOSITORY_ID_TAG, getItemId(position));
-        mContext.startActivity(intent);
     }
 
     private class RepositoryItemHolder extends RecyclerView.ViewHolder {
@@ -59,6 +50,16 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
             mForkTextView = (TextView) view.findViewById(R.id.text_repo_forks);
             mPrivateTextView = (TextView) view.findViewById(R.id.text_private_repository);
             mRepositoryType = (ImageView) view.findViewById(R.id.image_repository_type);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Repository repository = Repository.fromCursor(getCursor(getAdapterPosition()));
+                    Intent intent = new Intent(mContext, DescriptionActivity.class);
+                    intent.putExtra(EXTRA_REPOSITORY_ID_TAG, repository.getId());
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
         private void onBindViewHolder(Cursor cursor) {
@@ -126,7 +127,6 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
         }
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository, parent, false);
-        view.setOnClickListener(this);
         return new RepositoryItemHolder(view);
     }
 
