@@ -2,6 +2,7 @@ package instinctools.android.fragments.search;
 
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -22,9 +23,13 @@ import instinctools.android.adapters.search.SearchUsersAdapter;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.fragments.search.enums.SearchFragmentType;
+import instinctools.android.listeners.OnLoadMoreListener;
 import instinctools.android.loaders.AsyncSearchRequestLoader;
+import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
+import instinctools.android.services.github.GithubServiceListener;
+import instinctools.android.services.github.search.GithubServiceSearch;
 
 public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<SearchResponse> {
     private static final int LOADER_SEARCH_REQUEST_REPOSITORIES_ID = 1;
@@ -43,6 +48,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private AbstractSearchAdapter mSearchAdapter;
 
     private SearchRequest mLastSearchRequest;
+    private SearchResponse mLastSearchResponse;
 
     public SearchFragment() {
         this.mType = SearchFragmentType.REPOSITORIES;
@@ -69,14 +75,46 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         View view = inflater.inflate(R.layout.fragment_search, null);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_search_result_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mSearchAdapter = createSearchAdapter();
+        mSearchAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (mLastSearchResponse.getPageLinks().getNext() == null)
+                    return;
+
+                mSearchAdapter.getResource().add(null);
+                /// TODO
+                // Triggered
+                // RecyclerView: Cannot call this method in a scroll callback. Scroll callbacks might be run during a measure & layout pass where you cannot change the RecyclerView data. Any method call that might change the structure of the RecyclerView or the adapter contents should be postponed to the next frame.
+                mSearchAdapter.notifyItemInserted(mSearchAdapter.getResource().size() - 1);
+                GithubServiceSearch.getSearchByUrl(mLastSearchResponse.getPageLinks().getNext(), new GithubServiceListener<SearchResponse>() {
+                    @Override
+                    public void onError(int code, @Nullable ErrorResponse response) {
+                        mSearchAdapter.getResource().remove(mSearchAdapter.getResource().size() - 1);
+                        mSearchAdapter.notifyItemRemoved(mSearchAdapter.getResource().size() - 1);
+                        mSearchAdapter.setLoaded();
+                    }
+
+                    @Override
+                    public void onSuccess(SearchResponse response) {
+                        if (response != null) {
+                            int saveOldPos = mSearchAdapter.getResource().size() - 1;
+                            mSearchAdapter.getResource().remove(saveOldPos);
+                            mSearchAdapter.getResource().addAll(mSearchAdapter.getResource());
+                            mSearchAdapter.notifyItemRemoved(saveOldPos);
+                            mSearchAdapter.notifyItemRangeInserted(saveOldPos + 1, response.getResponse().size());
+                        }
+                        mSearchAdapter.setLoaded();
+                    }
+                });
+            }
+        });
         mRecyclerView.setAdapter(mSearchAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_search_loading);
 
@@ -118,6 +156,8 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mProgressBar.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
 
+        mLastSearchResponse = response;
+
         mSearchAdapter.setResource(response.getResponse());
         mSearchAdapter.notifyDataSetChanged();
 
@@ -150,13 +190,13 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private AbstractSearchAdapter createSearchAdapter() {
         switch (mType) {
             case REPOSITORIES:
-                return new SearchRepositoriesAdapter(getContext());
+                return new SearchRepositoriesAdapter(getContext(), mRecyclerView);
             case COMMITS:
-                return new SearchCommitsAdapter(getContext());
+                return new SearchCommitsAdapter(getContext(), mRecyclerView);
             case ISSUES:
-                return new SearchIssuesAdapter(getContext());
+                return new SearchIssuesAdapter(getContext(), mRecyclerView);
             case USERS:
-                return new SearchUsersAdapter(getContext());
+                return new SearchUsersAdapter(getContext(), mRecyclerView);
             default:
                 throw new UnsupportedOperationException("Unsupported search fragment type: " + mType);
         }

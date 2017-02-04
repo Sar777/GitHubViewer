@@ -1,6 +1,7 @@
 package instinctools.android.adapters.search;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,8 +24,8 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.user.GithubServiceUser;
 
 public class SearchCommitsAdapter extends AbstractSearchAdapter<Commit> {
-    public SearchCommitsAdapter(Context context) {
-        super(context);
+    public SearchCommitsAdapter(@NonNull Context context, @NonNull RecyclerView recyclerView) {
+        super(context, recyclerView);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -120,15 +121,20 @@ public class SearchCommitsAdapter extends AbstractSearchAdapter<Commit> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_VIEW_EMPTY)
-            return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository_empty, parent, false));
+        RecyclerView.ViewHolder holder = super.onCreateViewHolder(parent, viewType);
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_commit, parent, false);
-        return new ItemViewHolder(itemView);
+        if (holder == null) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_commit, parent, false);
+            return new ItemViewHolder(itemView);
+        }
+
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+
         if (holder instanceof ItemViewHolder)
             ((ItemViewHolder)holder).onBindViewHolder(position);
     }

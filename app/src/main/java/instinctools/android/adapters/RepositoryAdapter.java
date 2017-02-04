@@ -117,7 +117,7 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 return new HeaderItemHolder(view);
             }
             case VIEW_TYPE_EMPTY: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_repository_empty, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_empty, parent, false);
                 return new EmptyItemHolder(view);
             }
             case VIEW_TYPE_ITEM:
