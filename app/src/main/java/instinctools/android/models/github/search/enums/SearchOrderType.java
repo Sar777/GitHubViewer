@@ -63,6 +63,10 @@ public enum SearchOrderType implements Parcelable {
     }
 
     public static SearchOrderType get(String type) {
-        return mOrders.get(type);
+        SearchOrderType order = mOrders.get(type);
+        if (order == null)
+            throw new IllegalArgumentException("Unknown order type: " + type);
+
+        return order;
     }
 }

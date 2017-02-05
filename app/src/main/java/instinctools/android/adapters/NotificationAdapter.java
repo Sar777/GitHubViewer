@@ -94,6 +94,9 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                 case COMMIT:
                     resId = R.drawable.ic_github_commit;
                     break;
+                case RELEASE:
+                    resId = R.drawable.ic_github_tag;
+                    break;
                 default:
                     throw new UnsupportedOperationException("Unsupported notification type: " + item.getSubject().getType());
             }
