@@ -82,10 +82,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_search_menu, menu);
 
-        MenuItem menuOrder = menu.findItem(R.id.action_order);
-        MenuItem filterItem = menu.findItem(R.id.action_sort);
-
-        menuOrder.setOnMenuItemClickListener(this);
+        MenuItem filterItem = menu.findItem(R.id.action_filter);
         filterItem.setOnMenuItemClickListener(this);
         return super.onCreateOptionsMenu(menu);
     }
@@ -128,6 +125,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
+
+        SearchFragment fragment = (SearchFragment)(mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem()));
+        fragment.toggleFilter();
         return true;
     }
 
@@ -151,22 +151,41 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         SearchRequest request;
         switch (fragment.getFragmentType()) {
             case REPOSITORIES:
-                request = new RepositoriesSearchRequest(mSearchView.getQuery().toString());
+                request = new RepositoriesSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
                 break;
             case COMMITS:
-                request = new CommitsSearchRequest(mSearchView.getQuery().toString());
+                request = new CommitsSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
                 break;
             case ISSUES:
-                request = new IssuesSearchRequest(mSearchView.getQuery().toString());
+                request = new IssuesSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
                 break;
             case USERS:
-                request =  new UsersSearchRequest(mSearchView.getQuery().toString());
+                request =  new UsersSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported fragment type for send search request: " + fragment.getFragmentType());
         }
 
         fragment.search(request);
+    }
+
+    private static int getFilterViewId(SearchFragmentType type) {
+        int resViewId = 0;
+        switch (type) {
+            case REPOSITORIES:
+                resViewId = R.layout.fragment_search_repository_filter;
+                break;
+            case COMMITS:
+                break;
+            case ISSUES:
+                break;
+            case USERS:
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported fragment type for get filter view " + type);
+        }
+
+        return resViewId;
     }
 
     @Override

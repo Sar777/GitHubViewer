@@ -2,12 +2,14 @@ package instinctools.android;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
+import instinctools.android.services.HttpRunAllService;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 import instinctools.android.storages.SettingsStorage;
@@ -25,6 +27,8 @@ public class App extends Application {
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.pref_sync_data, false);
+
+        startService(new Intent(this, HttpRunAllService.class));
 
         deleteDatabase(DBConstants.DB_NAME);
     }

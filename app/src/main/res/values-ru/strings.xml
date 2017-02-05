@@ -45,7 +45,7 @@
     <string name="title_pref_category_repo_watch_summary">Промежуток между обновлением списка списка отслеживаемых репозиториев</string>
     <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
     <string name="title_pref_category_sync_notification_summary">Промежуток между загрузкой оповещений</string>
-    <string name="title_pref_category_general_max_serach_result_summary">Максимальное количество выдачи элементов при поиске</string>
+    <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
     <string name="title_search_activity">Поиск</string>
     <!-- -->
     <string name="title_notification">Оповещения</string>

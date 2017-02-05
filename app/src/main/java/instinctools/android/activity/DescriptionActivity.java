@@ -95,10 +95,14 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         if (intent != null) {
-            long id = intent.getLongExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
+            int id = intent.getIntExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
+            if (id == -1) {
+                finish();
+                return;
+            }
 
             Bundle bundle = new Bundle();
-            bundle.putLong(BUNDLE_REPOSITORY_ID, id);
+            bundle.putInt(BUNDLE_REPOSITORY_ID, id);
             getSupportLoaderManager().initLoader(LOADER_REPOSITORY_ID, bundle, this);
         }
     }
@@ -177,7 +181,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (id != LOADER_REPOSITORY_ID)
             return null;
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_REPOSITORY_ID))}, null);
+        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getInt(BUNDLE_REPOSITORY_ID))}, null);
     }
 
     @Override

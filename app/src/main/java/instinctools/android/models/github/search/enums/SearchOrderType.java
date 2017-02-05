@@ -3,11 +3,22 @@ package instinctools.android.models.github.search.enums;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum SearchOrderType implements Parcelable {
     ASC("asc"),
     DESC("desc");
 
     private String mType;
+
+    private static final Map<String, SearchOrderType> mOrders = new HashMap<String, SearchOrderType>();
+
+    static {
+        for (SearchOrderType type : SearchOrderType.values()) {
+            mOrders.put(type.toString(), type);
+        }
+    }
 
     SearchOrderType(String type) {
         this.mType = type;
@@ -49,5 +60,9 @@ public enum SearchOrderType implements Parcelable {
     @Override
     public String toString() {
         return mType;
+    }
+
+    public static SearchOrderType get(String type) {
+        return mOrders.get(type);
     }
 }

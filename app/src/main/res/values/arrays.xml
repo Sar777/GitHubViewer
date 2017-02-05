@@ -19,8 +19,61 @@
     </string-array>
 
     <string-array name="entries_order">
-        <item>Ask</item>
         <item>Desc</item>
+        <item>Asc</item>
+    </string-array>
+
+    <string-array name="entries_issue_state">
+        <item>Open</item>
+        <item>Closed</item>
+    </string-array>
+
+    <string-array name="entries_issue_state_values">
+        <item>open</item>
+        <item>closed</item>
+    </string-array>
+
+    <string-array name="entries_issue_type">
+        <item>Issue</item>
+        <item>Pull Request</item>
+    </string-array>
+
+    <string-array name="entries_issue_type_values">
+        <item>issue</item>
+        <item>pr</item>
+    </string-array>
+
+    <string-array name="entries_user_type">
+        <item>User</item>
+        <item>Organization</item>
+    </string-array>
+
+    <string-array name="entries_user_type_values">
+        <item>user</item>
+        <item>org</item>
+    </string-array>
+
+    <string-array name="entries_repo_sort">
+        <item>Stars</item>
+        <item>Forks</item>
+        <item>Updated</item>
+    </string-array>
+
+    <string-array name="entries_commit_sort">
+        <item>Author-Date</item>
+        <item>Committer-Date</item>
+    </string-array>
+
+    <string-array name="entries_issue_sort">
+        <item>Comments</item>
+        <item>Created</item>
+        <item>Updated</item>
+    </string-array>
+
+    <string-array name="entries_user_sort">
+        <item>Followers</item>
+        <item>Repositories</item>
+        <item>Joined</item>
     </string-array>
 
     <string-array name="entry_max_search_result">

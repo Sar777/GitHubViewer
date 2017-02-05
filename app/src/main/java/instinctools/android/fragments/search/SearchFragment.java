@@ -6,13 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Switch;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import instinctools.android.R;
 import instinctools.android.adapters.search.AbstractSearchAdapter;
@@ -26,12 +33,17 @@ import instinctools.android.fragments.search.enums.SearchFragmentType;
 import instinctools.android.listeners.OnLoadMoreListener;
 import instinctools.android.loaders.AsyncSearchRequestLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
+import instinctools.android.models.github.search.CommitsSearchRequest;
+import instinctools.android.models.github.search.IssuesSearchRequest;
+import instinctools.android.models.github.search.RepositoriesSearchRequest;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
+import instinctools.android.models.github.search.UsersSearchRequest;
+import instinctools.android.models.github.search.enums.SearchOrderType;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.search.GithubServiceSearch;
 
-public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<SearchResponse> {
+public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<SearchResponse>, SlidingPaneLayout.PanelSlideListener {
     private static final int LOADER_SEARCH_REQUEST_REPOSITORIES_ID = 1;
     private static final int LOADER_SEARCH_REQUEST_COMMITS_ID = 2;
     private static final int LOADER_SEARCH_REQUEST_ISSUES_ID = 3;
@@ -46,6 +58,8 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private AbstractSearchAdapter mSearchAdapter;
+    private SlidingPaneLayout mSlidingPaneLayout;
+    private ViewGroup mFilterContainer;
 
     private SearchRequest mLastSearchRequest;
     private SearchResponse mLastSearchResponse;
@@ -117,7 +131,12 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_search_loading);
+        mSlidingPaneLayout = (SlidingPaneLayout) view.findViewById(R.id.sliding_pane_layout_search);
+        mSlidingPaneLayout.setPanelSlideListener(this);
 
+        mFilterContainer = (ViewGroup) view.findViewById(R.id.layout_filter_container);
+
+        View.inflate(getContext(), getFilterViewId(), mFilterContainer);
         return view;
     }
 
@@ -132,6 +151,9 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     public void search(SearchRequest request) {
+        if (request == null)
+            return;
+
         if (TextUtils.isEmpty(request.getText()))
             return;
 
@@ -172,6 +194,13 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
+    public void toggleFilter() {
+        if (mSlidingPaneLayout.isOpen())
+            mSlidingPaneLayout.closePane();
+        else
+            mSlidingPaneLayout.openPane();
+    }
+
     private int getLoaderId() {
         switch (mType) {
             case REPOSITORIES:
@@ -200,5 +229,143 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
             default:
                 throw new UnsupportedOperationException("Unsupported search fragment type: " + mType);
         }
+    }
+
+    private int getFilterViewId() {
+        int resViewId;
+        switch (mType) {
+            case REPOSITORIES:
+                resViewId = R.layout.fragment_search_repository_filter;
+                break;
+            case COMMITS:
+                resViewId = R.layout.fragment_search_commit_filter;
+                break;
+            case ISSUES:
+                resViewId = R.layout.fragment_search_issue_filter;
+                break;
+            case USERS:
+                resViewId = R.layout.fragment_search_user_filter;
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported fragment type for get filter view " + mType);
+        }
+
+        return resViewId;
+    }
+
+    public String getSortType() {
+        Spinner sortSpinner = (Spinner)getActivity().findViewById(R.id.spinner_search_sort);
+        return sortSpinner.getSelectedItem().toString().toLowerCase();
+    }
+
+    public SearchOrderType getOrderType() {
+        Spinner orderSpinner = (Spinner)getActivity().findViewById(R.id.spinner_search_order);
+        return SearchOrderType.get(orderSpinner.getSelectedItem().toString().toLowerCase());
+    }
+
+    public Map<String, String> getFilters() {
+        Map<String, String> filters = new HashMap<>();
+        switch (mType) {
+            case REPOSITORIES: {
+                EditText forks = (EditText)getActivity().findViewById(R.id.text_repo_filter_forks);
+                if (!TextUtils.isEmpty(forks.getText()))
+                    filters.put(RepositoriesSearchRequest.FILTER_FORKS, forks.getText().toString());
+
+                EditText size = (EditText)getActivity().findViewById(R.id.text_repo_filter_size);
+                if (!TextUtils.isEmpty(size.getText()))
+                    filters.put(RepositoriesSearchRequest.FILTER_SIZE, size.getText().toString());
+
+                EditText stars = (EditText)getActivity().findViewById(R.id.text_repo_filter_stars);
+                if (!TextUtils.isEmpty(stars.getText()))
+                    filters.put(RepositoriesSearchRequest.FILTER_STARS, stars.getText().toString());
+
+                Switch fork = (Switch)getActivity().findViewById(R.id.switch_repo_filter_fork);
+                filters.put(RepositoriesSearchRequest.FILTER_FORK, String.valueOf(fork.isChecked()));
+                break;
+            }
+            case COMMITS: {
+                EditText author = (EditText)getActivity().findViewById(R.id.text_commit_filter_author);
+                if (!TextUtils.isEmpty(author.getText()))
+                    filters.put(CommitsSearchRequest.FILTER_AUTHOR, author.getText().toString());
+
+                EditText committer = (EditText)getActivity().findViewById(R.id.text_commit_filter_committer);
+                if (!TextUtils.isEmpty(committer.getText()))
+                    filters.put(CommitsSearchRequest.FILTER_COMMITTER, committer.getText().toString());
+
+                Switch merge = (Switch)getActivity().findViewById(R.id.switch_commit_filter_merge);
+                filters.put(CommitsSearchRequest.FILTER_MERGE, String.valueOf(merge.isChecked()));
+                break;
+            }
+            case ISSUES: {
+                EditText assignee = (EditText)getActivity().findViewById(R.id.text_issue_filter_assignee);
+                if (!TextUtils.isEmpty(assignee.getText()))
+                    filters.put(IssuesSearchRequest.FILTER_ASSIGNEE, assignee.getText().toString());
+
+                EditText author = (EditText)getActivity().findViewById(R.id.text_issue_filter_author);
+                if (!TextUtils.isEmpty(author.getText()))
+                    filters.put(IssuesSearchRequest.FILTER_AUTHOR, author.getText().toString());
+
+                EditText comments = (EditText)getActivity().findViewById(R.id.text_issue_filter_comments);
+                if (!TextUtils.isEmpty(comments.getText()))
+                    filters.put(IssuesSearchRequest.FILTER_COMMENTS, comments.getText().toString());
+
+                Spinner type = (Spinner)getActivity().findViewById(R.id.spinner_issue_filter_type);
+                String issueType = getResources().getStringArray(R.array.entries_issue_type_values)[type.getSelectedItemPosition()];
+                filters.put(IssuesSearchRequest.FILTER_TYPE, issueType);
+
+                Spinner state = (Spinner)getActivity().findViewById(R.id.spinner_issue_filter_state);
+                String issueState = getResources().getStringArray(R.array.entries_issue_state_values)[state.getSelectedItemPosition()];
+                filters.put(IssuesSearchRequest.FILTER_STATE, issueState);
+                break;
+            }
+            case USERS: {
+                EditText repos = (EditText)getActivity().findViewById(R.id.text_user_filter_repos);
+                if (!TextUtils.isEmpty(repos.getText()))
+                    filters.put(UsersSearchRequest.FILTER_REPOS, repos.getText().toString());
+
+                EditText followers = (EditText)getActivity().findViewById(R.id.text_user_filter_followers);
+                if (!TextUtils.isEmpty(followers.getText()))
+                    filters.put(UsersSearchRequest.FILTER_FOLLOWERS, followers.getText().toString());
+
+                EditText language = (EditText)getActivity().findViewById(R.id.text_user_filter_language);
+                if (!TextUtils.isEmpty(language.getText()))
+                    filters.put(UsersSearchRequest.FILTER_LANGUAGE, language.getText().toString().toLowerCase());
+
+                EditText location = (EditText)getActivity().findViewById(R.id.text_user_filter_location);
+                if (!TextUtils.isEmpty(location.getText()))
+                    filters.put(UsersSearchRequest.FILTER_LOCATION, location.getText().toString());
+
+                Spinner type = (Spinner)getActivity().findViewById(R.id.spinner_user_filter_type);
+                String userType = getResources().getStringArray(R.array.entries_user_type_values)[type.getSelectedItemPosition()];
+                filters.put(UsersSearchRequest.FILTER_TYPE, userType);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unsupported fragment type: " + mType);
+        }
+
+        return filters;
+    }
+
+    @Override
+    public void onPanelSlide(View panel, float slideOffset) {
+
+    }
+
+    @Override
+    public void onPanelOpened(View panel) {
+
+    }
+
+    @Override
+    public void onPanelClosed(View panel) {
+        if (mLastSearchRequest != null) {
+            mLastSearchRequest.setFilters(getFilters());
+
+            mLastSearchRequest.setSort(getSortType());
+            mLastSearchRequest.setOrder(getOrderType());
+        }
+
+        search(mLastSearchRequest);
     }
 }
