@@ -3,6 +3,7 @@ package instinctools.android;
 import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 
 import instinctools.android.constans.Constants;
@@ -21,6 +22,9 @@ public class App extends Application {
         GithubService.init(mContext, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.SCOPES, Constants.CALLBACK_URL);
         ApplicationPersistantStorage.init(mContext);
         SettingsStorage.init(mContext);
+
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.pref_sync_data, false);
 
         deleteDatabase(DBConstants.DB_NAME);
     }

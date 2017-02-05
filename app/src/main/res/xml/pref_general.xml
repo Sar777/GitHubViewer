@@ -4,13 +4,13 @@
     <PreferenceCategory
         android:title="@string/title_pref_header_general">
         <ListPreference
-            android:key="@string/title_pref_key_sync_notifications"
-            android:icon="@drawable/ic_github_notification"
+            android:key="@string/title_pref_key_general_max_search_result"
+            android:icon="@drawable/ic_github_search_black"
             android:defaultValue="1"
-            android:entries="@array/entries_minutes"
-            android:entryValues="@array/entry_minutes"
-            android:title="@string/title_pref_category_general_notification"
-            android:summary="@string/title_pref_category_general_notification_summary">
+            android:entryValues="@array/entry_max_search_result"
+            android:entries="@array/entry_max_search_result"
+            android:title="@string/title_pref_category_general_search_result"
+            android:summary="@string/title_pref_category_general_search_result_summary">
         </ListPreference>
     </PreferenceCategory>
 </PreferenceScreen>

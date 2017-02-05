@@ -28,4 +28,6 @@ public class Constants {
     public static final int INTERVAL_UPDATE_REPO_SERVICES = 10;
     // Interval update notifications. Default
     public static final int INTERVAL_UPDATE_NOTIFICATIONS = 1;
+    //
+    public static final int MAX_SEARCH_RESULT_BY_PAGE = 30;
 }

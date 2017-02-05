@@ -39,11 +39,13 @@
     <string name="title_pref_category_repo_my_repo">Мои</string>
     <string name="title_pref_category_repo_watch_repo">Отслеживаемые</string>
     <string name="title_pref_category_repo_stars_repo">Избранные</string>
-    <string name="title_pref_category_general_notification">Оповещения</string>
+    <string name="title_pref_category_sync_notification">Оповещения</string>
+    <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
     <string name="title_pref_category_repo_my_summary">Промежуток между обновлением списка моих репозиториев</string>
     <string name="title_pref_category_repo_watch_summary">Промежуток между обновлением списка списка отслеживаемых репозиториев</string>
     <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
-    <string name="title_pref_category_general_notification_summary">Промежуток между загрузкой оповещений</string>
+    <string name="title_pref_category_sync_notification_summary">Промежуток между загрузкой оповещений</string>
+    <string name="title_pref_category_general_max_serach_result_summary">Максимальное количество выдачи элементов при поиске</string>
     <string name="title_search_activity">Поиск</string>
     <!-- -->
     <string name="title_notification">Оповещения</string>

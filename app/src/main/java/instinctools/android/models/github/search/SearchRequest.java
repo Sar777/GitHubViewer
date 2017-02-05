@@ -5,10 +5,12 @@ import android.os.Parcelable;
 
 import instinctools.android.models.github.search.enums.SearchOrderType;
 import instinctools.android.models.github.search.enums.SearchType;
+import instinctools.android.storages.SettingsStorage;
 
 public abstract class SearchRequest implements Parcelable {
     protected static final String FIELD_SORT = "sort";
     protected static final String FIELD_ORDER = "order";
+    protected static final String FIELD_PER_PAGE = "per_page";
 
     protected final SearchType mType;
     protected final String mText;
@@ -49,5 +51,7 @@ public abstract class SearchRequest implements Parcelable {
         dest.writeParcelable(mOrder, flags);
     }
 
-    public abstract String build();
+    public String build() {
+        return "/" + mType + "?q=" + mText + "&" + FIELD_ORDER + "=" + mOrder + "&" + FIELD_PER_PAGE + "=" + SettingsStorage.getMaxSearchResult();
+    }
 }

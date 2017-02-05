@@ -81,7 +81,7 @@ public class IssueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_VIEW_EMPTY)
-            return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_issue_empty, parent, false));
+            return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_empty, parent, false));
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_issue, parent, false);
         return new ItemViewHolder(itemView);

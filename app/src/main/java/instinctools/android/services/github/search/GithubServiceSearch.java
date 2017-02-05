@@ -51,9 +51,7 @@ public class GithubServiceSearch extends GithubService {
                 addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET);
 
-        // Added custom github header for only search by commits
-        //if (request.getType() == SearchType.COMMITS)
-            client.addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_CUSTOM_GITHUB);
+        client.addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_CUSTOM_GITHUB);
 
         client.send(new OnHttpClientListener() {
             @Override

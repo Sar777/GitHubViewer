@@ -61,16 +61,19 @@
     <string name="title_pref_category_repo_my_repo">My</string>
     <string name="title_pref_category_repo_watch_repo">Watches</string>
     <string name="title_pref_category_repo_stars_repo">Stars</string>
-    <string name="title_pref_category_general_notification">Notification</string>
+    <string name="title_pref_category_sync_notification">Notification</string>
+    <string name="title_pref_category_general_search_result">Max search result</string>
     <string name="title_pref_category_repo_my_summary">The interval between updating my list of repositories</string>
     <string name="title_pref_category_repo_watch_summary">The interval between updating watches repositories</string>
     <string name="title_pref_category_repo_stars_summary">The interval between updating stargazers repositories</string>
-    <string name="title_pref_category_general_notification_summary">The interval between updating notifications</string>
+    <string name="title_pref_category_sync_notification_summary">The interval between updating notifications</string>
+    <string name="title_pref_category_general_search_result_summary">Max elements response by search</string>
     <!-- Preference keys -->
     <string name="title_pref_key_sync_my_repo">sync_my_repositories</string>
     <string name="title_pref_key_sync_watch_repo">sync_watch_repositories</string>
     <string name="title_pref_key_sync_stars_repo">sync_stars_repositories</string>
     <string name="title_pref_key_sync_notifications">sync_notifications</string>
+    <string name="title_pref_key_general_max_search_result">general_max_search_result</string>
 
     <string name="title_description_button_star">Star</string>
     <string name="title_description_button_watch">Watch</string>
