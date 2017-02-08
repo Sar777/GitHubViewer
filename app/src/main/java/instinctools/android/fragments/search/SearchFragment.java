@@ -281,6 +281,9 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
 
                 Switch fork = (Switch)getActivity().findViewById(R.id.switch_repo_filter_fork);
                 filters.put(RepositoriesSearchRequest.FILTER_FORK, String.valueOf(fork.isChecked()));
+
+                Spinner isSpinner = (Spinner)getActivity().findViewById(R.id.spinner_repo_filter_is);
+                filters.put(RepositoriesSearchRequest.FILTER_IS, isSpinner.getSelectedItem().toString().toLowerCase());
                 break;
             }
             case COMMITS: {

@@ -86,6 +86,20 @@
                 android:hint=">1000"
                 android:inputType="text" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@android:color/black"
+                android:text="Is"/>
+
+            <Spinner
+                android:id="@+id/spinner_repo_filter_is"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/entries_repo_is"/>
+
             <Switch
                 android:id="@+id/switch_repo_filter_fork"
                 android:layout_width="wrap_content"
