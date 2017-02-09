@@ -1,5 +1,6 @@
 package instinctools.android.adapters;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -57,7 +58,10 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                     Repository repository = Repository.fromCursor(getCursor(getAdapterPosition()));
                     Intent intent = new Intent(mContext, DescriptionActivity.class);
                     intent.putExtra(EXTRA_REPOSITORY_ID_TAG, repository.getId());
-                    mContext.startActivity(intent);
+                    ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                    mContext.startActivity(intent, options.toBundle());
+
+                    
                 }
             });
         }

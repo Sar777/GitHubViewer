@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 
 import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
 import instinctools.android.services.HttpRunAllService;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
