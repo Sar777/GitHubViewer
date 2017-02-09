@@ -20,8 +20,8 @@ import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 
 public class SearchIssuesAdapter extends AbstractSearchAdapter<Issue> {
-    public SearchIssuesAdapter(@NonNull Context context, @NonNull RecyclerView recyclerView) {
-        super(context, recyclerView);
+    public SearchIssuesAdapter(@NonNull Context context) {
+        super(context);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {

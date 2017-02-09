@@ -24,8 +24,8 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.user.GithubServiceUser;
 
 public class SearchCommitsAdapter extends AbstractSearchAdapter<Commit> {
-    public SearchCommitsAdapter(@NonNull Context context, @NonNull RecyclerView recyclerView) {
-        super(context, recyclerView);
+    public SearchCommitsAdapter(@NonNull Context context) {
+        super(context);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
