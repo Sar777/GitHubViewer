@@ -6,7 +6,7 @@ public enum Direction {
 
     private final String direction;
 
-    private Direction(final String direction) {
+    Direction(final String direction) {
         this.direction = direction;
     }
     @Override

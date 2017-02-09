@@ -29,7 +29,6 @@ public class HttpGithubUnreadNotificationService extends HttpGithubNotificationS
             onHandleIntent(new ArrayList<Notification>());
             return;
         }
-
         onHandleIntent(notifications);
     }
 }

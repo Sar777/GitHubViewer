@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android</string>
+    <string name="app_name">Github Viewer</string>
     <string name="title_repositories">Repositories</string>
     <string name="title_my_repositories">My Repositories</string>
     <string name="msg_empty_list">Empty list</string>
