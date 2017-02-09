@@ -1,16 +1,20 @@
 package instinctools.android.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.NotificationTypeAdapter;
 
 public class NotificationActivity extends AppCompatActivity {
+    public static final String NOTIFICATION_URL = "NOTIFICATION_URL";
+
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
     private TabLayout mTabLayout;
@@ -21,6 +25,18 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
 
         initView();
+
+        onNewIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras == null)
+            return;
+
+        if (extras.containsKey(NOTIFICATION_URL))
+            App.launchUrl(this, extras.getString(NOTIFICATION_URL));
     }
 
     private void initView() {

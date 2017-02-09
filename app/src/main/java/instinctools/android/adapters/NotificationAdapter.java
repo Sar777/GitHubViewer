@@ -3,7 +3,6 @@ package instinctools.android.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.notification.Notification;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.notification.GithubNotifications;
+import instinctools.android.services.github.notification.GithubServiceNotifications;
 
 public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter  {
     private Context mContext;
@@ -35,7 +34,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
             return;
 
         Notification notification = Notification.fromCursor(getCursor(position));
-        GithubNotifications.markNotification(notification.getUrl(), new GithubServiceListener<Boolean>() {
+        GithubServiceNotifications.markNotification(notification.getUrl(), new GithubServiceListener<Boolean>() {
             @Override
             public void onError(int code, ErrorResponse response) {
                 //Snackbar.make(mRecyclerView, R.string.msg_unknown_error_mark_notification, Snackbar.LENGTH_SHORT).show();

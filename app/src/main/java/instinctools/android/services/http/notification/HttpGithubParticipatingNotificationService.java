@@ -8,7 +8,7 @@ import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.notification.Notification;
 import instinctools.android.models.github.notification.NotificationListResponse;
-import instinctools.android.services.github.notification.GithubNotifications;
+import instinctools.android.services.github.notification.GithubServiceNotifications;
 import instinctools.android.storages.SettingsStorage;
 import instinctools.android.utility.Services;
 
@@ -24,7 +24,7 @@ public class HttpGithubParticipatingNotificationService extends HttpGithubNotifi
                 OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING,
                 SettingsStorage.getIntervalUpdateNotifications() * 60 * 1000);
 
-        NotificationListResponse response = GithubNotifications.getNotificationsResponse(false, true);
+        NotificationListResponse response = GithubServiceNotifications.getNotificationsResponse(false, true);
         if (response == null) {
             onHandleIntent(new ArrayList<Notification>());
             return;

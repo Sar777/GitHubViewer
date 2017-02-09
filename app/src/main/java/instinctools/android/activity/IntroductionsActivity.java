@@ -69,12 +69,12 @@ public class IntroductionsActivity extends AppCompatActivity implements ViewPage
     @Override
     public void onPageSelected(int position) {
         int width = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
-        int heigth = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
+        int height = (int) getResources().getDimension(R.dimen.introduction_slide_button_width_height);
 
         for (int i = 0; i < IntroductionPagerAdapter.MAX_PAGES; ++i) {
             ViewGroup.LayoutParams layoutParams = mButtonSlides[i].getLayoutParams();
             layoutParams.width = width;
-            layoutParams.height = heigth;
+            layoutParams.height = height;
             mButtonSlides[i].setLayoutParams(layoutParams);
         }
 

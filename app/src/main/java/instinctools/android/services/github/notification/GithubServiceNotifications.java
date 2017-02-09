@@ -1,7 +1,5 @@
 package instinctools.android.services.github.notification;
 
-import android.util.Log;
-
 import java.net.HttpURLConnection;
 import java.util.List;
 
@@ -16,8 +14,8 @@ import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.GithubServiceListener;
 
-public class GithubNotifications extends GithubService {
-    private static final String TAG = "GithubNotifications";
+public class GithubServiceNotifications extends GithubService {
+    private static final String TAG = "GithubServiceNotifications";
 
     private static final String API_NOTIFICATIONS = API_BASE_URL + "/notifications";
 

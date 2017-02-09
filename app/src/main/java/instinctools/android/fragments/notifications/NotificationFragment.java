@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 
 import instinctools.android.R;
 import instinctools.android.adapters.NotificationAdapter;
-import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.adapters.SimpleItemTouchHelperCallback;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
@@ -42,7 +41,6 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mRepositoryAdapter;
 
     private NotificationAdapter mNotificationAdapter;
 
@@ -72,6 +70,9 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_notification_list);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
         mNotificationAdapter = new NotificationAdapter(getContext(), false, null);
 
         if (isCanSwipeItem()) {
@@ -81,9 +82,6 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         }
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_notification_recycler);
         mSwipeRefreshLayout.setOnRefreshListener(this);
