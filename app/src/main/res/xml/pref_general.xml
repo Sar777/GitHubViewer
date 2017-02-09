@@ -6,7 +6,7 @@
         <ListPreference
             android:key="@string/title_pref_key_general_max_search_result"
             android:icon="@drawable/ic_github_search_black"
-            android:defaultValue="1"
+            android:defaultValue="30"
             android:entryValues="@array/entry_max_search_result"
             android:entries="@array/entry_max_search_result"
             android:title="@string/title_pref_category_general_search_result"

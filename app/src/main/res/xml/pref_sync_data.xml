@@ -6,7 +6,7 @@
         <ListPreference
             android:key="@string/title_pref_key_sync_my_repo"
             android:icon="@drawable/ic_github_repo"
-            android:defaultValue="1"
+            android:defaultValue="10"
             android:entries="@array/entries_minutes"
             android:entryValues="@array/entry_minutes"
             android:title="@string/title_pref_category_repo_my_repo"
@@ -16,7 +16,7 @@
         <ListPreference
             android:key="@string/title_pref_key_sync_watch_repo"
             android:icon="@drawable/ic_github_eye"
-            android:defaultValue="1"
+            android:defaultValue="10"
             android:entries="@array/entries_minutes"
             android:entryValues="@array/entry_minutes"
             android:title="@string/title_pref_category_repo_watch_repo"
@@ -26,7 +26,7 @@
         <ListPreference
             android:key="@string/title_pref_key_sync_stars_repo"
             android:icon="@drawable/ic_github_star"
-            android:defaultValue="1"
+            android:defaultValue="10"
             android:entries="@array/entries_minutes"
             android:entryValues="@array/entry_minutes"
             android:title="@string/title_pref_category_repo_stars_repo"
@@ -36,7 +36,7 @@
         <ListPreference
             android:key="@string/title_pref_key_sync_notifications"
             android:icon="@drawable/ic_github_notification"
-            android:defaultValue="1"
+            android:defaultValue="5"
             android:entries="@array/entries_minutes"
             android:entryValues="@array/entry_minutes"
             android:title="@string/title_pref_category_sync_notification"
