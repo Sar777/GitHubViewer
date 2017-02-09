@@ -17,8 +17,8 @@ import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.user.User;
 
 public class SearchUsersAdapter extends AbstractSearchAdapter<User> {
-    public SearchUsersAdapter(@NonNull Context context, @NonNull RecyclerView recyclerView) {
-        super(context, recyclerView);
+    public SearchUsersAdapter(@NonNull Context context) {
+        super(context);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {

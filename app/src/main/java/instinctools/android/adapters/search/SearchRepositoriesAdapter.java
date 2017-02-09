@@ -16,8 +16,8 @@ import instinctools.android.R;
 import instinctools.android.models.github.repositories.Repository;
 
 public class SearchRepositoriesAdapter extends AbstractSearchAdapter<Repository> {
-    public SearchRepositoriesAdapter(@NonNull Context context, @NonNull RecyclerView recyclerView) {
-        super(context, recyclerView);
+    public SearchRepositoriesAdapter(@NonNull Context context) {
+        super(context);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
