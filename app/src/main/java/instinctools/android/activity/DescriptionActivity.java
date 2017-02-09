@@ -1,5 +1,6 @@
 package instinctools.android.activity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -246,7 +247,8 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         } else if (view.getId() == R.id.image_description_owner_avatar) {
             Intent intent = new Intent(this, ProfileActivity.class);
             intent.putExtra(ProfileActivity.EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
-            startActivity(intent);
+            ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+            startActivity(intent, options.toBundle());
         }
     }
 

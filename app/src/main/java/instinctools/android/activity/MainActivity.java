@@ -1,6 +1,7 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -156,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                startActivity(intent, options.toBundle());
             }
         });
 

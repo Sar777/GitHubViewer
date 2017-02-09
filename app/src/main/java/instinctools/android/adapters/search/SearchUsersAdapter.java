@@ -1,5 +1,6 @@
 package instinctools.android.adapters.search;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -39,7 +40,8 @@ public class SearchUsersAdapter extends AbstractSearchAdapter<User> {
                     User user = getItem(getAdapterPosition());
                     Intent intent = new Intent(mContext, ProfileActivity.class);
                     intent.putExtra(ProfileActivity.EXTRA_USERNAME, user.getLogin());
-                    mContext.startActivity(intent);
+                    ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                    mContext.startActivity(intent, options.toBundle());
                 }
             });
         }

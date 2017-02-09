@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Github Viewer</string>
+    <string name="app_name">GitHub Viewer</string>
     <string name="title_repositories">Repositories</string>
     <string name="title_my_repositories">My Repositories</string>
     <string name="msg_empty_list">Empty list</string>
@@ -44,7 +44,7 @@
     <string name="title_profile_followers">Followers</string>
     <string name="title_profile_gists">Gists</string>
     <string name="title_profile_repositories">Repositories</string>
-    <string name="title_profile_following">Following</string>
+    <string name="title_profile_following">Follow.</string>
     <string name="title_profile_information">Information:</string>
     <string name="title_menu">Menu</string>
     <string name="title_watch_repositories">Watch</string>
