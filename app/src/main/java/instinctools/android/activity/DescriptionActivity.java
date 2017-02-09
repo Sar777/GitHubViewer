@@ -41,7 +41,6 @@ import instinctools.android.services.github.user.GithubServiceUser;
 
 public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String BUNDLE_REPOSITORY_ID = "ID";
-    public static final String EXTRA_USERNAME = "USERNAME";
 
     private static final int LOADER_REPOSITORY_ID = 1;
 
@@ -96,10 +95,14 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         if (intent != null) {
-            long id = intent.getLongExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
+            int id = intent.getIntExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
+            if (id == -1) {
+                finish();
+                return;
+            }
 
             Bundle bundle = new Bundle();
-            bundle.putLong(BUNDLE_REPOSITORY_ID, id);
+            bundle.putInt(BUNDLE_REPOSITORY_ID, id);
             getSupportLoaderManager().initLoader(LOADER_REPOSITORY_ID, bundle, this);
         }
     }
@@ -140,7 +143,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mRecyclerViewIssuesOpened.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
         mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
 
-        mIssueOpenedAdapter = new IssueAdapter(this, null);
+        mIssueOpenedAdapter = new IssueAdapter(this, mRecyclerViewIssuesOpened, null);
         mRecyclerViewIssuesOpened.setAdapter(mIssueOpenedAdapter);
         mRecyclerViewIssuesOpened.setLayoutManager(new LinearLayoutManager(this));
 
@@ -154,7 +157,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mRecyclerViewIssuesClosed.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
         mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
 
-        mIssueClosedAdapter = new IssueAdapter(this, null);
+        mIssueClosedAdapter = new IssueAdapter(this, mRecyclerViewIssuesClosed, null);
         mRecyclerViewIssuesClosed.setAdapter(mIssueClosedAdapter);
         mRecyclerViewIssuesClosed.setLayoutManager(new LinearLayoutManager(this));
 
@@ -178,7 +181,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (id != LOADER_REPOSITORY_ID)
             return null;
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getLong(BUNDLE_REPOSITORY_ID))}, null);
+        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getInt(BUNDLE_REPOSITORY_ID))}, null);
     }
 
     @Override
@@ -242,7 +245,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
             });
         } else if (view.getId() == R.id.image_description_owner_avatar) {
             Intent intent = new Intent(this, ProfileActivity.class);
-            intent.putExtra(EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
+            intent.putExtra(ProfileActivity.EXTRA_USERNAME, mTextViewOwnerLogin.getText().toString());
             startActivity(intent);
         }
     }

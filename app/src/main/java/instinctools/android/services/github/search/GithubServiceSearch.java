@@ -7,60 +7,66 @@ import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
+import instinctools.android.models.github.search.enums.SearchType;
 import instinctools.android.readers.json.JsonTransformer;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.GithubServiceListener;
 
 public class GithubServiceSearch extends GithubService {
-    private static final String API_SEARCH_REPOSITORY = API_BASE_URL + "/search/repositories";
+    private static final String API_SEARCH = API_BASE_URL + "/search";
 
-    public static void getSearchRepository(SearchRequest request, final GithubServiceListener<SearchResponse> listener) {
+    public static SearchResponse getSearch(SearchRequest request) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_SEARCH_REPOSITORY + request).
+                create(API_SEARCH + request.build()).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET);
 
-        client.send(new OnHttpClientListener() {
-            @Override
-            public void onError(int errCode, String content) {
-                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
-            }
+        // Added custom github header for only search by commits
+        if (request.getType() == SearchType.COMMITS)
+            client.addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_CUSTOM_GITHUB);
 
-            @Override
-            public void onSuccess(int code, String content) {
-                if (code != HttpURLConnection.HTTP_OK) {
-                    listener.onSuccess(null);
-                    return;
-                }
-
-                SearchResponse searchResponse = JsonTransformer.transform(content, SearchResponse.class);
-                if (searchResponse == null) {
-                    listener.onSuccess(new SearchResponse());
-                    return;
-                }
-                listener.onSuccess(searchResponse);
-
-            }
-        });
-    }
-
-    public static SearchResponse getSearchRepository(SearchRequest request) {
-        if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
-
-        HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(API_SEARCH_REPOSITORY + request).
-                setMethod(HttpClientFactory.METHOD_GET).send();
+        client.send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return new SearchResponse();
 
         SearchResponse searchResponse = JsonTransformer.transform(client.getContent(), SearchResponse.class);
-        if (searchResponse == null)
+        if (searchResponse == null) {
             return new SearchResponse();
+        }
 
+        searchResponse.setPageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK));
         return searchResponse;
+    }
+
+    public static void getSearchByUrl(String url, final GithubServiceListener<SearchResponse> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        final HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(url).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET);
+
+        client.addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_CUSTOM_GITHUB);
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int code, String content) {
+                listener.onError(code, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                SearchResponse searchResponse = JsonTransformer.transform(content, SearchResponse.class);
+                if (searchResponse != null)
+                    searchResponse.setPageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK));
+
+                listener.onSuccess(searchResponse);
+            }
+        });
     }
 }

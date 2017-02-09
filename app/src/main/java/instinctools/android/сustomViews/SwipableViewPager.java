@@ -1,4 +1,4 @@
-package instinctools.android.CustomViews;
+package instinctools.android.сustomViews;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -17,8 +17,7 @@ public class SwipableViewPager extends ViewPager {
     }
 
     @Override
-    protected boolean canScroll(View v, boolean checkV, int dx, int x,
-                                int y) {
+    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
         if (v instanceof RecyclerView) {
             return dx <= 0 || (super.canScroll(v, checkV, dx, x, y));
         }

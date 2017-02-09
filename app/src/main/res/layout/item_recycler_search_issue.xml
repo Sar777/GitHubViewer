@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginBottom="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginRight="@dimen/recycler_view_item_margin_right_left"
+    android:layout_marginLeft="@dimen/recycler_view_item_margin_right_left">
+
+    <ImageView
+        android:id="@+id/image_issue_state"
+        android:layout_width="@dimen/recycler_view_item_icon_size"
+        android:layout_height="@dimen/recycler_view_item_icon_size"
+        app:srcCompat="@drawable/ic_github_issue_opened"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/recycler_view_item_material_left_container_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_issue_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@android:color/black"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <TextView
+            android:id="@+id/text_issue_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@android:color/black"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_issue_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/recycler_view_item_search_issue_comment_margin_top"
+                android:layout_gravity="center_vertical"
+                android:drawableLeft="@drawable/ic_github_comment_discussion"
+                android:drawablePadding="@dimen/recycler_view_item_search_issue_comment_drawable_padding"
+                android:textColor="@android:color/black"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/text_issue_created"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/recycler_view_item_search_issue_comment_margin_top"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@id/text_issue_comments"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/black"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        </RelativeLayout>
+      </LinearLayout>
+</RelativeLayout>

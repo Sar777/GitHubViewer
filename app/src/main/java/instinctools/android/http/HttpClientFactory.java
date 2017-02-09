@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpClientFactory {
@@ -26,11 +27,13 @@ public class HttpClientFactory {
 
     // Headers
     public static final String HEADER_ACCEPT = "Accept";
+    public static final String HEADER_LINK = "Link";
     public static final String HEADER_CONTENT_LENGHT = "Content-Length";
     public static final String HEADER_AUTHORIZATION = "Authorization";
 
     // Types
     public static final String HEADER_ACCEPT_TYPE_JSON = "application/json";
+    public static final String HEADER_ACCEPT_TYPE_CUSTOM_GITHUB = "application/vnd.github.cloak-preview";
 
     private HttpClientFactory() {
     }
@@ -43,7 +46,8 @@ public class HttpClientFactory {
         private URL mUri;
         private String mMethod;
         private String mData;
-        private Map<String, String> mHeaders;
+        private Map<String, String> mRequestHeaders;
+        private Map<String, List<String>> mReponseHeaders;
         private Map<String, String> mParams;
 
         private int mCode;
@@ -58,7 +62,8 @@ public class HttpClientFactory {
 
             this.mMethod = METHOD_GET;
             this.mCode = -1;
-            this.mHeaders = new HashMap<>();
+            this.mRequestHeaders = new HashMap<>();
+            this.mReponseHeaders = new HashMap<>();
             this.mParams = new HashMap<>();
         }
 
@@ -88,7 +93,7 @@ public class HttpClientFactory {
         }
 
         public HttpClient addHeader(String key, String value) {
-            this.mHeaders.put(key, value);
+            this.mRequestHeaders.put(key, value);
             return this;
         }
 
@@ -110,19 +115,31 @@ public class HttpClientFactory {
             return mContent;
         }
 
+        public Map<String, List<String>> getReponseHeaders() {
+            return mReponseHeaders;
+        }
+
+        public String getResponseHeader(String header) {
+            List<String> headers  = mReponseHeaders.get(header);
+            if (headers == null || headers.isEmpty())
+                return null;
+
+            return headers.get(0);
+        }
+
         public HttpClient send() {
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) mUri.openConnection();
                 connection.setRequestMethod(mMethod);
-                for (Map.Entry<String, String> pair : mHeaders.entrySet())
+                for (Map.Entry<String, String> pair : mRequestHeaders.entrySet())
                     connection.setRequestProperty(pair.getKey(), pair.getValue());
 
             } catch (IOException e) {
                 Log.e(TAG, "Fail http client", e);
             }
 
-            if (mMethod.equals("POST")) {
+            if (mMethod.equals(METHOD_POST)) {
                 if (mData != null) {
                     DataOutputStream dataOutputStream = null;
                     try {
@@ -177,6 +194,8 @@ public class HttpClientFactory {
             } catch (IOException e) {
                 Log.e(TAG, "Fail close buffer reader in send", e);
             }
+
+            mReponseHeaders = connection.getHeaderFields();
 
             connection.disconnect();
 

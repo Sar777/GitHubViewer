@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
     private static final int LOADER_PROFILE_ID = 1;
     private static final int REQUEST_CODE_AUTHORIZATION = 1;
 
+    public static final String EXTRA_USERNAME = "USERNAME";
     public static final String BUNDLE_USERNAME = "USERNAME";
 
     private ViewGroup mContentLayout;
@@ -52,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
 
         Bundle bundle = new Bundle();
         if (getIntent() != null)
-            bundle.putString(ProfileActivity.BUNDLE_USERNAME, getIntent().getStringExtra(DescriptionActivity.EXTRA_USERNAME));
+            bundle.putString(BUNDLE_USERNAME, getIntent().getStringExtra(EXTRA_USERNAME));
 
         getSupportLoaderManager().initLoader(LOADER_PROFILE_ID, bundle, this);
     }

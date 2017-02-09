@@ -1,19 +1,23 @@
 package instinctools.android.models.github.issues;
 
+import java.util.Date;
 import java.util.List;
 
 public class Issue {
-    public static final String ISSUE_CLOSE = "closed";
-    public static final String ISSUE_OPEN = "open";
-
     private Integer mId;
     private String mUrl;
+    private String mHtmlUrl;
     private String mRepositoryUrl;
     private IssueState mState;
     private Integer mNumber;
     private String mTitle;
     private String mBody;
+    private Integer mComments;
+    private IssuePullRequest mPullRequest;
     private List<IssueLabel> mLabels;
+    private Date mCreatedAt;
+    private Date mUpdateAt;
+    private Date mClosedAt;
 
     public Integer getId() {
         return mId;
@@ -25,6 +29,14 @@ public class Issue {
 
     public String getUrl() {
         return mUrl;
+    }
+
+    public void setHtmlUrl(String url) {
+        this.mHtmlUrl = url;
+    }
+
+    public String getHtmlUrl() {
+        return mHtmlUrl;
     }
 
     public void setUrl(String url) {
@@ -71,11 +83,51 @@ public class Issue {
         this.mBody = body;
     }
 
+    public Integer getComments() {
+        return mComments;
+    }
+
+    public void setComments(Integer comments) {
+        this.mComments = comments;
+    }
+
+    public IssuePullRequest getPullRequest() {
+        return mPullRequest;
+    }
+
+    public void setPullRequest(IssuePullRequest pullRequest) {
+        this.mPullRequest = pullRequest;
+    }
+
     public List<IssueLabel> getLabels() {
         return mLabels;
     }
 
     public void setLabels(List<IssueLabel> labels) {
         this.mLabels = labels;
+    }
+
+    public Date getCreatedAt() {
+        return mCreatedAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.mCreatedAt = createdAt;
+    }
+
+    public Date getUpdateAt() {
+        return mUpdateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.mUpdateAt = updateAt;
+    }
+
+    public Date getClosedAt() {
+        return mClosedAt;
+    }
+
+    public void setClosedAt(Date closedAt) {
+        this.mClosedAt = closedAt;
     }
 }

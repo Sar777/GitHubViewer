@@ -8,7 +8,6 @@ import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.services.github.user.GithubServiceUser;
-import instinctools.android.services.http.repository.HttpRepositoryService;
 import instinctools.android.storages.SettingsStorage;
 import instinctools.android.utility.Services;
 

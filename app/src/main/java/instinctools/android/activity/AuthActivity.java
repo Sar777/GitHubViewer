@@ -53,7 +53,9 @@ public class AuthActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onSuccess(AccessToken token) {
+                // Update all data after login account
                 startService(new Intent(AuthActivity.this, HttpRunAllService.class));
+
                 Intent intentActivity = new Intent(AuthActivity.this, MainActivity.class);
                 intentActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intentActivity);

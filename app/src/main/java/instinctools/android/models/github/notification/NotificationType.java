@@ -6,6 +6,7 @@ import java.util.Map;
 public enum NotificationType {
     PULLREQUEST("PullRequest"),
     ISSUE("Issue"),
+    RELEASE("Release"),
     COMMIT("Commit");
 
     private final String mType;

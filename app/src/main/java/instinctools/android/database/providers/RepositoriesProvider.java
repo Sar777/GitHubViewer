@@ -16,7 +16,7 @@ import instinctools.android.database.DBHelper;
 
 public class RepositoriesProvider extends ContentProvider {
     static final String REPOSITORY_PATH = "repositories";
-    public static final String AUTHORITY = "instinctools.android.providers.Repositories";
+    public static final String AUTHORITY = "instinctools.android.database.providers.Repositories";
     public static final Uri REPOSITORY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + REPOSITORY_PATH);
 
     static final String REPOSITORY_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + REPOSITORY_PATH;

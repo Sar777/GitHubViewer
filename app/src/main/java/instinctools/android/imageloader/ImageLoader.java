@@ -129,13 +129,12 @@ public class ImageLoader {
 
         @Override
         protected void onPreExecute() {
-            ImagePlaceholder imagePlaceholder = mImageHolder.mImagePlaceholder;
-            if (imagePlaceholder == null)
-                return;
+            ImageView imageView = mImageHolder.mImageViewReference.get();
+            if (imageView != null) {
+                imageView.setTag(mImageHolder.mUrl);
 
-            if (imagePlaceholder.getLoadingId() != 0) {
-                ImageView imageView = mImageHolder.mImageViewReference.get();
-                if (imageView != null)
+                ImagePlaceholder imagePlaceholder = mImageHolder.mImagePlaceholder;
+                if (imagePlaceholder != null && imagePlaceholder.getLoadingId() != 0)
                     imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), imagePlaceholder.getLoadingId()));
             }
 
@@ -145,7 +144,9 @@ public class ImageLoader {
 
         @Override
         protected Bitmap doInBackground(Void... voids) {
-            Bitmap bitmap = mBitmapCacheMgr.getFromCache(mImageHolder.mUrl);
+            ImageTransformer transformer = mImageHolder.mTransformer;
+
+            Bitmap bitmap = mBitmapCacheMgr.getFromCache(transformer != null ? mImageHolder.mUrl + transformer.getClass().getName() : mImageHolder.mUrl);
             boolean cache = true;
             if (bitmap == null) {
                 cache = false;
@@ -153,9 +154,11 @@ public class ImageLoader {
             }
 
             if (bitmap != null && !cache) {
-                ImageTransformer transformer = mImageHolder.mTransformer;
+                // Apply transformer
                 if (transformer != null)
                     bitmap = transformer.transform(bitmap);
+
+                mBitmapCacheMgr.addToCache(mImageHolder.mTransformer != null ? mImageHolder.mUrl + mImageHolder.mTransformer.getClass().getName() : mImageHolder.mUrl, bitmap);
             }
 
             return bitmap;
@@ -177,11 +180,11 @@ public class ImageLoader {
                 return;
             }
 
-            mBitmapCacheMgr.addToCache(mImageHolder.mUrl, bitmap);
-
             ImageView imageView = mImageHolder.mImageViewReference.get();
-            if (imageView != null)
-                imageView.setImageBitmap(bitmap);
+            if (imageView != null) {
+                if (imageView.getTag().equals(mImageHolder.mUrl))
+                    imageView.setImageBitmap(bitmap);
+            }
 
             if (mListener != null)
                 mListener.onLoaded(bitmap);

@@ -3,32 +3,61 @@ package instinctools.android.models.github.search;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
+
+import instinctools.android.models.github.search.enums.SearchOrderType;
+import instinctools.android.models.github.search.enums.SearchType;
+import instinctools.android.storages.SettingsStorage;
+
 public class SearchRequest implements Parcelable {
-    public static final String ORDER_ASC = "asc";
-    public static final String ORDER_DESC = "desc";
+    protected static final String FIELD_SORT = "sort";
+    protected static final String FIELD_ORDER = "order";
+    protected static final String FIELD_PER_PAGE = "per_page";
 
-    public static final String SORT_STARS = "stars";
-    public static final String SORT_FORKS = "forks";
-    public static final String SORT_SIZE = "size";
+    protected final SearchType mType;
+    protected final String mText;
+    protected SearchOrderType mOrder;
+    protected String mSort;
+    protected Map<String, String> mFilters;
 
-    private String mIn;
-    private String mSort;
-    private String mOrder;
-
-    public SearchRequest(String in) {
-        this.mIn = in;
-        this.mOrder = ORDER_DESC;
-        this.mSort = SORT_STARS;
+    protected SearchRequest(SearchType type, String text, SearchOrderType order, String sort, Map<String, String> filters) {
+        this.mType = type;
+        this.mText = text;
+        this.mOrder = order;
+        this.mSort = sort;
+        this.mFilters = filters;
     }
 
     protected SearchRequest(Parcel in) {
-        mIn = in.readString();
-        mSort = in.readString();
-        mOrder = in.readString();
+        this.mType = in.readParcelable(SearchType.class.getClassLoader());
+        this.mText = in.readString();
+        this.mSort = in.readString();
+        this.mOrder = in.readParcelable(SearchOrderType.class.getClassLoader());
+        in.readMap(this.mFilters, String.class.getClassLoader());
     }
 
-    public String getIn() {
-        return mIn;
+    public SearchType getType() {
+        return mType;
+    }
+
+    public String getText() {
+        return mText;
+    }
+
+    public SearchOrderType getOrder() {
+        return mOrder;
+    }
+
+    public void setOrder(SearchOrderType order) {
+        this.mOrder = order;
+    }
+
+    public Map<String, String> getFilters() {
+        return mFilters;
+    }
+
+    public void setFilters(Map<String, String> filters) {
+        this.mFilters = filters;
     }
 
     public String getSort() {
@@ -36,50 +65,30 @@ public class SearchRequest implements Parcelable {
     }
 
     public void setSort(String sort) {
-        switch (sort.toLowerCase()) {
-            case SORT_STARS:
-            case SORT_FORKS:
-            case SORT_SIZE:
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported sort type: " + sort.toLowerCase());
+        this.mSort = sort;
+    }
+
+    private String filter() {
+        String filter = "";
+        if (mFilters.isEmpty())
+            return filter;
+
+        for (Map.Entry<String, String> fil : mFilters.entrySet()) {
+            filter += "+" + fil.getKey() + ":" + fil.getValue();
         }
 
-
-        this.mSort = sort.toLowerCase();
+        return filter;
     }
 
-    public String getOrder() {
-        return mOrder;
-    }
-
-    public void setOrder(String order) {
-        switch (order.toLowerCase()) {
-            case ORDER_ASC:
-            case ORDER_DESC:
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported order type: " + order.toLowerCase());
-        }
-
-        this.mOrder = order.toLowerCase();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("?q=%s&sort=%s&order=%s", mIn, mSort, mOrder);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mIn);
-        dest.writeString(mSort);
-        dest.writeString(mOrder);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public String build() {
+        return "/" + mType
+                + "?q=" + mText + filter()
+                + "&"
+                + FIELD_ORDER + "=" + mOrder
+                + "&"
+                + FIELD_SORT + "=" + mSort
+                + "&"
+                + FIELD_PER_PAGE + "=" + SettingsStorage.getMaxSearchResult();
     }
 
     public static final Creator<SearchRequest> CREATOR = new Creator<SearchRequest>() {
@@ -93,4 +102,18 @@ public class SearchRequest implements Parcelable {
             return new SearchRequest[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(mType, flags);
+        dest.writeString(mText);
+        dest.writeString(mSort);
+        dest.writeParcelable(mOrder, flags);
+        dest.writeMap(mFilters);
+    }
 }

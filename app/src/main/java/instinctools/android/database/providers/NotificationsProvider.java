@@ -16,7 +16,7 @@ import instinctools.android.database.DBHelper;
 
 public class NotificationsProvider extends ContentProvider {
     static final String NOTIFICATION_PATH = "notifications";
-    public static final String AUTHORITY = "instinctools.android.providers.Notifications";
+    public static final String AUTHORITY = "instinctools.android.database.providers.Notifications";
     public static final Uri NOTIFICATIONS_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + NOTIFICATION_PATH);
 
     static final String NOTIFICATION_CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + AUTHORITY + "." + NOTIFICATION_PATH;

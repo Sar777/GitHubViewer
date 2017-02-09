@@ -30,6 +30,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
         mContext = context;
         mRecyclerView = recyclerView;
+        setHasStableIds(true);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                     return;
 
                 mContext.getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, DBConstants.NOTIFICATION_ID + " = ?", new String[] {String.valueOf(getItemId(position))});
-                notifyItemRemoved(position);
+                //notifyItemRemoved(mCanShowHeader ? position - 1 : position);
             }
         });
     }
@@ -93,6 +94,9 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                 case COMMIT:
                     resId = R.drawable.ic_github_commit;
                     break;
+                case RELEASE:
+                    resId = R.drawable.ic_github_tag;
+                    break;
                 default:
                     throw new UnsupportedOperationException("Unsupported notification type: " + item.getSubject().getType());
             }
@@ -121,7 +125,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
                 return new HeaderItemHolder(view);
             }
             case VIEW_TYPE_EMPTY: {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_notification_empty, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_empty, parent, false);
                 return new EmptyItemHolder(view);
             }
             case VIEW_TYPE_ITEM:

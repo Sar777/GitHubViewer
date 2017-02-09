@@ -25,7 +25,6 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.enums.notifications.NotificationFragmentType;
 import instinctools.android.services.http.notification.HttpGithubAllNotificationService;
 import instinctools.android.services.http.notification.HttpGithubParticipatingNotificationService;
 import instinctools.android.services.http.notification.HttpGithubUnreadNotificationService;
@@ -137,7 +136,8 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
-        mNotificationAdapter.changeCursor(cursor);
+
+        mNotificationAdapter.changeCursor(cursor, true);
 
         // Hidden refresh bar
         mSwipeRefreshLayout.setRefreshing(false);

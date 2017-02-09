@@ -20,7 +20,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private int mRowIdColumn;
     private String mRowIdColumnName;
-    private final boolean mCanShowHeader;
+    protected final boolean mCanShowHeader;
 
     private DataSetObserver mDataSetObserver;
 
@@ -78,6 +78,10 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
         super.setHasStableIds(true);
     }
 
+    public boolean isValidCursor() {
+        return mDataValid;
+    }
+
     public abstract void onBindViewHolder(VH viewHolder, Cursor cursor);
 
     @Override
@@ -95,8 +99,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
      * Change the underlying cursor to a new cursor. If there is an existing cursor it will be
      * closed.
      */
-    public void changeCursor(Cursor cursor) {
-        Cursor old = swapCursor(cursor);
+    public void changeCursor(Cursor cursor, boolean notify) {
+        Cursor old = swapCursor(cursor, notify);
         if (old != null && !old.isClosed()) {
             old.close();
         }
@@ -104,10 +108,10 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     /**
      * Swap in a new Cursor, returning the old Cursor.  Unlike
-     * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
+     * {@link #changeCursor(Cursor, boolean)}, the returned old Cursor is <em>not</em>
      * closed.
      */
-    public Cursor swapCursor(Cursor newCursor) {
+    public Cursor swapCursor(Cursor newCursor, boolean notify) {
         if (newCursor == mCursor) {
             return null;
         }
@@ -122,11 +126,13 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             }
             mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
             mDataValid = true;
-            notifyDataSetChanged();
+            if (notify)
+                notifyDataSetChanged();
         } else {
             mRowIdColumn = -1;
             mDataValid = false;
-            notifyDataSetChanged();
+            if (notify)
+                notifyDataSetChanged();
             //There is no notifyDataSetInvalidated() method in RecyclerView.Adapter
         }
         return oldCursor;

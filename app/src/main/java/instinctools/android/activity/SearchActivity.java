@@ -2,51 +2,37 @@ package instinctools.android.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import instinctools.android.R;
-import instinctools.android.adapters.RepositoryAdapter;
-import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.RepositoriesProvider;
-import instinctools.android.decorations.DividerItemDecoration;
+import instinctools.android.adapters.search.SearchTypeAdapter;
+import instinctools.android.fragments.search.SearchFragment;
+import instinctools.android.fragments.search.enums.SearchFragmentType;
+import instinctools.android.models.github.search.CommitsSearchRequest;
+import instinctools.android.models.github.search.IssuesSearchRequest;
+import instinctools.android.models.github.search.RepositoriesSearchRequest;
 import instinctools.android.models.github.search.SearchRequest;
-import instinctools.android.services.http.repository.HttpSearchRepositoryService;
+import instinctools.android.models.github.search.UsersSearchRequest;
 
-public class SearchActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
-    private static final int LOADER_REPOSITORIES_ID = 1;
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, MenuItem.OnMenuItemClickListener, ViewPager.OnPageChangeListener {
     private static final int QUERY_SEARCH_DELAY = 300;
 
-    public static final String INTENT_SEARCH_REQUEST = "SEARCH_REQUEST";
-
     // View
-    private RecyclerView mRecyclerView;
-    private ProgressBar mProgressBar;
     private SearchView mSearchView;
-    private Spinner mSpinnerSort;
-
-    // Models
-    private RepositoryAdapter mRepositoryAdapter;
+    private ViewPager mViewPager;
+    private SearchTypeAdapter mPagerAdapter;
+    private TabLayout mTabLayout;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private Runnable mTextQueryWorker;
@@ -57,27 +43,32 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_search);
 
         initView();
-
-        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
     }
 
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_search_result);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_search);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_search_repository);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mViewPager = (ViewPager) findViewById(R.id.pager_search);
+        mPagerAdapter = new SearchTypeAdapter(this, getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(SearchTypeAdapter.NUM_PAGES);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, false, null);
-        mRecyclerView.setAdapter(mRepositoryAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        for (int i = 0; i < mTabLayout.getTabCount(); ++i)
+            mTabLayout.getTabAt(i).setIcon(getTabLayoutDrawable(i));
 
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
+        mSearchView = (SearchView) findViewById(R.id.searchview_search);
+        mSearchView.setIconified(false);
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnSuggestionListener(this);
+        mSearchView.onActionViewExpanded();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     }
 
     @Override
@@ -91,75 +82,9 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_search_menu, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        MenuItem sortItem = menu.findItem(R.id.action_sort);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        if (searchItem != null)
-            mSearchView = (SearchView) searchItem.getActionView();
-
-        if (mSearchView != null) {
-            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            mSearchView.setOnQueryTextListener(this);
-        }
-
-        if (sortItem != null)
-            mSpinnerSort = (Spinner) sortItem.getActionView();
-
-        if (mSpinnerSort != null) {
-            ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.entries_order, R.layout.order_item_spinner);
-            listAdapter.setDropDownViewResource(R.layout.order_item_spinner);
-            mSpinnerSort.setOnItemSelectedListener(this);
-            mSpinnerSort.setAdapter(listAdapter);
-        }
-
+        MenuItem filterItem = menu.findItem(R.id.action_filter);
+        filterItem.setOnMenuItemClickListener(this);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id != LOADER_REPOSITORIES_ID)
-            return null;
-
-        return new CursorLoader(this,
-                RepositoriesProvider.REPOSITORY_CONTENT_URI,
-                null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_TYPE + " = ?",
-                new String[]{String.valueOf(Constants.REPOSITORY_TYPE_SEARCH)},
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
-        mRepositoryAdapter.changeCursor(cursor);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        search();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
-
-    private void search() {
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        SearchRequest request = new SearchRequest(mSearchView.getQuery().toString());
-        request.setSort(mSpinnerSort.getSelectedItem().toString());
-
-        Intent intent = new Intent(this, HttpSearchRepositoryService.class);
-        intent.putExtra(INTENT_SEARCH_REQUEST, request);
-        startService(intent);
     }
 
     @Override
@@ -168,15 +93,113 @@ public class SearchActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
+    public boolean onQueryTextChange(final String newText) {
         mHandler.removeCallbacks(mTextQueryWorker);
         mTextQueryWorker = new Runnable() {
             @Override
             public void run() {
-                search();
+                searchInTab(mViewPager.getCurrentItem());
             }
         };
+
         mHandler.postDelayed(mTextQueryWorker, QUERY_SEARCH_DELAY);
         return true;
+    }
+
+    @Override
+    public boolean onSuggestionSelect(int position) {
+        return false;
+    }
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+        String suggestion = getSuggestion(position);
+        mSearchView.setQuery(suggestion, true);
+        return true;
+    }
+
+    private String getSuggestion(int position) {
+        Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
+        return cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+
+        SearchFragment fragment = (SearchFragment)(mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem()));
+        fragment.toggleFilter();
+        return true;
+    }
+
+    private int getTabLayoutDrawable(int index) {
+        switch (SearchFragmentType.get(index)) {
+            case REPOSITORIES:
+                return R.drawable.ic_github_repo_white;
+            case COMMITS:
+                return R.drawable.ic_github_commit_white;
+            case ISSUES:
+                return R.drawable.ic_github_issue_white;
+            case USERS:
+                return R.drawable.ic_github_person_white;
+            default:
+                throw new UnsupportedOperationException("Unsupported search enum type: " + index);
+        }
+    }
+
+    private void searchInTab(int position) {
+        SearchFragment fragment = (SearchFragment)(mPagerAdapter.getRegisteredFragment(position));
+        SearchRequest request;
+        switch (fragment.getFragmentType()) {
+            case REPOSITORIES:
+                request = new RepositoriesSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
+                break;
+            case COMMITS:
+                request = new CommitsSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
+                break;
+            case ISSUES:
+                request = new IssuesSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
+                break;
+            case USERS:
+                request =  new UsersSearchRequest(mSearchView.getQuery().toString(), fragment.getOrderType(), fragment.getSortType(), fragment.getFilters());
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported fragment type for send search request: " + fragment.getFragmentType());
+        }
+
+        fragment.search(request);
+    }
+
+    private static int getFilterViewId(SearchFragmentType type) {
+        int resViewId = 0;
+        switch (type) {
+            case REPOSITORIES:
+                resViewId = R.layout.fragment_search_repository_filter;
+                break;
+            case COMMITS:
+                break;
+            case ISSUES:
+                break;
+            case USERS:
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported fragment type for get filter view " + type);
+        }
+
+        return resViewId;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        searchInTab(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

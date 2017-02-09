@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_search"
@@ -11,7 +11,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -19,9 +20,30 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchview_search"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:iconifiedByDefault="true"
+                android:searchSuggestAuthority=".SearchSuggestionsProvider"
+                android:searchSuggestSelection=" ?"/>
+            </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_search" />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        style="@style/AppTabLayout"
+        app:tabTextAppearance="@style/AppTabTextAppearance" />
 
-</LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tab_layout_search">
+    </android.support.v4.view.ViewPager>
+</RelativeLayout>

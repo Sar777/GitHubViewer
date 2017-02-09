@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,19 +36,19 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.user.User;
-import instinctools.android.services.HttpRunAllService;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
 import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
 import instinctools.android.utility.Services;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
     private static final String TAG = "MainActivity";
 
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
@@ -72,9 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         requestExternalStoragePermissions();
 
-        // TODO REMOVE ME
-        startService(new Intent(this, HttpRunAllService.class));
-
         initLoaders();
     }
 
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, mRecyclerView, true, null);
+        mRepositoryAdapter = new RepositoryAdapter(this, true, null);
         mRecyclerView.setAdapter(mRepositoryAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mProgressBar.setVisibility(View.GONE);
                 }
 
-                mRepositoryAdapter.changeCursor(cursor);
+                mRepositoryAdapter.changeCursor(cursor, true);
 
                 // Hidden refresh bar
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -286,9 +285,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-            case R.id.nav_search:
-                startActivity(new Intent(this, SearchActivity.class));
-                break;
             case R.id.nav_notification:
                 startActivity(new Intent(this, NotificationActivity.class));
                 break;
@@ -307,14 +303,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_WATCH_REPO_CODE);
         Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_STARS_REPO_CODE);
 
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING);
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_ALL);
+        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD);
+
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
         getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null);
+
+        SearchRecentSuggestions searchSuggestions = new SearchRecentSuggestions(this, SearchSuggestionsProvider.AUTHORITY, SearchSuggestionsProvider.MODE);
+        searchSuggestions.clearHistory();
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_base_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setOnMenuItemClickListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.action_search:
+                startActivity(new Intent(this, SearchActivity.class));
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }

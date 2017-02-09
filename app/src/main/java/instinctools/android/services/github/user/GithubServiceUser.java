@@ -64,6 +64,28 @@ public class GithubServiceUser extends GithubService {
         return JsonTransformer.transform(client.getContent(), User.class);
     }
 
+    public static void getUser(String username, final GithubServiceListener<User> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USERS_URL, username)).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken());
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int code, String content) {
+                listener.onError(code, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess((User)JsonTransformer.transform(content, User.class));
+            }
+        });
+    }
+
     public static User getUser(String username) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
@@ -71,12 +93,35 @@ public class GithubServiceUser extends GithubService {
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_USERS_URL, username)).
                 setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
             return null;
 
         return JsonTransformer.transform(client.getContent(), User.class);
+    }
+
+    public static void getUser(int userId, final GithubServiceListener<User> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(API_USER_URL + "/" + userId).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET);
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int code, String content) {
+                listener.onError(code, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                listener.onSuccess((User)JsonTransformer.transform(content, User.class));
+            }
+        });
     }
 
     public static List<Repository> getMyRepositoryList() {
