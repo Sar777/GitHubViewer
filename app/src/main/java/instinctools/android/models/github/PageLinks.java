@@ -1,4 +1,4 @@
-package instinctools.android.models.github.search;
+package instinctools.android.models.github;
 
 public class PageLinks {
     private static final String DELIM_LINKS = ","; //$NON-NLS-1$

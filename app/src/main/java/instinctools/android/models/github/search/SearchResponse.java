@@ -3,6 +3,8 @@ package instinctools.android.models.github.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import instinctools.android.models.github.PageLinks;
+
 public class SearchResponse<T> {
     private Integer mTotalCount;
     private Boolean mIncompleteResults;

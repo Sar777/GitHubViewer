@@ -20,22 +20,13 @@ import instinctools.android.models.github.notification.Notification;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.notification.GithubNotifications;
 
-public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements View.OnClickListener, ItemTouchHelperAdapter  {
+public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter  {
     private Context mContext;
-    private RecyclerView mRecyclerView;
 
-    public static final String EXTRA_NOTIFICATION_ID_TAG = "NOTIFICATION";
-
-    public NotificationAdapter(Context context, RecyclerView recyclerView, boolean showHeader, @Nullable Cursor cursor) {
+    public NotificationAdapter(Context context, boolean showHeader, @Nullable Cursor cursor) {
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
         mContext = context;
-        mRecyclerView = recyclerView;
         setHasStableIds(true);
-    }
-
-    @Override
-    public void onClick(View view) {
-        int position = mRecyclerView.getChildAdapterPosition(view);
     }
 
     @Override
@@ -47,7 +38,7 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         GithubNotifications.markNotification(notification.getUrl(), new GithubServiceListener<Boolean>() {
             @Override
             public void onError(int code, ErrorResponse response) {
-                Snackbar.make(mRecyclerView, R.string.msg_unknown_error_mark_notification, Snackbar.LENGTH_SHORT).show();
+                //Snackbar.make(mRecyclerView, R.string.msg_unknown_error_mark_notification, Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
@@ -135,7 +126,6 @@ public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.
         }
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_notification, parent, false);
-        view.setOnClickListener(this);
         return new NotificationItemHolder(view);
     }
 

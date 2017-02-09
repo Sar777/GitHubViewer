@@ -3,11 +3,11 @@ package instinctools.android.services.http.notification;
 import android.content.Intent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.models.github.notification.Notification;
+import instinctools.android.models.github.notification.NotificationListResponse;
 import instinctools.android.services.github.notification.GithubNotifications;
 import instinctools.android.storages.SettingsStorage;
 import instinctools.android.utility.Services;
@@ -24,12 +24,12 @@ public class HttpGithubUnreadNotificationService extends HttpGithubNotificationS
                 OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD,
                 SettingsStorage.getIntervalUpdateNotifications() * 60 * 1000);
 
-        List<Notification> notifications = GithubNotifications.getNotifications(false, false);
-        if (notifications == null) {
+        NotificationListResponse response = GithubNotifications.getNotificationsResponse(false, false);
+        if (response == null) {
             onHandleIntent(new ArrayList<Notification>());
             return;
         }
 
-        onHandleIntent(notifications);
+        onHandleIntent(response.getNotifications());
     }
 }

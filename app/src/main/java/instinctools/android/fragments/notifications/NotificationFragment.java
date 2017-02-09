@@ -72,7 +72,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_notification_list);
 
-        mNotificationAdapter = new NotificationAdapter(getContext(), mRecyclerView, false, null);
+        mNotificationAdapter = new NotificationAdapter(getContext(), false, null);
 
         if (isCanSwipeItem()) {
             ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mNotificationAdapter);

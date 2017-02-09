@@ -29,8 +29,6 @@ public class App extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.pref_sync_data, false);
 
         startService(new Intent(this, HttpRunAllService.class));
-
-        deleteDatabase(DBConstants.DB_NAME);
     }
 
     public static void launchUrl(final Context context, final String url) {

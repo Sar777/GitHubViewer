@@ -354,6 +354,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         return filters;
     }
 
+
     @Override
     public void onPanelSlide(View panel, float slideOffset) {
 
