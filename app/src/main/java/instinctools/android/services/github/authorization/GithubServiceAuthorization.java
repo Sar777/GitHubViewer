@@ -77,6 +77,23 @@ public class GithubServiceAuthorization extends GithubService {
                 });
     }
 
+    public static AccessToken getAccessToken(final String code) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(getTokenUrl(code));
+        httpClient.
+                setMethod(HttpClientFactory.METHOD_POST).
+                addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON);
+
+        httpClient.send();
+
+        if (httpClient.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return JsonTransformer.transform(httpClient.getContent(), AccessToken.class);
+    }
+
     public static void logout(final GithubServiceListener<Boolean> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
