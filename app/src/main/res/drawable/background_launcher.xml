@@ -3,13 +3,8 @@
     android:opacity="opaque">
     <item android:drawable="@android:color/white" />
     <item>
-        <!--<bitmap-->
-            <!--android:src="@mipmap/ic_launcher"-->
-            <!--android:gravity="center" />-->
         <bitmap
             android:gravity="center"
-            android:width="10dp"
-            android:height="20dp"
-            android:src="@drawable/img_octocat_resize" />
+            android:src="@drawable/img_octocat" />
     </item>
 </layer-list>
