@@ -1,6 +1,7 @@
 package instinctools.android.fragments.notifications;
 
-import android.content.Intent;
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.NotificationAdapter;
 import instinctools.android.adapters.SimpleItemTouchHelperCallback;
@@ -24,9 +26,6 @@ import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.http.notification.HttpGithubAllNotificationService;
-import instinctools.android.services.http.notification.HttpGithubParticipatingNotificationService;
-import instinctools.android.services.http.notification.HttpGithubUnreadNotificationService;
 
 public class NotificationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final int LOADER_NOTIFICATION_UNREAD_ID = 1;
@@ -93,22 +92,13 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        Intent intent;
-        switch (mType) {
-            case ALL:
-                intent = new Intent(getContext(), HttpGithubAllNotificationService.class);
-                break;
-            case PARTICIPATING:
-                intent = new Intent(getContext(), HttpGithubParticipatingNotificationService.class);
-                break;
-            case UNREAD:
-                intent = new Intent(getContext(), HttpGithubUnreadNotificationService.class);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported in OnRefresh type: " + mType);
+        Account account = App.getApplicationAccount();
+        if (account == null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
         }
 
-        getActivity().startService(intent);
+        ContentResolver.requestSync(account, NotificationsProvider.AUTHORITY, Bundle.EMPTY);
     }
 
     @Override

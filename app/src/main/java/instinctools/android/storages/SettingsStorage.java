@@ -28,25 +28,11 @@ public class SettingsStorage {
         mEditor.clear().apply();
     }
 
-    public static int getIntervalUpdateMyRepo() {
+    public static int getIntervalUpdateRepositories() {
         if (mSettings == null)
             init();
 
-        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_my_repo), String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
-    }
-
-    public static int getIntervalUpdateWatchesRepo() {
-        if (mSettings == null)
-            init();
-
-        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_watch_repo), String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
-    }
-
-    public static int getIntervalUpdateStarsRepo() {
-        if (mSettings == null)
-            init();
-
-        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_stars_repo), String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
+        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_repositories), String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
     }
 
     public static int getIntervalUpdateNotifications() {

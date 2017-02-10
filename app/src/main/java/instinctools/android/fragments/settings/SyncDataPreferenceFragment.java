@@ -1,16 +1,16 @@
 package instinctools.android.fragments.settings;
 
+import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.widget.Toolbar;
 
+import instinctools.android.App;
 import instinctools.android.R;
-import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
-import instinctools.android.storages.SettingsStorage;
-import instinctools.android.utility.RandomGenerator;
-import instinctools.android.utility.Services;
+import instinctools.android.database.providers.NotificationsProvider;
+import instinctools.android.database.providers.RepositoriesProvider;
 
 public class SyncDataPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     public void onCreate(Bundle savedInstanceState) {
@@ -23,40 +23,12 @@ public class SyncDataPreferenceFragment extends PreferenceFragment implements Sh
         if (sharedPreferences == null)
             return;
 
-        int interval = Integer.parseInt(sharedPreferences.getString(key, String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
-
-        if (key.contains(getString(R.string.title_pref_key_sync_my_repo))) {
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_MY_REPO_CODE,
-                    interval * 60 * 1000);
-
-        } else if (key.contains(getString(R.string.title_pref_key_sync_watch_repo))) {
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_WATCH_REPO_CODE,
-                    SettingsStorage.getIntervalUpdateWatchesRepo() * 60 * 1000);
-
-        } else if (key.contains(getString(R.string.title_pref_key_sync_stars_repo))) {
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_STARS_REPO_CODE,
-                    interval * 60 * 1000);
+        if (key.contains(getString(R.string.title_pref_key_sync_repositories))) {
+            int interval = Integer.parseInt(sharedPreferences.getString(key, String.valueOf(Constants.INTERVAL_UPDATE_REPO_SERVICES)));
+            ContentResolver.addPeriodicSync(App.getApplicationAccount(), RepositoriesProvider.AUTHORITY, Bundle.EMPTY, interval * 60);
         } else if (key.contains(getString(R.string.title_pref_key_sync_notifications))) {
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD,
-                    (interval * 60 * 1000) + RandomGenerator.rand(0, 3));
-
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_ALL,
-                    (interval * 60 * 1000) + RandomGenerator.rand(1, 3));
-
-            Services.rescheduleAlarmBroadcast(getActivity().getApplicationContext(),
-                    OnAlarmReceiver.class,
-                    OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING,
-                    (interval * 60 * 1000) + RandomGenerator.rand(2, 3));
+            int interval = Integer.parseInt(sharedPreferences.getString(key, String.valueOf(Constants.INTERVAL_UPDATE_NOTIFICATIONS)));
+            ContentResolver.addPeriodicSync(App.getApplicationAccount(), NotificationsProvider.AUTHORITY, Bundle.EMPTY, interval * 60);
         }
     }
 

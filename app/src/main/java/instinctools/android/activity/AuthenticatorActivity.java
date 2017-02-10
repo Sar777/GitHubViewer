@@ -5,6 +5,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
@@ -14,27 +15,43 @@ import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.account.GitHubAccount;
 import instinctools.android.constans.Constants;
+import instinctools.android.database.providers.NotificationsProvider;
+import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.loaders.AsyncAuthenticatorLoader;
 import instinctools.android.models.github.authorization.AuthenticatorResponse;
+import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
+import instinctools.android.storages.SettingsStorage;
 
 public class AuthenticatorActivity extends AccountAuthenticatorActivity implements LoaderManager.LoaderCallbacks<AuthenticatorResponse> {
     public static final String EXTRA_TOKEN_TYPE = "instinctools.android.EXTRA_TOKEN_TYPE";
 
     public static final String BUNDLE_AUTH_CODE = "AUTH_CODE";
+    public static final String INTENT_AUTH_TYPE = "AUTH_TYPE";
 
     public static final int LOADER_AUTHENTICATOR_ID = 1;
 
-    // View
-    private ProgressDialog mProgressDialog;
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        onNewIntent(getIntent());
+        Intent intent = getIntent();
+        if (intent == null)
+            return;
 
-        App.launchUrl(this, GithubServiceAuthorization.getAuthUrl(Constants.AUTH_CALLBACK_INITIAL));
+        switch (intent.getIntExtra(INTENT_AUTH_TYPE, -1)) {
+            case 0:
+            case 1:
+                App.launchUrl(this, GithubServiceAuthorization.getAuthUrl(Constants.AUTH_CALLBACK_INITIAL));
+                finish();
+                return;
+            default:
+                break;
+        }
+
+        onNewIntent(getIntent());
     }
 
     @Override
@@ -64,18 +81,25 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
     @Override
     public void onLoadFinished(Loader<AuthenticatorResponse> loader, AuthenticatorResponse response) {
         final AccountManager am = AccountManager.get(this);
-        final Bundle result = new Bundle();
         final Account account = new GitHubAccount(response.getUser().getName());
-        if (am.addAccountExplicitly(account, response.getUser().getEmail(), new Bundle())) {
-            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            result.putString(AccountManager.KEY_AUTHTOKEN, response.getAccessToken().getAcessToken());
+        if (am.addAccountExplicitly(account, response.getUser().getEmail(), new Bundle()))
             am.setAuthToken(account, account.type, response.getAccessToken().getAcessToken());
-        } else {
-            //result.putString(AccountManager.KEY_ERROR_MESSAGE, getString(R.string.account_already_exists));
-        }
-        setAccountAuthenticatorResult(result);
-        setResult(RESULT_OK);
+
+        mProgressDialog.dismiss();
+
+        // Automatic sync
+        ContentResolver.setSyncAutomatically(account, NotificationsProvider.AUTHORITY, true);
+        ContentResolver.setSyncAutomatically(account, RepositoriesProvider.AUTHORITY, true);
+
+        ContentResolver.addPeriodicSync(account, NotificationsProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateNotifications() * 60);
+        ContentResolver.addPeriodicSync(account, RepositoriesProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateRepositories() * 60);
+
+        GithubService.setAccessToken(response.getAccessToken().getAcessToken());
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
         finish();
     }
 

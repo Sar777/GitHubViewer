@@ -8,6 +8,7 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import instinctools.android.activity.AuthenticatorActivity;
 
@@ -29,6 +30,7 @@ public class GitHubAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.EXTRA_TOKEN_TYPE, accountType);
+        intent.putExtra(AuthenticatorActivity.INTENT_AUTH_TYPE, 0);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         if (options != null)
@@ -45,7 +47,22 @@ public class GitHubAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        return null;
+        final Bundle result = new Bundle();
+        final AccountManager am = AccountManager.get(mContext.getApplicationContext());
+        String authToken = am.peekAuthToken(account, authTokenType);
+        if (!TextUtils.isEmpty(authToken)) {
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+        } else {
+            final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            intent.putExtra(AuthenticatorActivity.EXTRA_TOKEN_TYPE, authTokenType);
+            final Bundle bundle = new Bundle();
+            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        }
+
+        return result;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package instinctools.android.activity;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,13 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.http.repository.HttpUpdateWatchRepositoriesService;
 
 public class WatchRepositoriesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor>, MenuItem.OnMenuItemClickListener {
 
@@ -74,8 +76,13 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateWatchRepositoriesService.class);
-        startService(intentService);
+        Account account = App.getApplicationAccount();
+        if (account == null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        ContentResolver.requestSync(account, RepositoriesProvider.AUTHORITY,  Bundle.EMPTY);
     }
 
     @Override

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -113,17 +115,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".broadcasts.OnBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".broadcasts.OnAlarmReceiver"
-            android:process=":remote" />
-
         <service
             android:name=".services.GitHubAuthenticatorService"
             android:exported="true"
@@ -136,30 +127,43 @@
                 android:resource="@xml/github_authenticator" />
         </service>
 
-        <service android:name=".services.HttpRunAllService" />
-        <!-- Repostitories -->
-        <service android:name=".services.http.repository.HttpUpdateMyRepositoriesService" />
-        <service android:name=".services.http.repository.HttpUpdateWatchRepositoriesService" />
-        <service android:name=".services.http.repository.HttpUpdateStarsRepositoriesService" />
-        <!-- Notifications -->
-        <service android:name=".services.http.notification.HttpGithubUnreadNotificationService" />
-        <service android:name=".services.http.notification.HttpGithubParticipatingNotificationService" />
-        <service android:name=".services.http.notification.HttpGithubAllNotificationService" />
+        <service
+            android:name=".services.NotificationsSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/notifications_sync_adapter" />
+        </service>
+
+        <service
+            android:name=".services.RepositoriesSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/repositories_sync_adapter" />
+        </service>
 
         <provider
             android:name=".database.providers.RepositoriesProvider"
             android:authorities="instinctools.android.database.providers.Repositories"
+            android:syncable="true"
+            android:label="@string/title_repositories"
             android:exported="false" />
         <provider
             android:name=".database.providers.NotificationsProvider"
             android:authorities="instinctools.android.database.providers.Notifications"
+            android:syncable="true"
+            android:label="@string/title_notifications"
             android:exported="false" />
 
         <provider
             android:name=".database.providers.SearchSuggestionsProvider"
             android:authorities="instinctools.android.database.providers.SearchSuggestions"
             android:exported="false" />
-
     </application>
 
 </manifest>

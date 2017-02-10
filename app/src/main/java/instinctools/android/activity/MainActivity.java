@@ -1,10 +1,17 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
@@ -30,9 +37,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import instinctools.android.App;
 import instinctools.android.R;
+import instinctools.android.account.GitHubAccount;
 import instinctools.android.adapters.RepositoryAdapter;
-import instinctools.android.broadcasts.OnAlarmReceiver;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
@@ -46,13 +54,12 @@ import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
-import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
-import instinctools.android.utility.Services;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
     private static final String TAG = "MainActivity";
 
     public static final int PERMISSION_EXTERNAL_STORAGE = 100;
+    public static final int PERMISSION_GET_ACCOUNTS = 101;
 
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int LOADER_USER_ID = 2;
@@ -185,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 cursor = new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
                 break;
             case LOADER_NOTIFICATIONS_ID:
-                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] { String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
+                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[]{String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
                 break;
             default:
                 break;
@@ -196,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
         switch (loader.getId()) {
             case LOADER_REPOSITORIES_ID: {
                 if (cursor.getCount() != 0) {
@@ -243,8 +249,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateMyRepositoriesService.class);
-        startService(intentService);
+        Account account = App.getApplicationAccount();
+        if (account == null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        ContentResolver.requestSync(account, RepositoriesProvider.AUTHORITY, Bundle.EMPTY);
     }
 
     @Override
@@ -299,22 +310,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @SuppressLint("NewApi")
     private void logout() {
-        // Stop alarm manager
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_MY_REPO_CODE);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_WATCH_REPO_CODE);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_STARS_REPO_CODE);
-
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_ALL);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD);
-
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
         getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null);
 
         SearchRecentSuggestions searchSuggestions = new SearchRecentSuggestions(this, SearchSuggestionsProvider.AUTHORITY, SearchSuggestionsProvider.MODE);
         searchSuggestions.clearHistory();
+
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_ACCOUNTS);
+        else {
+            for (Account account : accountManager.getAccountsByType(GitHubAccount.TYPE)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    accountManager.removeAccountExplicitly(account);
+                else
+                    accountManager.removeAccount(account, this, new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+
+                        }
+                    }, null);
+            }
+        }
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

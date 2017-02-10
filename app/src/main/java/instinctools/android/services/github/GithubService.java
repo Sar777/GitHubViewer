@@ -15,6 +15,8 @@ public class GithubService {
     protected static String mBaseCallback;
     protected static String mScopes;
 
+    private static String mAccessToken;
+
     public static void init(Context context, String clientId, String clientSecret, String scopes, String callbackUrl) {
         mSessionStorage = new GitHubSessionStorage(context);
 
@@ -29,13 +31,22 @@ public class GithubService {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
-        return "token " + mSessionStorage.getAccessToken();
+        return "token " + mAccessToken;
     }
 
     public static String getAccessToken() {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
-        return mSessionStorage.getAccessToken();
+        return mAccessToken;
     }
+
+    public static void setAccessToken(String token) {
+        mAccessToken = token;
+    }
+
+    public static void resetAccessToken() {
+        mAccessToken = null;
+    }
+
 }

@@ -1,16 +1,25 @@
 package instinctools.android.activity;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 
 import instinctools.android.R;
+import instinctools.android.account.GitHubAccount;
+import instinctools.android.account.OnTokenAcquired;
 import instinctools.android.constans.Constants;
-import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 
 public class SplashActivity extends AppCompatActivity {
+    private static final String TAG = "SplashActivity";
+
+    public static final int PERMISSION_GET_CONTACTS = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,14 +32,22 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
-        String accessToken = GithubService.getAccessToken();
-        Intent intent;
-        if (TextUtils.isEmpty(accessToken))
-            intent = new Intent(SplashActivity.this, AuthActivity.class);
-        else
-            intent = new Intent(SplashActivity.this, MainActivity.class);
+        final AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.GET_ACCOUNTS, Manifest.permission.ACCOUNT_MANAGER }, PERMISSION_GET_CONTACTS);
+            return;
+        }
 
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        if (accountManager.getAccountsByType(GitHubAccount.TYPE).length == 0) {
+            Intent intent = new Intent(SplashActivity.this, AuthenticatorActivity.class);
+            intent.putExtra(AuthenticatorActivity.INTENT_AUTH_TYPE, 1);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        Account account = accountManager.getAccountsByType(GitHubAccount.TYPE)[0];
+        accountManager.getAuthToken(account, GitHubAccount.TYPE, new Bundle(), SplashActivity.this, new OnTokenAcquired(this), null);
     }
 }

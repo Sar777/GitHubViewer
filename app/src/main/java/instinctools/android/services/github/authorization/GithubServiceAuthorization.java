@@ -51,32 +51,6 @@ public class GithubServiceAuthorization extends GithubService {
                 FIELD_REDIRECT_URL + "=" + mBaseCallback + "/" + uriCallback;
     }
 
-    public static void continueAuthorization(final String code, final GithubServiceListener<AccessToken> listener) {
-        if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
-
-        HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(getTokenUrl(code));
-        httpClient.
-                setMethod(HttpClientFactory.METHOD_POST).
-                addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON).
-                send(new OnHttpClientListener() {
-                    @Override
-                    public void onError(int errCode, String content) {
-                        listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
-                    }
-
-                    @Override
-                    public void onSuccess(int code, String content) {
-                        AccessToken token = JsonTransformer.transform(content, AccessToken.class);
-                        if (token == null)
-                            return;
-
-                        mSessionStorage.saveAccessToken(token.getAcessToken());
-                        listener.onSuccess(token);
-                    }
-                });
-    }
-
     public static AccessToken getAccessToken(final String code) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
@@ -116,7 +90,7 @@ public class GithubServiceAuthorization extends GithubService {
                     return;
                 }
 
-                mSessionStorage.resetAccessToken();
+                resetAccessToken();
                 listener.onSuccess(true);
             }
         });
