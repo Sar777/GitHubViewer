@@ -1,6 +1,5 @@
 package instinctools.android.activity;
 
-import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.constans.Constants;
@@ -27,7 +25,6 @@ import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 
 public class StarRepositoriesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
-
     private static final int LOADER_REPOSITORIES_ID = 1;
 
     // View
@@ -76,13 +73,11 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
 
     @Override
     public void onRefresh() {
-        Account account = App.getApplicationAccount();
-        if (account == null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            return;
-        }
-
-        ContentResolver.requestSync(account, RepositoriesProvider.AUTHORITY,  Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_STAR);
+        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
     }
 
     @Override

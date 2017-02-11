@@ -17,14 +17,20 @@ public class Constants {
     // Property persistence storage
     public static final String PROPERTY_FIRST_RUN = "FIRST_RUN";
 
-    // For save in database
-    public static final int REPOSITORY_TYPE_MY = 0;
-    public static final int REPOSITORY_TYPE_WATCH = 1;
-    public static final int REPOSITORY_TYPE_STAR = 2;
+    public static final String REPOSITORY_SYNC_TYPE = "REPO_SYNC_TYPE";
 
-    public static final int NOTIFICATION_TYPE_UNREAD = 0;
-    public static final int NOTIFICATION_TYPE_PARTICIPATING = 1;
-    public static final int NOTIFICATION_TYPE_ALL = 2;
+    // For sync data
+    public static final int REPOSITORY_TYPE_MY = 1;
+    public static final int REPOSITORY_TYPE_WATCH = 2;
+    public static final int REPOSITORY_TYPE_STAR = 4;
+    public static final int REPOSITORY_TYPE_ALL = REPOSITORY_TYPE_MY | REPOSITORY_TYPE_WATCH | REPOSITORY_TYPE_STAR;
+
+    public static final String NOTIFICATION_SYNC_TYPE = "NOTIFICATION_SYNC_TYPE";
+
+    public static final int NOTIFICATION_TYPE_UNREAD = 1;
+    public static final int NOTIFICATION_TYPE_PARTICIPATING = 2;
+    public static final int NOTIFICATION_TYPE_ALL = 4;
+    public static final int NOTIFICATION_TYPE_ALL_TYPES = NOTIFICATION_TYPE_UNREAD | NOTIFICATION_TYPE_PARTICIPATING | NOTIFICATION_TYPE_ALL;
 
     // Interval update repositories. Default
     public static final int INTERVAL_UPDATE_REPO_SERVICES = 10;

@@ -1,6 +1,5 @@
 package instinctools.android.activity;
 
-import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.constans.Constants;
@@ -76,13 +74,11 @@ public class WatchRepositoriesActivity extends AppCompatActivity implements Swip
 
     @Override
     public void onRefresh() {
-        Account account = App.getApplicationAccount();
-        if (account == null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            return;
-        }
-
-        ContentResolver.requestSync(account, RepositoriesProvider.AUTHORITY,  Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_WATCH);
+        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
     }
 
     @Override

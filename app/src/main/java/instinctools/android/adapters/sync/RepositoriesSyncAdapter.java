@@ -39,12 +39,18 @@ public class RepositoriesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        syncMyRepositories();
-        syncWatchepositories();
-        syncStarsRepositories();
+        int syncMask = extras.getInt(Constants.REPOSITORY_SYNC_TYPE);
 
-        Log.d(TAG, "Sync repositories DONE");
+        if (syncMask == 0 || (syncMask & Constants.REPOSITORY_TYPE_MY) != 0)
+            syncMyRepositories();
 
+        if (syncMask == 0 || (syncMask & Constants.REPOSITORY_TYPE_WATCH) != 0)
+            syncWatchRepositories();
+
+        if (syncMask == 0 || (syncMask & Constants.REPOSITORY_TYPE_STAR) != 0)
+            syncStarsRepositories();
+
+        Log.d(TAG, "Sync repositories success by mask: " + syncMask);
     }
 
     private void syncMyRepositories() {
@@ -55,7 +61,7 @@ public class RepositoriesSyncAdapter extends AbstractThreadedSyncAdapter {
         save(repositories, Constants.REPOSITORY_TYPE_MY);
     }
 
-    private void syncWatchepositories() {
+    private void syncWatchRepositories() {
         List<Repository> repositories = GithubServiceUser.getWatchRepositoryList();
         if (repositories == null)
             return;

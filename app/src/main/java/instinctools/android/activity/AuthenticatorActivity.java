@@ -87,14 +87,23 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity implemen
 
         mProgressDialog.dismiss();
 
+        GithubService.setAccessToken(response.getAccessToken().getAcessToken());
+
         // Automatic sync
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_MY);
+        bundle.putInt(Constants.NOTIFICATION_SYNC_TYPE, Constants.NOTIFICATION_TYPE_ALL_TYPES);
+
+        ContentResolver.requestSync(null, NotificationsProvider.AUTHORITY, bundle);
+        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
+
         ContentResolver.setSyncAutomatically(account, NotificationsProvider.AUTHORITY, true);
         ContentResolver.setSyncAutomatically(account, RepositoriesProvider.AUTHORITY, true);
 
         ContentResolver.addPeriodicSync(account, NotificationsProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateNotifications() * 60);
         ContentResolver.addPeriodicSync(account, RepositoriesProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateRepositories() * 60);
-
-        GithubService.setAccessToken(response.getAccessToken().getAcessToken());
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -40,11 +40,18 @@ public class NotificationsSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        syncAllNotifications();
-        syncUnreadNotifications();
-        syncParticipatingNotifications();
+        int syncMask = extras.getInt(Constants.NOTIFICATION_SYNC_TYPE);
 
-        Log.d(TAG, "Sync notifications DONE");
+        if (syncMask == 0 || (syncMask & Constants.NOTIFICATION_TYPE_ALL) != 0)
+            syncAllNotifications();
+
+        if (syncMask == 0 || (syncMask & Constants.NOTIFICATION_TYPE_UNREAD) != 0)
+            syncUnreadNotifications();
+
+        if (syncMask == 0 || (syncMask & Constants.NOTIFICATION_TYPE_PARTICIPATING) != 0)
+            syncParticipatingNotifications();
+
+        Log.d(TAG, "Sync notifications success by mask: " + syncMask);
     }
 
     private void syncAllNotifications() {

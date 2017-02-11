@@ -16,8 +16,6 @@ import instinctools.android.constans.Constants;
 import instinctools.android.storages.ApplicationPersistantStorage;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final String TAG = "SplashActivity";
-
     public static final int PERMISSION_GET_CONTACTS = 100;
 
     @Override
@@ -39,8 +37,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (accountManager.getAccountsByType(GitHubAccount.TYPE).length == 0) {
-            Intent intent = new Intent(SplashActivity.this, AuthenticatorActivity.class);
-            intent.putExtra(AuthenticatorActivity.INTENT_AUTH_TYPE, 1);
+            Intent intent = new Intent(SplashActivity.this, AuthActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -48,6 +45,6 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         Account account = accountManager.getAccountsByType(GitHubAccount.TYPE)[0];
-        accountManager.getAuthToken(account, GitHubAccount.TYPE, new Bundle(), SplashActivity.this, new OnTokenAcquired(this), null);
+        accountManager.getAuthToken(account, GitHubAccount.TYPE, Bundle.EMPTY, this, new OnTokenAcquired(this), null);
     }
 }

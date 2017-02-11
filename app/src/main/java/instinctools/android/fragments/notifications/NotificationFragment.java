@@ -1,6 +1,5 @@
 package instinctools.android.fragments.notifications;
 
-import android.accounts.Account;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.NotificationAdapter;
 import instinctools.android.adapters.SimpleItemTouchHelperCallback;
@@ -92,13 +90,11 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        Account account = App.getApplicationAccount();
-        if (account == null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            return;
-        }
-
-        ContentResolver.requestSync(account, NotificationsProvider.AUTHORITY, Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.NOTIFICATION_SYNC_TYPE, getNotificationType());
+        ContentResolver.requestSync(null, NotificationsProvider.AUTHORITY, bundle);
     }
 
     @Override
@@ -117,7 +113,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] {String.valueOf(getDBNotificationType())}, null);
+        return new CursorLoader(getContext(), NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] {String.valueOf(getNotificationType())}, null);
     }
 
     @Override
@@ -151,7 +147,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         return LOADER_NOTIFICATION_UNREAD_ID;
     }
 
-    private int getDBNotificationType() {
+    private int getNotificationType() {
         switch (mType) {
             case UNREAD:
                 return Constants.NOTIFICATION_TYPE_UNREAD;

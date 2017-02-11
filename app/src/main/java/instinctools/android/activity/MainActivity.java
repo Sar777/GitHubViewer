@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.account.GitHubAccount;
 import instinctools.android.adapters.RepositoryAdapter;
@@ -249,13 +248,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRefresh() {
-        Account account = App.getApplicationAccount();
-        if (account == null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            return;
-        }
-
-        ContentResolver.requestSync(account, RepositoriesProvider.AUTHORITY, Bundle.EMPTY);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_ALL);
+        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
     }
 
     @Override
