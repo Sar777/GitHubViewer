@@ -11,9 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import instinctools.android.R;
 import instinctools.android.adapters.search.SearchTypeAdapter;
@@ -25,7 +22,7 @@ import instinctools.android.models.github.search.RepositoriesSearchRequest;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.UsersSearchRequest;
 
-public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, MenuItem.OnMenuItemClickListener, ViewPager.OnPageChangeListener {
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, ViewPager.OnPageChangeListener {
     private static final int QUERY_SEARCH_DELAY = 300;
 
     // View
@@ -78,16 +75,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.activity_search_menu, menu);
-
-        MenuItem filterItem = menu.findItem(R.id.action_filter);
-        filterItem.setOnMenuItemClickListener(this);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
@@ -121,14 +108,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private String getSuggestion(int position) {
         Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
         return cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1));
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-
-        SearchFragment fragment = (SearchFragment)(mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem()));
-        fragment.toggleFilter();
-        return true;
     }
 
     private int getTabLayoutDrawable(int index) {

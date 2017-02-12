@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="wrap_content"
-    android:id="@+id/layout_search_filter"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_search_filter_issue"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="Sort"/>
+                android:text="@string/title_search_field_sort"/>
 
             <Spinner
                 android:id="@+id/spinner_search_sort"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp"
-                android:text="Author"/>
+                android:text="@string/title_search_field_author"/>
 
             <EditText
                 android:id="@+id/text_issue_filter_author"
@@ -47,14 +48,14 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
+                android:hint="@string/title_search_field_github"
                 android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text="Assignee"/>
+                android:text="@string/title_search_field_assignee"/>
 
             <EditText
                 android:id="@+id/text_issue_filter_assignee"
@@ -65,14 +66,14 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
+                android:hint="@string/title_search_field_github"
                 android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text="Comments"/>
+                android:text="@string/title_search_field_comments"/>
 
             <EditText
                 android:id="@+id/text_issue_filter_comments"
@@ -83,7 +84,7 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint=">100"
+                android:hint="@string/title_search_field_value_100"
                 android:inputType="text" />
 
             <TextView
@@ -92,7 +93,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="Type"/>
+                android:text="@string/title_search_field_type"/>
 
             <Spinner
                 android:id="@+id/spinner_issue_filter_type"
@@ -107,7 +108,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="State"/>
+                android:text="@string/title_search_field_state"/>
 
             <Spinner
                 android:id="@+id/spinner_issue_filter_state"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="wrap_content"
-    android:id="@+id/layout_search_filter"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_search_filter_commit"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_margin="16dp">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="Sort"/>
+                android:text="@string/title_search_field_sort"/>
 
             <Spinner
                 android:id="@+id/spinner_search_sort"
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp"
-                android:text="Author"/>
+                android:text="@string/title_search_field_author"/>
 
             <EditText
                 android:id="@+id/text_commit_filter_author"
@@ -46,14 +47,14 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
+                android:hint="@string/title_search_field_github"
                 android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text="Committer"/>
+                android:text="@string/title_search_field_committer"/>
 
             <EditText
                 android:id="@+id/text_commit_filter_committer"
@@ -64,7 +65,7 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
+                android:hint="@string/title_search_field_sort"
                 android:inputType="text" />
 
             <Switch
@@ -73,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:switchPadding="8dp"
-                android:text="Is merge"
+                android:text="@string/title_search_field_is_merge"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"/>
         </LinearLayout>

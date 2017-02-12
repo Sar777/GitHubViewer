@@ -57,4 +57,5 @@
     <string name="title_notifications">Оповещения</string>
     <string name="title_pref_settings_summary">Настройки для приложения</string>
     <string name="title_pref_settings">Настройки</string>
+    <string name="title_search_filter_params">Параметры поиска</string>
 </resources>

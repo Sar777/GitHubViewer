@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="wrap_content"
-    android:id="@+id/layout_search_filter"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_search_filter_repo"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -23,7 +25,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="Sort"/>
+                android:text="@string/title_search_field_sort"/>
 
             <Spinner
                 android:id="@+id/spinner_search_sort"
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:layout_marginTop="8dp"
-                android:text="Forks"/>
+                android:text="@string/title_search_field_forks"/>
 
             <EditText
                 android:id="@+id/text_repo_filter_forks"
@@ -47,14 +49,14 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint=">=100"
+                android:hint="@string/title_search_field_value_100"
                 android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text="Size"/>
+                android:text="@string/title_search_field_size"/>
 
             <EditText
                 android:id="@+id/text_repo_filter_size"
@@ -65,14 +67,15 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint="=1000"
-                android:inputType="text" />
+                android:hint="@string/title_search_field_value_1000"
+                android:inputType="text"
+                tools:ignore="TextFields" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:text="Stars"/>
+                android:text="@string/title_search_field_stars"/>
 
             <EditText
                 android:id="@+id/text_repo_filter_stars"
@@ -83,7 +86,7 @@
                 android:minWidth="100dp"
                 android:textSize="12sp"
                 android:textColorHint="@color/colorGithubText"
-                android:hint=">1000"
+                android:hint="@string/title_search_field_value_100"
                 android:inputType="text" />
 
             <TextView
@@ -92,7 +95,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
-                android:text="Is"/>
+                android:text="@string/title_search_field_is"/>
 
             <Spinner
                 android:id="@+id/spinner_repo_filter_is"
@@ -108,7 +111,7 @@
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/black"
                 android:switchPadding="8dp"
-                android:text="Is fork"/>
+                android:text="@string/title_search_field_is_fork"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

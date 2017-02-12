@@ -78,6 +78,7 @@
     <string name="title_description_button_unwatch">Unwatch</string>
     <string name="title_search_activity">Search</string>
     <string name="title_search_search">Search</string>
+    <string name="title_search_filter_params">Filter settings</string>
     <!-- -->
     <string name="title_notification">Notifications</string>
     <string name="msg_unknown_error_mark_notification">Unknown error marked notification</string>
@@ -100,4 +101,20 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_pref_settings">Settings</string>
     <string name="title_pref_settings_summary">Settings for application</string>
+    <string name="title_search_field_sort">Sort</string>
+    <string name="title_search_field_author">Author</string>
+    <string name="title_search_field_github">Github</string>
+    <string name="title_search_field_is_merge">Is merge</string>
+    <string name="title_search_field_assignee">Assignee</string>
+    <string name="title_search_field_comments">Comments</string>
+    <string name="title_search_field_type">Type</string>
+    <string name="title_search_field_state">State</string>
+    <string name="title_search_field_value_100"><![CDATA[>100]]></string>
+    <string name="title_search_field_is_fork">Is fork</string>
+    <string name="title_search_field_is">Is</string>
+    <string name="title_search_field_stars">Stars</string>
+    <string name="title_search_field_value_1000"><![CDATA[>=1000]]></string>
+    <string name="title_search_field_size">Size</string>
+    <string name="title_search_field_forks">Forks</string>
+    <string name="title_search_field_committer">Committer</string>
 </resources>

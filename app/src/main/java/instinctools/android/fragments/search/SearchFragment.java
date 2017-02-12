@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -42,8 +41,10 @@ import instinctools.android.models.github.search.UsersSearchRequest;
 import instinctools.android.models.github.search.enums.SearchOrderType;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.search.GithubServiceSearch;
+import instinctools.android.сustomViews.CustomSlidingDrawer;
+import instinctools.android.сustomViews.listeners.CustomSlidingDrawerStateListener;
 
-public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<SearchResponse>, SlidingPaneLayout.PanelSlideListener {
+public class SearchFragment extends Fragment implements LoaderManager.LoaderCallbacks<SearchResponse> {
     private static final int LOADER_SEARCH_REQUEST_REPOSITORIES_ID = 1;
     private static final int LOADER_SEARCH_REQUEST_COMMITS_ID = 2;
     private static final int LOADER_SEARCH_REQUEST_ISSUES_ID = 3;
@@ -58,8 +59,8 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private AbstractSearchAdapter mSearchAdapter;
-    private SlidingPaneLayout mSlidingPaneLayout;
     private ViewGroup mFilterContainer;
+    private CustomSlidingDrawer mCustomVerticalSlidingDrawer;
 
     private SearchRequest mLastSearchRequest;
     private SearchResponse mLastSearchResponse;
@@ -135,12 +136,31 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_search_loading);
-        mSlidingPaneLayout = (SlidingPaneLayout) view.findViewById(R.id.sliding_pane_layout_search);
-        mSlidingPaneLayout.setPanelSlideListener(this);
 
-        mFilterContainer = (ViewGroup) view.findViewById(R.id.layout_filter_container);
+        mCustomVerticalSlidingDrawer = (CustomSlidingDrawer) view.findViewById(R.id.slider_search_filter);
+        mCustomVerticalSlidingDrawer.setOnStateListener(new CustomSlidingDrawerStateListener() {
+            @Override
+            public void onOpened() {
 
-        View.inflate(getContext(), getFilterViewId(), mFilterContainer);
+            }
+
+            @Override
+            public void onClosed() {
+                if (mLastSearchRequest != null) {
+                    mLastSearchRequest.setFilters(getFilters());
+
+                    mLastSearchRequest.setSort(getSortType());
+                    mLastSearchRequest.setOrder(getOrderType());
+                }
+
+                search(mLastSearchRequest);
+            }
+        });
+
+        mFilterContainer = (ViewGroup) view.findViewById(R.id.layout_search_filter_container);
+
+        inflater.inflate(getFilterViewId(), mFilterContainer);
+        mCustomVerticalSlidingDrawer.measureViewLayout();
         return view;
     }
 
@@ -196,13 +216,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<SearchResponse> loader) {
 
-    }
-
-    public void toggleFilter() {
-        if (mSlidingPaneLayout.isOpen())
-            mSlidingPaneLayout.closePane();
-        else
-            mSlidingPaneLayout.openPane();
     }
 
     private int getLoaderId() {
@@ -352,28 +365,5 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         return filters;
-    }
-
-
-    @Override
-    public void onPanelSlide(View panel, float slideOffset) {
-
-    }
-
-    @Override
-    public void onPanelOpened(View panel) {
-
-    }
-
-    @Override
-    public void onPanelClosed(View panel) {
-        if (mLastSearchRequest != null) {
-            mLastSearchRequest.setFilters(getFilters());
-
-            mLastSearchRequest.setSort(getSortType());
-            mLastSearchRequest.setOrder(getOrderType());
-        }
-
-        search(mLastSearchRequest);
     }
 }
