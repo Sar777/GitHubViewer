@@ -35,22 +35,12 @@
             android:name=".activity.DescriptionActivity"
             android:label="@string/title_activity_description"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activity.AuthActivity"
             android:label="@string/title_activity_auth"
-            android:theme="@style/AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
+            android:theme="@style/AppTheme"/>
 
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-
-                <!--<data-->
-                    <!--android:host="github"-->
-                    <!--android:path="/oauth"-->
-                    <!--android:scheme="application" />-->
-            <!--</intent-filter>-->
-        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
@@ -59,26 +49,32 @@
             android:name=".activity.ProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.Profile" />
+
         <activity
             android:name=".activity.IntroductionsActivity"
             android:label="@string/title_activity_introductions"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.MyRepositoriesActivity"
             android:label="@string/title_my_repositories"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.WatchRepositoriesActivity"
             android:label="@string/title_watch_repositories"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.StarRepositoriesActivity"
             android:label="@string/title_star_repos"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.SearchActivity"
             android:label="@string/title_search_activity"
@@ -93,6 +89,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
         <activity
             android:name=".activity.NotificationActivity"
             android:label="@string/title_notification"
