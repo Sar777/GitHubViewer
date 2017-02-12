@@ -6,6 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import instinctools.android.broadcast.NotificationsBroadcast;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
@@ -24,7 +26,7 @@ import instinctools.android.services.github.notification.GithubServiceNotificati
 
 public class NotificationsSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "NotifSyncAdapter";
-    ContentResolver mContentResolver;
+    private ContentResolver mContentResolver;
 
     public NotificationsSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -66,6 +68,10 @@ public class NotificationsSyncAdapter extends AbstractThreadedSyncAdapter {
         NotificationListResponse response = GithubServiceNotifications.getNotificationsResponse(false, false);
         if (response == null)
             return;
+
+        Intent intent = new Intent(Constants.ACTION_SYNC_NOTIFICATION_FINISHED);
+        intent.putParcelableArrayListExtra(NotificationsBroadcast.INTENT_EXTRA_NOTIFICATIONS, (ArrayList<Notification>)response.getNotifications());
+        getContext().sendBroadcast(intent);
 
         save(response.getNotifications(), Constants.NOTIFICATION_TYPE_UNREAD);
     }

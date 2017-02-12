@@ -38,4 +38,6 @@ public class Constants {
     public static final int INTERVAL_UPDATE_NOTIFICATIONS = 1;
     //
     public static final int MAX_SEARCH_RESULT_BY_PAGE = 30;
+
+    public static final String ACTION_SYNC_NOTIFICATION_FINISHED = "instinctools.android.ACTION_SYNC_NOTIFICATION_FINISHED";
 }

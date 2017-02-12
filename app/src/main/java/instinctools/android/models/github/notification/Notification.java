@@ -2,12 +2,12 @@ package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import instinctools.android.database.DBConstants;
-import instinctools.android.models.github.repositories.Repository;
-import instinctools.android.models.github.repositories.RepositoryOwner;
 
-public class Notification {
+public class Notification implements Parcelable {
     private Integer mId;
     private NotificationRepository mRepository;
     private NotificationSubject mSubject;
@@ -16,6 +16,20 @@ public class Notification {
     private String mUpdateAt;
     private String mLastReadAt;
     private String mUrl;
+
+    public Notification() {
+    }
+
+    protected Notification(Parcel in) {
+        mId = in.readInt();
+        mRepository = in.readParcelable(NotificationRepository.class.getClassLoader());
+        mSubject = in.readParcelable(NotificationSubject.class.getClassLoader());
+        mReason = in.readString();
+        mUnread = in.readByte() != 0;
+        mUpdateAt = in.readString();
+        mLastReadAt = in.readString();
+        mUrl = in.readString();
+    }
 
     public Integer getId() {
         return mId;
@@ -80,6 +94,35 @@ public class Notification {
     public void setUrl(String url) {
         this.mUrl = url;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeParcelable(mRepository, flags);
+        dest.writeParcelable(mSubject, flags);
+        dest.writeString(mReason);
+        dest.writeByte((byte) (mUnread ? 1 : 0));
+        dest.writeString(mUpdateAt);
+        dest.writeString(mLastReadAt);
+        dest.writeString(mUrl);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Notification> CREATOR = new Creator<Notification>() {
+        @Override
+        public Notification createFromParcel(Parcel in) {
+            return new Notification(in);
+        }
+
+        @Override
+        public Notification[] newArray(int size) {
+            return new Notification[size];
+        }
+    };
 
     public ContentValues build() {
         ContentValues values = new ContentValues();
