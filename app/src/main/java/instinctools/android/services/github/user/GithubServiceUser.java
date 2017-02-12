@@ -64,6 +64,21 @@ public class GithubServiceUser extends GithubService {
         return JsonTransformer.transform(client.getContent(), User.class);
     }
 
+    public static User getCurrentUserByToken(String accessToken) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(API_USER_URL).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, "token " + accessToken).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return JsonTransformer.transform(client.getContent(), User.class);
+    }
+
     public static void getUser(String username, final GithubServiceListener<User> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");

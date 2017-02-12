@@ -1,6 +1,9 @@
 package instinctools.android.models.github;
 
-public class PageLinks {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PageLinks implements Parcelable {
     private static final String DELIM_LINKS = ","; //$NON-NLS-1$
     private static final String DELIM_LINK_PARAM = ";"; //$NON-NLS-1$
     private static final String META_REL = "rel"; //$NON-NLS-1$
@@ -50,6 +53,13 @@ public class PageLinks {
         }
     }
 
+    private PageLinks(Parcel in) {
+        mFirst = in.readString();
+        mLast = in.readString();
+        mNext = in.readString();
+        mPrev = in.readString();
+    }
+
     public String getFirst() {
         return mFirst;
     }
@@ -65,4 +75,29 @@ public class PageLinks {
     public String getPrev() {
         return mPrev;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mFirst);
+        dest.writeString(mLast);
+        dest.writeString(mNext);
+        dest.writeString(mPrev);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<PageLinks> CREATOR = new Creator<PageLinks>() {
+        @Override
+        public PageLinks createFromParcel(Parcel in) {
+            return new PageLinks(in);
+        }
+
+        @Override
+        public PageLinks[] newArray(int size) {
+            return new PageLinks[size];
+        }
+    };
 }

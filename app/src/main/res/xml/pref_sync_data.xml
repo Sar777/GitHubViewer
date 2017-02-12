@@ -1,36 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:persistent="true">
     <PreferenceCategory
-        android:title="@string/title_pref_category_repositories">
+        android:title="@string/title_pref_category_sync">
         <ListPreference
-            android:key="@string/title_pref_key_sync_my_repo"
+            android:key="@string/title_pref_key_sync_repositories"
             android:icon="@drawable/ic_github_repo"
             android:defaultValue="10"
             android:entries="@array/entries_minutes"
             android:entryValues="@array/entry_minutes"
-            android:title="@string/title_pref_category_repo_my_repo"
-            android:summary="@string/title_pref_category_repo_my_summary">
-        </ListPreference>
-
-        <ListPreference
-            android:key="@string/title_pref_key_sync_watch_repo"
-            android:icon="@drawable/ic_github_eye"
-            android:defaultValue="10"
-            android:entries="@array/entries_minutes"
-            android:entryValues="@array/entry_minutes"
-            android:title="@string/title_pref_category_repo_watch_repo"
-            android:summary="@string/title_pref_category_repo_watch_summary">
-        </ListPreference>
-
-        <ListPreference
-            android:key="@string/title_pref_key_sync_stars_repo"
-            android:icon="@drawable/ic_github_star"
-            android:defaultValue="10"
-            android:entries="@array/entries_minutes"
-            android:entryValues="@array/entry_minutes"
-            android:title="@string/title_pref_category_repo_stars_repo"
-            android:summary="@string/title_pref_category_repo_stars_summary">
+            android:title="@string/title_pref_category_sync_repositories"
+            android:summary="@string/title_pref_category_repos_summary">
         </ListPreference>
 
         <ListPreference

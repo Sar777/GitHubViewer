@@ -35,16 +35,12 @@
     <string name="title_pref_header_general">Общие</string>
     <string name="title_pref_header_data_sync_summary">Промежутки обновления данных</string>
     <string name="title_pref_header_general_summary">Общие настройки приложения</string>
-    <string name="title_pref_category_repositories">Репозитории</string>
-    <string name="title_pref_category_repo_my_repo">Мои</string>
-    <string name="title_pref_category_repo_watch_repo">Отслеживаемые</string>
-    <string name="title_pref_category_repo_stars_repo">Избранные</string>
+    <string name="title_pref_category_sync_repositories">Репозитории</string>
+    <string name="title_pref_category_sync">Синхранизации</string>
     <string name="title_pref_category_sync_notification">Оповещения</string>
     <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
-    <string name="title_pref_category_repo_my_summary">Промежуток между обновлением списка моих репозиториев</string>
-    <string name="title_pref_category_repo_watch_summary">Промежуток между обновлением списка списка отслеживаемых репозиториев</string>
-    <string name="title_pref_category_repo_stars_summary">Промежуток между обновлением списка избранных репозиториев</string>
-    <string name="title_pref_category_sync_notification_summary">Промежуток между загрузкой оповещений</string>
+    <string name="title_pref_category_repos_summary">Промежуток между обновлением списка репозиториев</string>
+    <string name="title_pref_category_sync_notification_summary">Промежуток между обновлением оповещений</string>
     <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
     <string name="title_search_activity">Поиск</string>
     <!-- -->
@@ -58,4 +54,7 @@
     <string name="title_search_setting_order">Выдавать по</string>
     <string name="title_search_search">Поиск</string>
     <string name="msg_github_notifications">Новоое событие GitHub.com</string>
+    <string name="title_notifications">Оповещения</string>
+    <string name="title_pref_settings_summary">Настройки для приложения</string>
+    <string name="title_pref_settings">Настройки</string>
 </resources>
