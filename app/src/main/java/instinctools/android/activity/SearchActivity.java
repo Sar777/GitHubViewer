@@ -1,5 +1,6 @@
 package instinctools.android.activity;
 
+import android.app.NotificationManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import instinctools.android.R;
 import instinctools.android.adapters.search.SearchTypeAdapter;
+import instinctools.android.constans.Constants;
 import instinctools.android.fragments.search.SearchFragment;
 import instinctools.android.fragments.search.enums.SearchFragmentType;
 import instinctools.android.models.github.search.CommitsSearchRequest;

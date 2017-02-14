@@ -6,9 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.activity.NotificationActivity;
 import instinctools.android.constans.Constants;
@@ -19,22 +21,28 @@ public class NotificationsBroadcast extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         ArrayList<Notification> notifications = intent.getParcelableArrayListExtra(INTENT_EXTRA_NOTIFICATIONS);
         if (notifications.isEmpty())
+            return;
+
+        if (App.isNotificationActivityVisible())
             return;
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_github_bell)
-                        .setContentText(notifications.get(0).getSubject().getTitle())
-                        .setContentTitle(context.getString(R.string.msg_github_notifications));
+                        .setAutoCancel(true)
+                        .setContentText(notifications.get(0).getSubject().getTitle());
+
+        if (notifications.size() > 1) {
+            builder.setNumber(notifications.size());
+            builder.setContentTitle(String.format(context.getString(R.string.msg_github_notifications_stack), notifications.size()));
+        }
+        else
+            builder.setContentTitle(context.getString(R.string.msg_github_notifications));
 
         Intent notifyIntent = new Intent(context, NotificationActivity.class);
-
-        if (notifications.size() > 1)
-            builder.setNumber(notifications.size());
 
         /// TODO not supported
         //if (notifications.size() == 1)

@@ -1,5 +1,7 @@
 package instinctools.android.activity;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.NotificationTypeAdapter;
+import instinctools.android.constans.Constants;
 
 public class NotificationActivity extends AppCompatActivity {
     public static final String NOTIFICATION_URL = "NOTIFICATION_URL";
@@ -27,6 +30,10 @@ public class NotificationActivity extends AppCompatActivity {
         initView();
 
         onNewIntent(getIntent());
+
+        // Cancel notifications
+        NotificationManager accountManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        accountManager.cancel(Constants.NOTIFICATION_ID);
     }
 
     @Override

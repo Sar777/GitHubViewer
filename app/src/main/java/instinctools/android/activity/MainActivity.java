@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -57,8 +58,7 @@ import instinctools.android.services.github.authorization.GithubServiceAuthoriza
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
     private static final String TAG = "MainActivity";
 
-    public static final int PERMISSION_EXTERNAL_STORAGE = 100;
-    public static final int PERMISSION_GET_ACCOUNTS = 101;
+    public static final int PERMISSION_GET_ACCOUNTS = 100;
 
     private static final int LOADER_REPOSITORIES_ID = 1;
     private static final int LOADER_USER_ID = 2;
@@ -78,9 +78,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         initView();
-
-        requestExternalStoragePermissions();
-
         initLoaders();
     }
 
@@ -174,10 +171,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_EXTERNAL_STORAGE && grantResults.length == 2) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(findViewById(R.id.content_main), R.string.msg_permission_external_storage_granted, Snackbar.LENGTH_SHORT).show();
-            }
+        if (requestCode == PERMISSION_GET_ACCOUNTS && grantResults.length == 1) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                Snackbar.make(findViewById(R.id.content_main), R.string.msg_fail_grant_account_permissions, Snackbar.LENGTH_SHORT).show();
+            else
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    deleteAccount();
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -235,15 +234,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-    }
-
-    private void requestExternalStoragePermissions() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                },
-                PERMISSION_EXTERNAL_STORAGE);
     }
 
     @Override
@@ -316,22 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SearchRecentSuggestions searchSuggestions = new SearchRecentSuggestions(this, SearchSuggestionsProvider.AUTHORITY, SearchSuggestionsProvider.MODE);
         searchSuggestions.clearHistory();
 
-        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_ACCOUNTS);
-        else {
-            for (Account account : accountManager.getAccountsByType(GitHubAccount.TYPE)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-                    accountManager.removeAccountExplicitly(account);
-                else
-                    accountManager.removeAccount(account, this, new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-
-                        }
-                    }, null);
-            }
-        }
+        deleteAccount();
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -360,5 +335,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    private void deleteAccount() {
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_ACCOUNTS);
+        else {
+            for (Account account : accountManager.getAccountsByType(GitHubAccount.TYPE)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    accountManager.removeAccountExplicitly(account);
+                else
+                    accountManager.removeAccount(account, this, new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                        }
+                    }, null);
+            }
+        }
     }
 }

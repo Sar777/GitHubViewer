@@ -5,7 +5,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
@@ -19,6 +22,18 @@ public class SplashActivity extends AppCompatActivity {
     public static final int PERMISSION_GET_CONTACTS = 100;
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_GET_CONTACTS && grantResults.length == 1) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                Snackbar.make(findViewById(R.id.activity_splash), R.string.msg_fail_grant_account_permissions, Snackbar.LENGTH_SHORT).show();
+            else
+                authOrGetAuthToken();
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
@@ -30,9 +45,13 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
+        authOrGetAuthToken();
+    }
+
+    private void authOrGetAuthToken() {
         final AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.GET_ACCOUNTS, Manifest.permission.ACCOUNT_MANAGER }, PERMISSION_GET_CONTACTS);
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_CONTACTS);
             return;
         }
 

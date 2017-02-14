@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import instinctools.android.App;
@@ -23,7 +24,7 @@ import instinctools.android.services.github.GithubService;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
 import instinctools.android.storages.SettingsStorage;
 
-public class AuthenticatorActivity extends AccountAuthenticatorActivity implements LoaderManager.LoaderCallbacks<AuthenticatorResponse> {
+public class AuthenticatorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<AuthenticatorResponse> {
     public static final String EXTRA_TOKEN_TYPE = "instinctools.android.EXTRA_TOKEN_TYPE";
 
     public static final String BUNDLE_AUTH_CODE = "AUTH_CODE";
