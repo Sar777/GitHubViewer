@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
@@ -32,8 +31,7 @@ public class NotificationsBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_github_bell)
-                        .setAutoCancel(true)
-                        .setContentText(notifications.get(0).getSubject().getTitle());
+                        .setAutoCancel(true);
 
         if (notifications.size() > 1) {
             builder.setNumber(notifications.size());
@@ -41,6 +39,8 @@ public class NotificationsBroadcast extends BroadcastReceiver {
         }
         else
             builder.setContentTitle(context.getString(R.string.msg_github_notifications));
+
+        builder.setContentText(String.format(context.getString(R.string.msg_github_notifications_from), notifications.get(notifications.size() - 1).getRepository().getFullName()));
 
         Intent notifyIntent = new Intent(context, NotificationActivity.class);
 

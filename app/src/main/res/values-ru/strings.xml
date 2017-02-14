@@ -53,7 +53,8 @@
     <string name="title_search_setting_order">Выдавать по</string>
     <string name="title_search_search">Поиск</string>
     <string name="msg_github_notifications">Событие GitHub.com</string>
-    <string name="msg_github_notifications_stack">%s новых оповещений</string>
+    <string name="msg_github_notifications_stack">%d новых GitHub оповещений</string>
+    <string name="msg_github_notifications_from">Последнее оповещение от: %s</string>
     <string name="title_notifications">Оповещения</string>
     <string name="title_pref_settings_summary">Настройки для приложения</string>
     <string name="title_pref_settings">Настройки</string>
