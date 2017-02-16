@@ -52,6 +52,6 @@ public class SettingsStorage {
         if (mSettings == null)
             init();
 
-        return mSettings.getBoolean(mContext.getString(R.string.title_pref_key_general_notification_sound), true);
+        return mSettings.getBoolean(mContext.getString(R.string.title_pref_key_general_sound_notifications), true);
     }
 }

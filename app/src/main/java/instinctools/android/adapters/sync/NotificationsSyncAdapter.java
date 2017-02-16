@@ -87,8 +87,6 @@ public class NotificationsSyncAdapter extends AbstractThreadedSyncAdapter {
     private void save(List<Notification> notifications, int type) {
         ArrayList<ContentProviderOperation> operationsNotifications = new ArrayList<>(notifications.size());
 
-        operationsNotifications.add(ContentProviderOperation.newDelete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI)
-                .withSelection(DBConstants.NOTIFICATION_TYPE + " = ?", new String[]{String.valueOf(type)}).build());
         for (Notification notification : notifications) {
             ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(NotificationsProvider.NOTIFICATIONS_CONTENT_URI)
                     .withValue(DBConstants.NOTIFICATION_TYPE, type)

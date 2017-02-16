@@ -71,7 +71,7 @@
     <string name="title_pref_key_sync_notifications">sync_notifications</string>
     <string name="title_pref_key_sync_account">sync_account</string>
     <string name="title_pref_key_general_max_search_result">general_max_search_result</string>
-    <string name="title_pref_key_general_notification_sound">general_notification_sound</string>
+    <string name="title_pref_key_general_sound_notifications">general_sound_notifications</string>
     <string name="title_pref_key_app_settings">app_settings</string>
 
     <string name="title_description_button_star">Star</string>

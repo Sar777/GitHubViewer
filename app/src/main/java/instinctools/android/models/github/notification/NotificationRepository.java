@@ -140,7 +140,7 @@ public class NotificationRepository implements Parcelable {
         values.put(DBConstants.NOTIFICATION_REPO_ID, mId);
         values.put(DBConstants.NOTIFICATION_REPO_NAME, mName);
         values.put(DBConstants.NOTIFICATION_REPO_FULLNAME, mFullName);
-        values.put(DBConstants.NOTIFICATION_REPO_DESCRIPION, mDescription);
+        values.put(DBConstants.NOTIFICATION_REPO_DESCRIPTION, mDescription);
         values.put(DBConstants.NOTIFICATION_REPO_PRIVATE, mPrivate);
         values.put(DBConstants.NOTIFICATION_REPO_FORK, mFork);
         values.put(DBConstants.NOTIFICATION_REPO_HTML_URL, mHtmlUrl);
@@ -155,7 +155,7 @@ public class NotificationRepository implements Parcelable {
         repository.setId(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_ID)));
         repository.setName(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_NAME)));
         repository.setFullName(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_FULLNAME)));
-        repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_DESCRIPION)));
+        repository.setDescription(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_DESCRIPTION)));
         repository.setPrivate(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_PRIVATE)) != 0);
         repository.setFork(cursor.getInt(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_FORK)) != 0);
         repository.setHtmlUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_REPO_HTML_URL)));
