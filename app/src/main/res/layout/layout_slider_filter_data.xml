@@ -4,6 +4,5 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F5F5F5">
-
-</RelativeLayout>
+    android:paddingBottom="@dimen/layout_slider_container_padding_bottom"
+    android:background="#F5F5F5"/>

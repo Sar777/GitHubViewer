@@ -104,4 +104,5 @@
     <dimen name="recycler_view_item_material_left_container_margin">56dp</dimen>
     <dimen name="recycler_view_item_search_issue_comment_drawable_padding">5dp</dimen>
     <dimen name="recycler_view_item_search_issue_comment_margin_top">5dp</dimen>
+    <dimen name="layout_slider_container_padding_bottom">30dp</dimen>
 </resources>

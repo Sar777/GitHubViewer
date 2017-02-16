@@ -160,7 +160,6 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         mFilterContainer = (ViewGroup) view.findViewById(R.id.layout_search_filter_container);
 
         inflater.inflate(getFilterViewId(), mFilterContainer);
-        mCustomVerticalSlidingDrawer.measureViewLayout();
         return view;
     }
 

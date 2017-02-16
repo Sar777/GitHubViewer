@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -17,7 +18,7 @@ import instinctools.android.R;
 import instinctools.android.animations.SlideAnimation;
 import instinctools.android.сustomViews.listeners.CustomSlidingDrawerStateListener;
 
-public class CustomSlidingDrawer extends FrameLayout implements Animation.AnimationListener {
+public class CustomSlidingDrawer extends FrameLayout implements Animation.AnimationListener, View.OnClickListener {
     private static final String TAG = "CustomVerticalSlidingDrawer";
 
     public enum SlideState {
@@ -41,13 +42,11 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
     private Button mButtonOpenClose;
 
     // Animations
-    private Animation mOpenAnimation;
-    private Animation mCloseAnimation;
-
     private Animation mButtonCloseAnimation;
     private Animation mButtonOpenAnimation;
 
     private SlideState mState;
+    private boolean mAnimationRunned;
 
     public CustomSlidingDrawer(Context context) {
         super(context);
@@ -56,7 +55,7 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
 
         initDefaultState();
 
-        buildAnimations();
+        buildButtonAnimations();
     }
 
     public CustomSlidingDrawer(Context context, AttributeSet attrs) {
@@ -67,7 +66,7 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
 
         initDefaultState();
 
-        buildAnimations();
+        buildButtonAnimations();
     }
 
     public CustomSlidingDrawer(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -78,7 +77,7 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
 
         initDefaultState();
 
-        buildAnimations();
+        buildButtonAnimations();
     }
 
     private void parseAttrs(Context context, AttributeSet attrs) {
@@ -96,26 +95,64 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
 
     private void initDefaultState() {
         mState = SlideState.Closed;
+        mAnimationRunned = false;
 
-        mLayoutView.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = mLayoutView.getLayoutParams();
+        params.height = 0; // Default 0 height
+        mLayoutView.setLayoutParams(params);
+
         mLayoutView.setVisibility(INVISIBLE);
-
-        mDefaultViewHeight = mLayoutView.getMeasuredHeight();
     }
 
-    private void buildAnimations() {
-        // Open
-        mOpenAnimation = new SlideAnimation(mLayoutView, 0, mDefaultViewHeight);
-        mOpenAnimation.setInterpolator(new AccelerateInterpolator());
-        mOpenAnimation.setDuration(mAnimationDuration);
-        mOpenAnimation.setAnimationListener(this);
+    @Override
+    public void onClick(View v) {
+        if (mAnimationRunned)
+            return;
 
-        // Close
-        mCloseAnimation = new SlideAnimation(mLayoutView, mDefaultViewHeight, 0);
-        mCloseAnimation.setInterpolator(new AccelerateInterpolator());
-        mCloseAnimation.setDuration(mAnimationDuration);
-        mCloseAnimation.setAnimationListener(this);
+        mDefaultViewHeight = ((View)getParent()).getMeasuredHeight();
 
+        Animation animation;
+        switch (mState) {
+            case Opened:
+                animation = new SlideAnimation(mLayoutView, mDefaultViewHeight, 0);
+                break;
+            case Closed:
+                animation = new SlideAnimation(mLayoutView, 0, mDefaultViewHeight);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown slide state: " + mState);
+        }
+
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setDuration(mAnimationDuration);
+        animation.setAnimationListener(CustomSlidingDrawer.this);
+
+        mLayoutView.startAnimation(animation);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        final View parent = (View)getParent();
+        if (parent == null)
+            return;
+
+        parent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mState != SlideState.Opened)
+                    return;
+
+                // Keyboard show/hidden and slide layout resize. example
+                ViewGroup.LayoutParams params = mLayoutView.getLayoutParams();
+                params.height = parent.getHeight();
+                mLayoutView.setLayoutParams(params);
+            }
+        });
+    }
+
+    private void buildButtonAnimations() {
         mButtonCloseAnimation = new RotateAnimation(0.0f, 180.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         mButtonCloseAnimation.setInterpolator(new DecelerateInterpolator());
         mButtonCloseAnimation.setRepeatCount(0);
@@ -138,17 +175,14 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
         container.addView(mLayoutView);
 
         mButtonOpenClose = (Button)header.findViewById(R.id.button_open_filter);
-        mButtonOpenClose.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLayoutView.startAnimation(mState == SlideState.Closed ? mOpenAnimation : mCloseAnimation);
-                mButtonOpenClose.startAnimation(mState == SlideState.Closed ? mButtonCloseAnimation : mButtonOpenAnimation);
-            }
-        });
+        mButtonOpenClose.setOnClickListener(this);
     }
 
     @Override
     public void onAnimationStart(Animation animation) {
+        mButtonOpenClose.startAnimation(mState == SlideState.Closed ? mButtonCloseAnimation : mButtonOpenAnimation);
+
+        mAnimationRunned = true;
     }
 
     @Override
@@ -161,6 +195,8 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
             else
                 mListener.onClosed();
         }
+
+        mAnimationRunned = false;
 
         if (mState == SlideState.Opened)
             mLayoutView.setVisibility(VISIBLE);
@@ -175,23 +211,5 @@ public class CustomSlidingDrawer extends FrameLayout implements Animation.Animat
 
     public void setOnStateListener(CustomSlidingDrawerStateListener listener) {
         this.mListener = listener;
-    }
-
-    public void measureViewLayout() {
-        int height = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        mLayoutView.measure(LayoutParams.MATCH_PARENT, height);
-
-        if (mState == SlideState.Opened) {
-            mLayoutView.setVisibility(INVISIBLE);
-            mState = SlideState.Closed;
-
-            Animation animation = new SlideAnimation(mLayoutView, mDefaultViewHeight, 0);
-            animation.setInterpolator(new AccelerateInterpolator());
-            animation.setDuration(0);
-            mLayoutView.startAnimation(animation);
-        }
-
-        mDefaultViewHeight = mLayoutView.getMeasuredHeight();
-        buildAnimations();
     }
 }
