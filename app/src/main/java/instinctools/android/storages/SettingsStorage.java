@@ -48,4 +48,10 @@ public class SettingsStorage {
         return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_general_max_search_result), String.valueOf(Constants.MAX_SEARCH_RESULT_BY_PAGE)));
     }
 
+    public static boolean isNotificationSound() {
+        if (mSettings == null)
+            init();
+
+        return mSettings.getBoolean(mContext.getString(R.string.title_pref_key_general_notification_sound), true);
+    }
 }

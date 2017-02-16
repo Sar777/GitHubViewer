@@ -8,6 +8,7 @@ import android.accounts.AccountManagerFuture;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,6 +27,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -126,10 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onLoadFinished(Loader<User> loader, User user) {
                 if (user == null) {
-                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    showUserGetAlert();
                     return;
                 }
 
@@ -142,6 +141,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+    }
+
+    private void showUserGetAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.msg_fail_get_current_user_title)
+                .setMessage(R.string.msg_fail_get_current_user_summary)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setIcon(R.drawable.ic_github_logo)
+                .show();
     }
 
     private void updateUserInfoNavBar(User user) {

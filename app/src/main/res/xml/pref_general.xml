@@ -12,5 +12,12 @@
             android:title="@string/title_pref_category_general_search_result"
             android:summary="@string/title_pref_category_general_search_result_summary">
         </ListPreference>
+        <SwitchPreference
+            android:key="@string/title_pref_key_general_notification_sound"
+            android:icon="@drawable/ic_volume_up_black_24dp"
+            android:defaultValue="true"
+            android:title="@string/title_pref_category_general_sound_notifications"
+            android:summary="@string/title_pref_category_general_sound_notifications_summary">
+        </SwitchPreference>
     </PreferenceCategory>
 </PreferenceScreen>

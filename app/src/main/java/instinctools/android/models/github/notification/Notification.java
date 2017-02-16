@@ -96,6 +96,16 @@ public class Notification implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Notification that = (Notification) o;
+
+        return mId != null ? mId.equals(that.mId) : that.mId == null;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
         dest.writeParcelable(mRepository, flags);

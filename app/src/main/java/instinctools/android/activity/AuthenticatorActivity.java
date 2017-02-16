@@ -1,14 +1,22 @@
 package instinctools.android.activity;
 
+import android.Manifest;
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
@@ -30,6 +38,8 @@ public class AuthenticatorActivity extends AppCompatActivity implements LoaderMa
     public static final String BUNDLE_AUTH_CODE = "AUTH_CODE";
     public static final String INTENT_AUTH_TYPE = "AUTH_TYPE";
 
+    public static final int PERMISSION_GET_ACCOUNTS = 100;
+
     public static final int LOADER_AUTHENTICATOR_ID = 1;
 
     public ProgressDialog mProgressDialog;
@@ -41,6 +51,8 @@ public class AuthenticatorActivity extends AppCompatActivity implements LoaderMa
         Intent intent = getIntent();
         if (intent == null)
             return;
+
+        deleteAccount();
 
         switch (intent.getIntExtra(INTENT_AUTH_TYPE, -1)) {
             case 0:
@@ -116,5 +128,37 @@ public class AuthenticatorActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onLoaderReset(Loader<AuthenticatorResponse> loader) {
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_GET_ACCOUNTS && grantResults.length == 1) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                Snackbar.make(findViewById(R.id.content_main), R.string.msg_fail_grant_account_permissions, Snackbar.LENGTH_SHORT).show();
+            else
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                deleteAccount();
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    private void deleteAccount() {
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_ACCOUNTS);
+        else {
+            for (Account account : accountManager.getAccountsByType(GitHubAccount.TYPE)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    accountManager.removeAccountExplicitly(account);
+                else
+                    accountManager.removeAccount(account, this, new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                        }
+                    }, null);
+            }
+        }
     }
 }

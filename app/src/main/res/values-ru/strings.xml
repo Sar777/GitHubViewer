@@ -38,9 +38,11 @@
     <string name="title_pref_category_sync">Синхранизации</string>
     <string name="title_pref_category_sync_notification">Оповещения</string>
     <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
+    <string name="title_pref_category_general_sound_notifications">Звук при получении оповещений</string>
     <string name="title_pref_category_repos_summary">Промежуток между обновлением списка репозиториев</string>
     <string name="title_pref_category_sync_notification_summary">Промежуток между обновлением оповещений</string>
     <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
+    <string name="title_pref_category_general_sound_notifications_summary">Включение звукового уведомления при получении новых оповещений</string>
     <string name="title_search_activity">Поиск</string>
     <!-- -->
     <string name="title_notification">Оповещения</string>
@@ -59,4 +61,6 @@
     <string name="title_pref_settings_summary">Настройки для приложения</string>
     <string name="title_pref_settings">Настройки</string>
     <string name="title_search_filter_params">Параметры поиска</string>
+    <string name="msg_fail_get_current_user_title">Ошибка получения данных</string>
+    <string name="msg_fail_get_current_user_summary">В ходе получения данных о пользователе произошла неизвестная ошибка. Пожалуйста, по пробуйте авторизоваться ещё раз</string>
 </resources>
