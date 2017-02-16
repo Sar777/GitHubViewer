@@ -9,6 +9,7 @@ import java.util.Map;
 import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.models.github.commits.Commit;
 import instinctools.android.models.github.errors.ErrorResponse;
+import instinctools.android.models.github.events.Event;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueLabel;
 import instinctools.android.models.github.notification.Notification;
@@ -21,6 +22,8 @@ import instinctools.android.readers.json.transformers.github.authorization.Acces
 import instinctools.android.readers.json.transformers.github.commits.CommitTransformer;
 import instinctools.android.readers.json.transformers.github.commits.ListCommitsTransformer;
 import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformer;
+import instinctools.android.readers.json.transformers.github.events.EventTransformer;
+import instinctools.android.readers.json.transformers.github.events.ListEventsTransformer;
 import instinctools.android.readers.json.transformers.github.issues.IssueLabelTransformer;
 import instinctools.android.readers.json.transformers.github.issues.IssueTransformer;
 import instinctools.android.readers.json.transformers.github.issues.ListIssueLabelTransformer;
@@ -62,6 +65,9 @@ public class JsonTransformer {
         // Commits
         mTransformersMap.put(Commit.class.getName(), CommitTransformer.class);
         mTransformersMap.put(Commit[].class.getName(), ListCommitsTransformer.class);
+        // Feeds
+        mTransformersMap.put(Event.class.getName(), EventTransformer.class);
+        mTransformersMap.put(Event[].class.getName(), ListEventsTransformer.class);
     }
 
     public static <Model, T> Model transform(@NonNull String json, Class<T> clazz) {
