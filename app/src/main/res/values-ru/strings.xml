@@ -34,13 +34,15 @@
     <string name="title_pref_header_general">Общие</string>
     <string name="title_pref_header_data_sync_summary">Промежутки обновления данных</string>
     <string name="title_pref_header_general_summary">Общие настройки приложения</string>
-    <string name="title_pref_category_sync_repositories">Репозитории</string>
     <string name="title_pref_category_sync">Синхранизации</string>
-    <string name="title_pref_category_sync_notification">Оповещения</string>
+    <string name="title_pref_category_sync_events">События</string>
+    <string name="title_pref_category_sync_repositories">Репозитории</string>
+    <string name="title_pref_category_sync_notifications">Оповещения</string>
     <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
     <string name="title_pref_category_general_sound_notifications">Звук при получении оповещений</string>
     <string name="title_pref_category_repos_summary">Промежуток между обновлением списка репозиториев</string>
-    <string name="title_pref_category_sync_notification_summary">Промежуток между обновлением оповещений</string>
+    <string name="title_pref_category_sync_events_summary">Промежуток между обновлением событий в ленте</string>
+    <string name="title_pref_category_sync_notifications_summary">Промежуток между обновлением оповещений</string>
     <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
     <string name="title_pref_category_general_sound_notifications_summary">Включение звукового уведомления при получении новых оповещений</string>
     <string name="title_search_activity">Поиск</string>
@@ -58,6 +60,7 @@
     <string name="msg_github_notifications_stack">%d новых GitHub оповещений</string>
     <string name="msg_github_notifications_from">Последнее оповещение от: %s</string>
     <string name="title_notifications">Оповещения</string>
+    <string name="title_events">События</string>
     <string name="title_pref_settings_summary">Настройки для приложения</string>
     <string name="title_pref_settings">Настройки</string>
     <string name="title_search_filter_params">Параметры поиска</string>

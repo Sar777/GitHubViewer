@@ -45,6 +45,7 @@ import instinctools.android.account.GitHubAccount;
 import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
+import instinctools.android.database.providers.EventsProvider;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
@@ -62,14 +63,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final int PERMISSION_GET_ACCOUNTS = 100;
 
-    private static final int LOADER_REPOSITORIES_ID = 1;
+    private static final int LOADER_EVENTS_ID = 1;
     private static final int LOADER_USER_ID = 2;
     private static final int LOADER_NOTIFICATIONS_ID = 3;
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mRepositoryAdapter;
+    private RepositoryAdapter mEventsAdapter;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -88,13 +89,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_repositories_list);
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_events_list);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, true, null);
-        mRecyclerView.setAdapter(mRepositoryAdapter);
+        mEventsAdapter = new RepositoryAdapter(this, true, null);
+        mRecyclerView.setAdapter(mEventsAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -114,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initLoaders() {
-        // All repositories
-        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
+        // All events
+        getSupportLoaderManager().initLoader(LOADER_EVENTS_ID, null, this);
         // Notifications
         getSupportLoaderManager().initLoader(LOADER_NOTIFICATIONS_ID, null, this);
         // User info
@@ -202,8 +203,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Loader<Cursor> cursor = null;
         switch (id) {
-            case LOADER_REPOSITORIES_ID:
-                cursor = new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
+            case LOADER_EVENTS_ID:
+                cursor = new CursorLoader(this, EventsProvider.EVENT_CONTENT_URI, null, null, null, null);
                 break;
             case LOADER_NOTIFICATIONS_ID:
                 cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[]{String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
@@ -218,13 +219,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         switch (loader.getId()) {
-            case LOADER_REPOSITORIES_ID: {
+            case LOADER_EVENTS_ID: {
                 if (cursor.getCount() != 0) {
                     mRecyclerView.setVisibility(View.VISIBLE);
                     mProgressBar.setVisibility(View.GONE);
                 }
 
-                mRepositoryAdapter.changeCursor(cursor, true);
+                mEventsAdapter.changeCursor(cursor, true);
 
                 // Hidden refresh bar
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -257,8 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_ALL);
-        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
+        ContentResolver.requestSync(null, EventsProvider.AUTHORITY, bundle);
     }
 
     @Override

@@ -4,11 +4,11 @@ import java.util.List;
 
 import instinctools.android.models.github.PageLinks;
 
-public class EventListResponse {
+public class EventsListResponse {
     private List<Event> mEvents;
     private PageLinks mPageLinks;
 
-    public EventListResponse(List<Event> events) {
+    public EventsListResponse(List<Event> events) {
         this.mEvents = events;
     }
 

@@ -41,6 +41,14 @@ public class SettingsStorage {
 
         return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_notifications), String.valueOf(Constants.INTERVAL_UPDATE_NOTIFICATIONS)));
     }
+
+    public static int getIntervalUpdateEvents() {
+        if (mSettings == null)
+            init();
+
+        return Integer.parseInt(mSettings.getString(mContext.getString(R.string.title_pref_key_sync_events), String.valueOf(Constants.INTERVAL_UPDATE_EVENTS)));
+    }
+
     public static int getMaxSearchResult() {
         if (mSettings == null)
             init();

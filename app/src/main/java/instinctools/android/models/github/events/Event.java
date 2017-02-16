@@ -1,5 +1,7 @@
 package instinctools.android.models.github.events;
 
+import android.support.annotation.Nullable;
+
 import java.util.Date;
 
 import instinctools.android.models.github.events.enums.EventType;
@@ -70,6 +72,7 @@ public class Event {
         this.mActor = actor;
     }
 
+    @Nullable
     public EventOrganization getOrg() {
         return mOrg;
     }

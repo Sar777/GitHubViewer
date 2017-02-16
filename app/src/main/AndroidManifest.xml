@@ -134,6 +134,16 @@
         </service>
 
         <service
+            android:name=".services.EventsSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/events_sync_adapter" />
+        </service>
+
+        <service
             android:name=".services.NotificationsSyncService"
             android:exported="false">
             <intent-filter>
@@ -154,11 +164,19 @@
         </service>
 
         <provider
+            android:name=".database.providers.EventsProvider"
+            android:authorities="instinctools.android.database.providers.Events"
+            android:syncable="true"
+            android:label="@string/title_events"
+            android:exported="false" />
+
+        <provider
             android:name=".database.providers.RepositoriesProvider"
             android:authorities="instinctools.android.database.providers.Repositories"
             android:syncable="true"
             android:label="@string/title_repositories"
             android:exported="false" />
+
         <provider
             android:name=".database.providers.NotificationsProvider"
             android:authorities="instinctools.android.database.providers.Notifications"

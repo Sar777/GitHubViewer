@@ -47,8 +47,12 @@ public class EventTransformer implements ITransformer<Event> {
 
             event.setPayload(new EventPayloadTransformer().transform(jsonObject.getJSONObject(J_PAYLOAD)));
             event.setActor(new EventActorTransformer().transform(jsonObject.getJSONObject(J_ACTOR)));
-            event.setRepo(new EventRepoTransformer().transform(jsonObject.getJSONObject(J_REPO)));
-            event.setOrg(new EventOrganizationTransformer().transform(jsonObject.getJSONObject(J_ORG)));
+
+            if (jsonObject.has(J_REPO))
+                event.setRepo(new EventRepoTransformer().transform(jsonObject.getJSONObject(J_REPO)));
+
+            if (jsonObject.has(J_ORG))
+                event.setOrg(new EventOrganizationTransformer().transform(jsonObject.getJSONObject(J_ORG)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);
             return null;

@@ -65,7 +65,7 @@ public class JsonTransformer {
         // Commits
         mTransformersMap.put(Commit.class.getName(), CommitTransformer.class);
         mTransformersMap.put(Commit[].class.getName(), ListCommitsTransformer.class);
-        // Feeds
+        // Events
         mTransformersMap.put(Event.class.getName(), EventTransformer.class);
         mTransformersMap.put(Event[].class.getName(), ListEventsTransformer.class);
     }
