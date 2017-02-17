@@ -54,6 +54,7 @@ public class DBConstants {
     public static final String TABLE_EVENTS = "events";
     public static final String EVENT_ID = "_id";
     public static final String EVENT_TYPE = "type";
+    public static final String EVENT_IS_PUBLIC = "public";
     public static final String EVENT_CREATED_AT = "created_at";
     //
     public static final String EVENT_REPO_ID = "repo_id";
@@ -120,8 +121,9 @@ public class DBConstants {
 
 
     static final String TABLE_EVENTS_CREATE = "CREATE TABLE " + TABLE_EVENTS + "("
-            + EVENT_ID + " INTEGER PRIMARY KEY, "
+            + EVENT_ID + " INTEGER, "
             + EVENT_TYPE + " VARCHAR(30), "
+            + EVENT_IS_PUBLIC + " INTEGER(1), "
             + EVENT_CREATED_AT + " INTEGER, "
             + EVENT_REPO_ID + " INTEGER, "
             + EVENT_REPO_NAME + " VARCHAR(50), "

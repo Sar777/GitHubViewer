@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mEventsAdapter = new RepositoryAdapter(this, true, null);
-        mRecyclerView.setAdapter(mEventsAdapter);
+        //mEventsAdapter = new RepositoryAdapter(this, true, null);
+        //mRecyclerView.setAdapter(mEventsAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     mProgressBar.setVisibility(View.GONE);
                 }
 
-                mEventsAdapter.changeCursor(cursor, true);
+                //mEventsAdapter.changeCursor(cursor, true);
 
                 // Hidden refresh bar
                 mSwipeRefreshLayout.setRefreshing(false);

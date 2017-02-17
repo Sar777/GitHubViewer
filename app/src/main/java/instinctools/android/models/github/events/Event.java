@@ -1,9 +1,11 @@
 package instinctools.android.models.github.events;
 
+import android.content.ContentValues;
 import android.support.annotation.Nullable;
 
 import java.util.Date;
 
+import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.events.enums.EventType;
 
 public class Event {
@@ -56,6 +58,7 @@ public class Event {
         this.mPayload = payload;
     }
 
+    @Nullable
     public EventRepository getRepo() {
         return mRepo;
     }
@@ -79,5 +82,15 @@ public class Event {
 
     public void setOrg(EventOrganization org) {
         this.mOrg = org;
+    }
+
+    public ContentValues build() {
+        ContentValues values = new ContentValues();
+
+        values.put(DBConstants.EVENT_ID, mId);
+        values.put(DBConstants.EVENT_TYPE, mType.toString());
+        values.put(DBConstants.EVENT_CREATED_AT, mCreatedAt.getTime());
+        values.put(DBConstants.EVENT_IS_PUBLIC, mIsPublic);
+        return values;
     }
 }
