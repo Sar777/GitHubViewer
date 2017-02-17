@@ -13,11 +13,12 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.ProfileActivity;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.user.User;
 
-public class SearchUsersAdapter extends AbstractSearchAdapter<User> {
+public class SearchUsersAdapter extends AbstractRecyclerAdapter<User> {
     public SearchUsersAdapter(@NonNull Context context) {
         super(context);
     }

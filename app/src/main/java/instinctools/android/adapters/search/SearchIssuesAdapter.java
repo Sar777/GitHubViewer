@@ -16,10 +16,11 @@ import java.util.Locale;
 
 import instinctools.android.App;
 import instinctools.android.R;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 
-public class SearchIssuesAdapter extends AbstractSearchAdapter<Issue> {
+public class SearchIssuesAdapter extends AbstractRecyclerAdapter<Issue> {
     public SearchIssuesAdapter(@NonNull Context context) {
         super(context);
     }

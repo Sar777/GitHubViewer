@@ -7,6 +7,7 @@ import instinctools.android.database.DBConstants;
 public class Actor {
     private Integer mId;
     private String mLogin;
+    private String mDisplayLogin;
     private String mGravatarId;
     private String mAvatarUrl;
     private String mUrl;
@@ -25,6 +26,14 @@ public class Actor {
 
     public void setLogin(String login) {
         this.mLogin = login;
+    }
+
+    public String getDisplayLogin() {
+        return mDisplayLogin;
+    }
+
+    public void setDisplayLogin(String displayLogin) {
+        this.mDisplayLogin = displayLogin;
     }
 
     public String getGravatarId() {

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import instinctools.android.R;
-import instinctools.android.adapters.search.AbstractSearchAdapter;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.adapters.search.SearchCommitsAdapter;
 import instinctools.android.adapters.search.SearchIssuesAdapter;
 import instinctools.android.adapters.search.SearchRepositoriesAdapter;
@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
     // View
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
-    private AbstractSearchAdapter mSearchAdapter;
+    private AbstractRecyclerAdapter mSearchAdapter;
     private ViewGroup mFilterContainer;
     private CustomSlidingDrawer mCustomVerticalSlidingDrawer;
 
@@ -232,7 +232,7 @@ public class SearchFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-    private AbstractSearchAdapter createSearchAdapter() {
+    private AbstractRecyclerAdapter createSearchAdapter() {
         switch (mType) {
             case REPOSITORIES:
                 return new SearchRepositoriesAdapter(getContext());

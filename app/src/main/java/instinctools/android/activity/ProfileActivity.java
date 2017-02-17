@@ -52,8 +52,12 @@ public class ProfileActivity extends AppCompatActivity implements LoaderManager.
         initView();
 
         Bundle bundle = new Bundle();
-        if (getIntent() != null)
-            bundle.putString(BUNDLE_USERNAME, getIntent().getStringExtra(EXTRA_USERNAME));
+        if (getIntent() != null) {
+            if (getIntent().getData() != null)
+                bundle.putString(BUNDLE_USERNAME, getIntent().getData().getAuthority());
+            else
+                bundle.putString(BUNDLE_USERNAME, getIntent().getStringExtra(EXTRA_USERNAME));
+        }
 
         getSupportLoaderManager().initLoader(LOADER_PROFILE_ID, bundle, this);
     }

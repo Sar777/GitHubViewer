@@ -7,6 +7,7 @@ import java.util.Date;
 
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.events.enums.EventType;
+import instinctools.android.models.github.events.payload.Payload;
 
 public class Event {
     private Integer mId;

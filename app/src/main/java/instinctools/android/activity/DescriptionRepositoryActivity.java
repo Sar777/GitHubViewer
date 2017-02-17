@@ -40,7 +40,7 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class DescriptionRepositoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String BUNDLE_REPOSITORY_ID = "ID";
 
     private static final int LOADER_REPOSITORY_ID = 1;

@@ -14,6 +14,7 @@ class EventActorTransformer implements ITransformer<Actor> {
 
     private static final String J_ID = "id";
     private static final String J_LOGIN = "login";
+    private static final String J_DISPLAY_LOGIN = "display_login";
     private static final String J_GRAVATAR_ID = "gravatar_id";
     private static final String J_AVATAR_URL = "avatar_url";
     private static final String J_URL = "url";
@@ -37,6 +38,7 @@ class EventActorTransformer implements ITransformer<Actor> {
         try {
             actor.setId(jsonObject.getInt(J_ID));
             actor.setLogin(jsonObject.getString(J_LOGIN));
+            actor.setDisplayLogin(jsonObject.getString(J_DISPLAY_LOGIN));
             actor.setAvatarUrl(jsonObject.getString(J_AVATAR_URL));
             actor.setGravatarId(CustomTextUtils.isEmpty(jsonObject.getString(J_GRAVATAR_ID)) ? "" : jsonObject.getString(J_GRAVATAR_ID));
             actor.setUrl(jsonObject.getString(J_URL));

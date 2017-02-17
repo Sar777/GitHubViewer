@@ -19,12 +19,14 @@ import instinctools.android.activity.AuthenticatorActivity;
 import instinctools.android.activity.NotificationActivity;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
+import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 import instinctools.android.storages.SettingsStorage;
 
 public class App extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context mContext;
+    private static User mLoggedUser;
 
     private static boolean isNotificationActivityVisible;
 
@@ -72,6 +74,14 @@ public class App extends Application implements Application.ActivityLifecycleCal
         }
 
         return accountManager.getAccountsByType(GitHubAccount.TYPE)[0];
+    }
+
+    public static User getLoggedUser() {
+        return mLoggedUser;
+    }
+
+    public static void setLoggedUser(User user) {
+        mLoggedUser = user;
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import instinctools.android.App;
 import instinctools.android.R;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.commits.Commit;
@@ -23,7 +24,7 @@ import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class SearchCommitsAdapter extends AbstractSearchAdapter<Commit> {
+public class SearchCommitsAdapter extends AbstractRecyclerAdapter<Commit> {
     public SearchCommitsAdapter(@NonNull Context context) {
         super(context);
     }
