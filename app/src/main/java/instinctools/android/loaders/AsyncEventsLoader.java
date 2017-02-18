@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import instinctools.android.models.github.events.EventsListResponse;
+import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.events.GithubServiceEvents;
+import instinctools.android.services.github.user.GithubServiceUser;
 
 public class AsyncEventsLoader extends AsyncTaskLoader<EventsListResponse> {
     public AsyncEventsLoader(Context context) {
@@ -18,6 +20,10 @@ public class AsyncEventsLoader extends AsyncTaskLoader<EventsListResponse> {
 
     @Override
     public EventsListResponse loadInBackground() {
-        return GithubServiceEvents.getReceivedEventsResponse("Sar777");
+        User user = GithubServiceUser.getCurrentUser();
+        if (user == null)
+            return null;
+
+        return GithubServiceEvents.getReceivedEventsResponse(user.getLogin());
     }
 }

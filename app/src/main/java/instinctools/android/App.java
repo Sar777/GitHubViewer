@@ -18,7 +18,6 @@ import instinctools.android.account.GitHubAccount;
 import instinctools.android.activity.AuthenticatorActivity;
 import instinctools.android.activity.NotificationActivity;
 import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
@@ -37,8 +36,6 @@ public class App extends Application implements Application.ActivityLifecycleCal
         GithubService.init(mContext, Constants.CLIENT_ID, Constants.CLIENT_SECRET, Constants.SCOPES, Constants.CALLBACK_URL);
         ApplicationPersistantStorage.init(mContext);
         SettingsStorage.init(mContext);
-
-        deleteDatabase(DBConstants.DB_NAME);
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.pref_sync_data, false);

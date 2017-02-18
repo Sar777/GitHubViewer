@@ -196,6 +196,7 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
         mLayoutCardView.setVisibility(View.VISIBLE);
 
         getSupportActionBar().setTitle(repository.getFullName());
+        getSupportActionBar().setSubtitle(repository.getDefaultBranch());
 
         mTextViewOwnerLogin.setText(repository.getRepositoryOwner().getLogin());
         ImageLoader

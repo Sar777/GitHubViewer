@@ -78,7 +78,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                         commitTitle.setText(commit.getMessage());
                         // Hash
                         TextView commitHash = (TextView) view.findViewById(R.id.text_event_commit_hash);
-                        commitHash.setText(commit.getSha().substring(0, 7));
+                        commitHash.setText(commit.getSha());
                         mViewGroupBody.addView(view);
                     }
                     break;
