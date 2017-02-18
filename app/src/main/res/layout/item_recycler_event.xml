@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/image_event_actor_avatar"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             app:srcCompat="@drawable/ic_github_logo"/>
 
         <RelativeLayout

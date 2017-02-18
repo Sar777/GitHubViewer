@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.notifications;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

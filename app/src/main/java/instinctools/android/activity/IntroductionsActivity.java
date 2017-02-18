@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import instinctools.android.R;
-import instinctools.android.adapters.IntroductionPagerAdapter;
+import instinctools.android.adapters.introduction.IntroductionPagerAdapter;
 
 public class IntroductionsActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private IntroductionPagerAdapter mIntroductionPagerAdapter;

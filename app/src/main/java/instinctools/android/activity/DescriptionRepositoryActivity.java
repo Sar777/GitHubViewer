@@ -21,8 +21,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import instinctools.android.R;
-import instinctools.android.adapters.IssueAdapter;
-import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.adapters.issues.IssueAdapter;
+import instinctools.android.adapters.repository.RepositoryAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;

@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.repository;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.DescriptionRepositoryActivity;
+import instinctools.android.adapters.CursorRecyclerViewAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
 

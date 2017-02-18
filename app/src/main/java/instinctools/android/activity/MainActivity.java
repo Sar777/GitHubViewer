@@ -53,7 +53,7 @@ import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncEventsLoader;
+import instinctools.android.loaders.AsyncReceivedEventsLoader;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.events.EventsListResponse;
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportLoaderManager().initLoader(LOADER_USER_ID, new Bundle(), new LoaderManager.LoaderCallbacks<User>() {
             @Override
             public Loader<User> onCreateLoader(int id, Bundle args) {
-                return new AsyncUserInfoLoader(MainActivity.this, args);
+                return new AsyncUserInfoLoader(MainActivity.this, null);
             }
 
             @Override
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportLoaderManager().initLoader(LOADER_EVENTS_ID, null, new LoaderManager.LoaderCallbacks<EventsListResponse>() {
             @Override
             public Loader<EventsListResponse> onCreateLoader(int id, Bundle args) {
-                return new AsyncEventsLoader(getApplicationContext());
+                return new AsyncReceivedEventsLoader(getApplicationContext(), null);
             }
 
             @Override

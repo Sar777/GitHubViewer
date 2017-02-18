@@ -24,6 +24,7 @@
     <string name="title_nav_bar_stars">Избранные</string>
     <string name="title_nav_bar_search">Поиск репозиториев</string>
     <string name="title_profile_information">Информация:</string>
+    <string name="title_profile_organizations">Организации:</string>
     <string name="title_menu">Меню</string>
     <string name="title_watch_repositories">Отслеживаемые</string>
     <string name="title_star_repos">Избранные</string>
@@ -64,4 +65,7 @@
     <string name="title_search_filter_params">Параметры поиска</string>
     <string name="msg_fail_get_current_user_title">Ошибка получения данных</string>
     <string name="msg_fail_get_current_user_summary">В ходе получения данных о пользователе произошла неизвестная ошибка. Пожалуйста, по пробуйте авторизоваться ещё раз</string>
+    <!-- -->
+    <string name="title_profile_tab_about">Информация</string>
+    <string name="title_profile_tab_events">События</string>
 </resources>

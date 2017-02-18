@@ -13,6 +13,7 @@ import instinctools.android.models.github.events.Event;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueLabel;
 import instinctools.android.models.github.notification.Notification;
+import instinctools.android.models.github.organizations.Organization;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.repositories.RepositoryReadme;
 import instinctools.android.models.github.search.SearchResponse;
@@ -30,6 +31,8 @@ import instinctools.android.readers.json.transformers.github.issues.ListIssueLab
 import instinctools.android.readers.json.transformers.github.issues.ListIssueTransformer;
 import instinctools.android.readers.json.transformers.github.notification.ListNotificationsTransformer;
 import instinctools.android.readers.json.transformers.github.notification.NotificationTransformer;
+import instinctools.android.readers.json.transformers.github.organizations.ListOrganizationsTransformer;
+import instinctools.android.readers.json.transformers.github.organizations.OrganizationTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListRepositoriesTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryTransformer;
@@ -68,6 +71,9 @@ public class JsonTransformer {
         // Events
         mTransformersMap.put(Event.class.getName(), EventTransformer.class);
         mTransformersMap.put(Event[].class.getName(), ListEventsTransformer.class);
+        // Organizations
+        mTransformersMap.put(Organization.class.getName(), OrganizationTransformer.class);
+        mTransformersMap.put(Organization[].class.getName(), ListOrganizationsTransformer.class);
     }
 
     public static <Model, T> Model transform(@NonNull String json, Class<T> clazz) {

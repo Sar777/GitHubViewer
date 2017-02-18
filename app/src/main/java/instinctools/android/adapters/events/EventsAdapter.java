@@ -99,7 +99,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     actionText = event.getPayload().getComment().getBody();
                     break;
                 case ISSUES:
-                    action = String.format("<a href='profile://%s'>%s</a> closed issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                    action = String.format("<a href='profile://%s'>%s</a> %s issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getAction(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
                     actionText = event.getPayload().getIssue().getTitle();
                     break;
                 case FORK:
@@ -125,6 +125,10 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     break;
                 case DELETE:
                     action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+                    mTextViewActionText.setVisibility(View.GONE);
+                    break;
+                case WATCH:
+                    action = String.format("<a href='profile://%s'>%s</a> starred <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName());
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 default:
