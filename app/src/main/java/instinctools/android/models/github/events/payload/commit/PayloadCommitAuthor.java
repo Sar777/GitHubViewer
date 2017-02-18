@@ -1,4 +1,4 @@
-package instinctools.android.models.github.events.payload;
+package instinctools.android.models.github.events.payload.commit;
 
 public class PayloadCommitAuthor {
     private String mEmail;

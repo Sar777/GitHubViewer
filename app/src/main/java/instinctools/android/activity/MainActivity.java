@@ -7,7 +7,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,7 +46,6 @@ import instinctools.android.account.GitHubAccount;
 import instinctools.android.adapters.events.EventsAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.EventsProvider;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
@@ -313,10 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRefresh() {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(null, EventsProvider.AUTHORITY, bundle);
+        getSupportLoaderManager().getLoader(LOADER_EVENTS_ID).forceLoad();
     }
 
     @Override

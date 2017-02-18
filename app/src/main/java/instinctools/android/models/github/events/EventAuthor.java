@@ -1,26 +1,28 @@
 package instinctools.android.models.github.events;
 
-public class EventOrganization {
+public class EventAuthor {
     private Integer mId;
     private String mLogin;
     private String mGravatarId;
     private String mAvatarUrl;
     private String mUrl;
+    private String mHtmlUrl;
+    private String mType;
 
     public Integer getId() {
         return mId;
     }
 
-    public void setId(Integer id) {
-        this.mId = id;
+    public void setId(Integer mId) {
+        this.mId = mId;
     }
 
     public String getLogin() {
         return mLogin;
     }
 
-    public void setLogin(String login) {
-        this.mLogin = login;
+    public void setLogin(String mLogin) {
+        this.mLogin = mLogin;
     }
 
     public String getGravatarId() {
@@ -45,5 +47,21 @@ public class EventOrganization {
 
     public void setUrl(String url) {
         this.mUrl = url;
+    }
+
+    public String getHtmlUrl() {
+        return mHtmlUrl;
+    }
+
+    public void setHtmlUrl(String htmlUrl) {
+        this.mHtmlUrl = htmlUrl;
+    }
+
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        this.mType = type;
     }
 }

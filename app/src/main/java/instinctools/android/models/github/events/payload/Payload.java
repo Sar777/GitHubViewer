@@ -4,6 +4,8 @@ import java.util.List;
 
 import instinctools.android.models.github.comments.Comment;
 import instinctools.android.models.github.events.enums.PayloadActions;
+import instinctools.android.models.github.events.payload.commit.PayloadCommit;
+import instinctools.android.models.github.events.payload.release.PayloadRelease;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.pr.PullRequest;
 import instinctools.android.models.github.repositories.Repository;
@@ -13,11 +15,13 @@ public class Payload {
     private Integer mPushId;
     private Integer mSize;
     private String mRef;
+    private String mRefType;
     private Issue mIssue;
     private PullRequest mPullRequest;
     private Comment mComment;
     private Repository mForkee;
     private List<PayloadCommit> mCommits;
+    private PayloadRelease mRelease;
 
     public PayloadActions getAction() {
         return mAction;
@@ -49,6 +53,14 @@ public class Payload {
 
     public void setRef(String ref) {
         this.mRef = ref;
+    }
+
+    public String getRefType() {
+        return mRefType;
+    }
+
+    public void setRefType(String refType) {
+        this.mRefType = refType;
     }
 
     public Issue getIssue() {
@@ -89,5 +101,13 @@ public class Payload {
 
     public void setCommits(List<PayloadCommit> commits) {
         this.mCommits = commits;
+    }
+
+    public PayloadRelease getRelease() {
+        return mRelease;
+    }
+
+    public void setRelease(PayloadRelease release) {
+        this.mRelease = release;
     }
 }

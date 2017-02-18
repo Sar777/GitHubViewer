@@ -1,9 +1,5 @@
 package instinctools.android.models.github.events;
 
-import android.content.ContentValues;
-
-import instinctools.android.database.DBConstants;
-
 public class Actor {
     private Integer mId;
     private String mLogin;
@@ -58,16 +54,5 @@ public class Actor {
 
     public void setUrl(String url) {
         this.mUrl = url;
-    }
-
-    public ContentValues build() {
-        ContentValues values = new ContentValues();
-
-        values.put(DBConstants.EVENT_ACTOR_ID, mId);
-        values.put(DBConstants.EVENT_ACTOR_LOGIN, mLogin);
-        values.put(DBConstants.EVENT_ACTOR_URL, mUrl);
-        values.put(DBConstants.EVENT_ACTOR_AVATAR_URL, mAvatarUrl);
-        values.put(DBConstants.EVENT_ACTOR_GRAVATAR_ID, mGravatarId);
-        return values;
     }
 }

@@ -35,13 +35,11 @@
     <string name="title_pref_header_data_sync_summary">Промежутки обновления данных</string>
     <string name="title_pref_header_general_summary">Общие настройки приложения</string>
     <string name="title_pref_category_sync">Синхранизации</string>
-    <string name="title_pref_category_sync_events">События</string>
     <string name="title_pref_category_sync_repositories">Репозитории</string>
     <string name="title_pref_category_sync_notifications">Оповещения</string>
     <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
     <string name="title_pref_category_general_sound_notifications">Звук при получении оповещений</string>
     <string name="title_pref_category_repos_summary">Промежуток между обновлением списка репозиториев</string>
-    <string name="title_pref_category_sync_events_summary">Промежуток между обновлением событий в ленте</string>
     <string name="title_pref_category_sync_notifications_summary">Промежуток между обновлением оповещений</string>
     <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
     <string name="title_pref_category_general_sound_notifications_summary">Включение звукового уведомления при получении новых оповещений</string>

@@ -1,4 +1,4 @@
-package instinctools.android.readers.json.transformers.github.events.payload;
+package instinctools.android.readers.json.transformers.github.events.payload.commit;
 
 import android.util.Log;
 
@@ -8,10 +8,10 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.models.github.events.payload.PayloadCommit;
+import instinctools.android.models.github.events.payload.commit.PayloadCommit;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-class ListPayloadCommitsTransformer implements ITransformer<List<PayloadCommit>> {
+public class ListPayloadCommitsTransformer implements ITransformer<List<PayloadCommit>> {
     private static final String TAG = "ListPayloadCommitsTrans";
 
     @Override

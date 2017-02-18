@@ -16,7 +16,8 @@ import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.events.Event;
-import instinctools.android.models.github.events.payload.PayloadCommit;
+import instinctools.android.models.github.events.payload.commit.PayloadCommit;
+import instinctools.android.models.github.events.payload.release.PayloadAsset;
 import instinctools.android.utility.CustomTextUtils;
 
 public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
@@ -61,7 +62,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
             mTextViewActionText.setVisibility(View.VISIBLE);
             mViewGroupBody.removeAllViews();
 
-            String action = null;
+            String action;
             String actionText = null;
             switch (event.getType()) {
                 case PUSH:
@@ -71,13 +72,14 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     for (int i = 0; i < event.getPayload().getCommits().size() && i < 4; ++i) {
                         PayloadCommit commit = event.getPayload().getCommits().get(i);
 
-                        View view = View.inflate(mContext, R.layout.item_recycler_event_commit, mViewGroupBody);
+                        View view = View.inflate(mContext, R.layout.item_recycler_event_commit, null);
                         // Title
                         TextView commitTitle = (TextView) view.findViewById(R.id.text_event_commit_title);
                         commitTitle.setText(commit.getMessage());
                         // Hash
                         TextView commitHash = (TextView) view.findViewById(R.id.text_event_commit_hash);
                         commitHash.setText(commit.getSha().substring(0, 7));
+                        mViewGroupBody.addView(view);
                     }
                     break;
                 case COMMIT_COMMENT:
@@ -101,8 +103,29 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     actionText = event.getPayload().getIssue().getTitle();
                     break;
                 case FORK:
+                    action = String.format("<a href='profile://%s'>%s</a> forked <a href='repository://%s'>%s</a> to <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName(), event.getPayload().getForkee().getFullName(), event.getPayload().getForkee().getFullName());
+                    mTextViewActionText.setVisibility(View.GONE);
+                    break;
+                case RELEASE: {
+                    action = String.format("<a href='profile://%s'>%s</a> released %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRelease().getName(), event.getRepo().getUrl(), event.getRepo().getName());
+                    mTextViewActionText.setVisibility(View.GONE);
+
+                    for (PayloadAsset asset : event.getPayload().getRelease().getAssets()) {
+                        View view = View.inflate(mContext, R.layout.item_recycler_event_release, null);
+
+                        TextView assetName = (TextView) view.findViewById(R.id.text_event_asset_name);
+                        assetName.setText(asset.getName());
+                        mViewGroupBody.addView(view);
+                    }
+                    break;
+                }
                 case CREATE:
-                    // %s forked nadirowski/primeng-jit to Shauren/primeng-jit
+                    action = String.format("<a href='profile://%s'>%s</a> created %s %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getUrl(), event.getRepo().getName());
+                    mTextViewActionText.setVisibility(View.GONE);
+                    break;
+                case DELETE:
+                    action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getUrl(), event.getRepo().getName());
+                    mTextViewActionText.setVisibility(View.GONE);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unsupported event type: " + event.getType());

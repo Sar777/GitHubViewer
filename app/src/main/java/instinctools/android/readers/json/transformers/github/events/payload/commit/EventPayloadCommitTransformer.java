@@ -1,11 +1,11 @@
-package instinctools.android.readers.json.transformers.github.events.payload;
+package instinctools.android.readers.json.transformers.github.events.payload.commit;
 
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import instinctools.android.models.github.events.payload.PayloadCommit;
+import instinctools.android.models.github.events.payload.commit.PayloadCommit;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 public class EventPayloadCommitTransformer implements ITransformer<PayloadCommit> {

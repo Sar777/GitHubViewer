@@ -12,7 +12,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DBConstants.TABLE_REPOSITORIES_CREATE);
         db.execSQL(DBConstants.TABLE_NOTIFICATION_CREATE);
-        db.execSQL(DBConstants.TABLE_EVENTS_CREATE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
