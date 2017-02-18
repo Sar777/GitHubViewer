@@ -41,6 +41,7 @@ public class GithubServiceRepository extends GithubService {
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY_README_URL, fullname)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET).send();
 
         if (client.getCode() != HttpURLConnection.HTTP_OK)
@@ -55,6 +56,7 @@ public class GithubServiceRepository extends GithubService {
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY_README_URL, fullname)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET);
 
         client.send(new OnHttpClientListener() {
@@ -81,6 +83,7 @@ public class GithubServiceRepository extends GithubService {
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY, fullname)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET);
 
         client.send(new OnHttpClientListener() {
@@ -101,12 +104,28 @@ public class GithubServiceRepository extends GithubService {
         });
     }
 
+    public static Repository getRepository(String fullname) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_REPOSITORY, fullname)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return (Repository) JsonTransformer.transform(client.getContent(), Repository.class);
+    }
+
     public static void getRepositoryIssues(String fullname, IssueState state, Direction direction, final GithubServiceListener<List<Issue>> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient client = HttpClientFactory.
                 create(String.format(API_REPOSITORY_ISSUES, fullname) + getIssuesRequestFormat(state, direction)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
                 setMethod(HttpClientFactory.METHOD_GET);
 
         client.send(new OnHttpClientListener() {

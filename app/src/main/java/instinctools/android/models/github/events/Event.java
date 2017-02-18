@@ -57,7 +57,6 @@ public class Event {
         this.mPayload = payload;
     }
 
-    @Nullable
     public EventRepository getRepo() {
         return mRepo;
     }

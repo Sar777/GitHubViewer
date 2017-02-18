@@ -21,9 +21,8 @@ import instinctools.android.models.github.repositories.Repository;
 
 public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private RecyclerView mRecyclerView;
 
-    public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
+    public static final String EXTRA_REPOSITORY_NAME_TAG = "REPOSITORY";
 
     public RepositoryAdapter(Context context, boolean showHeader, @Nullable Cursor cursor) {
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
@@ -57,11 +56,9 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 public void onClick(View view) {
                     Repository repository = Repository.fromCursor(getCursor(getAdapterPosition()));
                     Intent intent = new Intent(mContext, DescriptionRepositoryActivity.class);
-                    intent.putExtra(EXTRA_REPOSITORY_ID_TAG, repository.getId());
+                    intent.putExtra(EXTRA_REPOSITORY_NAME_TAG, repository.getFullName());
                     ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
                     mContext.startActivity(intent, options.toBundle());
-
-                    
                 }
             });
         }

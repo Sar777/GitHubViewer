@@ -107,7 +107,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 case RELEASE: {
-                    action = String.format("<a href='profile://%s'>%s</a> released %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRelease().getName(), event.getRepo().getUrl(), event.getRepo().getName());
+                    action = String.format("<a href='profile://%s'>%s</a> released %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRelease().getName(), event.getRepo().getName(), event.getRepo().getName());
                     mTextViewActionText.setVisibility(View.GONE);
 
                     for (PayloadAsset asset : event.getPayload().getRelease().getAssets()) {
@@ -120,11 +120,11 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     break;
                 }
                 case CREATE:
-                    action = String.format("<a href='profile://%s'>%s</a> created %s %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getUrl(), event.getRepo().getName());
+                    action = String.format("<a href='profile://%s'>%s</a> created %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 case DELETE:
-                    action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getUrl(), event.getRepo().getName());
+                    action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 default:
