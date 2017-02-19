@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android</string>
+    <string name="title_programming_books">Programming books</string>
+    <string name="msg_empty_list">Empty list</string>
+    <string name="title_activity_description">DescriptionActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
