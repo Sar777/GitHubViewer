@@ -10,7 +10,7 @@ import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.utility.GitHubDate;
 
 public class CommitTransformer implements ITransformer<Commit> {
-    private static final String TAG = "RepositoryTransformer";
+    private static final String TAG = "CommitTransformer";
 
     private static final String J_HASH = "hash";
     private static final String J_MESSAGE = "message";

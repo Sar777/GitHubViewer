@@ -1,4 +1,4 @@
-package instinctools.android.adapters.search;
+package instinctools.android.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import instinctools.android.R;
 
-public abstract class AbstractSearchAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class AbstractRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected static final int TYPE_VIEW_EMPTY = 0;
     protected static final int TYPE_VIEW_ITEM = 1;
     protected static final int TYPE_VIEW_LOADING = 2;
@@ -22,7 +22,7 @@ public abstract class AbstractSearchAdapter<T> extends RecyclerView.Adapter<Recy
 
     private List<T> mResources;
 
-    protected AbstractSearchAdapter(@NonNull Context context) {
+    protected AbstractRecyclerAdapter(@NonNull Context context) {
         this.mContext = context;
         this.mResources = new ArrayList<>();
     }
@@ -40,7 +40,7 @@ public abstract class AbstractSearchAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof AbstractSearchAdapter<?>.LoadingViewHolder)
+        if (holder instanceof AbstractRecyclerAdapter<?>.LoadingViewHolder)
             ((LoadingViewHolder)holder).onBindViewHolder(position);
     }
 

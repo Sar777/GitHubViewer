@@ -24,7 +24,6 @@ import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.account.GitHubAccount;
 import instinctools.android.constans.Constants;
-import instinctools.android.database.providers.EventsProvider;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.loaders.AsyncAuthenticatorLoader;
@@ -110,15 +109,12 @@ public class AuthenticatorActivity extends AppCompatActivity implements LoaderMa
         bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_MY);
         bundle.putInt(Constants.NOTIFICATION_SYNC_TYPE, Constants.NOTIFICATION_TYPE_ALL_TYPES);
 
-        ContentResolver.requestSync(null, EventsProvider.AUTHORITY, bundle);
         ContentResolver.requestSync(null, NotificationsProvider.AUTHORITY, bundle);
         ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
 
-        ContentResolver.setSyncAutomatically(account, EventsProvider.AUTHORITY, true);
         ContentResolver.setSyncAutomatically(account, NotificationsProvider.AUTHORITY, true);
         ContentResolver.setSyncAutomatically(account, RepositoriesProvider.AUTHORITY, true);
 
-        ContentResolver.addPeriodicSync(account, EventsProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateEvents() * 60);
         ContentResolver.addPeriodicSync(account, NotificationsProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateNotifications() * 60);
         ContentResolver.addPeriodicSync(account, RepositoriesProvider.AUTHORITY, Bundle.EMPTY, SettingsStorage.getIntervalUpdateRepositories() * 60);
 

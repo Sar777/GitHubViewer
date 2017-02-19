@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.repository;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -15,15 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import instinctools.android.R;
-import instinctools.android.activity.DescriptionActivity;
+import instinctools.android.activity.DescriptionRepositoryActivity;
+import instinctools.android.adapters.CursorRecyclerViewAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
 
 public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private RecyclerView mRecyclerView;
 
-    public static final String EXTRA_REPOSITORY_ID_TAG = "REPOSITORY";
+    public static final String EXTRA_REPOSITORY_NAME_TAG = "REPOSITORY";
 
     public RepositoryAdapter(Context context, boolean showHeader, @Nullable Cursor cursor) {
         super(DBConstants.REPOSITORY_ID, context, showHeader, cursor);
@@ -56,12 +56,10 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 @Override
                 public void onClick(View view) {
                     Repository repository = Repository.fromCursor(getCursor(getAdapterPosition()));
-                    Intent intent = new Intent(mContext, DescriptionActivity.class);
-                    intent.putExtra(EXTRA_REPOSITORY_ID_TAG, repository.getId());
+                    Intent intent = new Intent(mContext, DescriptionRepositoryActivity.class);
+                    intent.putExtra(EXTRA_REPOSITORY_NAME_TAG, repository.getFullName());
                     ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
                     mContext.startActivity(intent, options.toBundle());
-
-                    
                 }
             });
         }

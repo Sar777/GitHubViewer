@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import instinctools.android.R;
-import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.adapters.repository.RepositoryAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;

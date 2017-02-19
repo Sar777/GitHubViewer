@@ -2,11 +2,8 @@ package instinctools.android.activity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -24,13 +21,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import instinctools.android.R;
-import instinctools.android.adapters.IssueAdapter;
-import instinctools.android.adapters.RepositoryAdapter;
-import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.RepositoriesProvider;
+import instinctools.android.adapters.issues.IssueAdapter;
+import instinctools.android.adapters.repository.RepositoryAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
+import instinctools.android.loaders.AsyncRepositoryInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
@@ -40,8 +36,8 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class DescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-    private static final String BUNDLE_REPOSITORY_ID = "ID";
+public class DescriptionRepositoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Repository>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+    public static final String BUNDLE_REPOSITORY_NAME = "NAME";
 
     private static final int LOADER_REPOSITORY_ID = 1;
 
@@ -79,10 +75,10 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     private IssueAdapter mIssueOpenedAdapter;
     private IssueAdapter mIssueClosedAdapter;
 
+    private String mFullName;
+
     private boolean mStarred;
     private boolean mWatched;
-
-    private Repository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +92,14 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         if (intent != null) {
-            int id = intent.getIntExtra(RepositoryAdapter.EXTRA_REPOSITORY_ID_TAG, -1);
-            if (id == -1) {
-                finish();
-                return;
-            }
+
+            if (intent.getData() != null)
+                mFullName = intent.getData().toString().split("//")[1];
+            else
+                mFullName = intent.getStringExtra(RepositoryAdapter.EXTRA_REPOSITORY_NAME_TAG);
 
             Bundle bundle = new Bundle();
-            bundle.putInt(BUNDLE_REPOSITORY_ID, id);
+            bundle.putString(BUNDLE_REPOSITORY_NAME, mFullName);
             getSupportLoaderManager().initLoader(LOADER_REPOSITORY_ID, bundle, this);
         }
     }
@@ -132,12 +128,16 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mTextViewOpenIssues = (TextView) findViewById(R.id.text_description_open_issues);
         //
         mButtonStar = (Button) findViewById(R.id.button_description_star_repo);
+        mButtonStar.setOnClickListener(this);
+
         mButtonWatch = (Button) findViewById(R.id.button_description_watch_repo);
+        mButtonWatch.setOnClickListener(this);
 
         mProgressBarStar = (ProgressBar) findViewById(R.id.pb_description_star_repo);
         mProgressBarWatch = (ProgressBar) findViewById(R.id.pb_description_watch_repo);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh_description);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         // Opened
         mRecyclerViewIssuesOpened = (RecyclerView) findViewById(R.id.recycler_description_issues_opened);
@@ -178,32 +178,80 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Repository> onCreateLoader(int id, Bundle args) {
         if (id != LOADER_REPOSITORY_ID)
             return null;
 
-        return new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, DBConstants.TABLE_REPOSITORIES + "." + DBConstants.REPOSITORY_ID + " = ?", new String[]{String.valueOf(args.getInt(BUNDLE_REPOSITORY_ID))}, null);
+        return new AsyncRepositoryInfoLoader(this, args);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mProgressBar.setVisibility(View.GONE);
-        mLayoutCardView.setVisibility(View.VISIBLE);
-
-        if (!cursor.moveToFirst()) {
-            cursor.close();
+    public void onLoadFinished(Loader<Repository> loader, Repository repository) {
+        if (repository == null) {
+            finish();
             return;
         }
 
-        mRepository = Repository.fromCursor(cursor);
-        initRepositoryData();
+        mProgressBar.setVisibility(View.GONE);
+        mLayoutCardView.setVisibility(View.VISIBLE);
 
-        if (!cursor.isClosed())
-            cursor.close();
+        getSupportActionBar().setTitle(repository.getFullName());
+        getSupportActionBar().setSubtitle(repository.getDefaultBranch());
+
+        mTextViewOwnerLogin.setText(repository.getRepositoryOwner().getLogin());
+        ImageLoader
+                .what(repository.getRepositoryOwner().getAvatarUrl())
+                .error(R.drawable.ic_github_logo)
+                .in(mImageViewOwnerAvatar)
+                .transformer(new CircleImageTransformer())
+                .load();
+
+        mTextViewFullName.setText(repository.getName());
+        mTextViewDescription.setText(repository.getDescription());
+        mTextViewLanguage.setText(repository.getLanguage());
+        mTextViewDefaultBranch.setText(repository.getDefaultBranch());
+        //
+        mTextViewForks.setText(String.valueOf(repository.getForks()));
+        mTextViewStargazers.setText(String.valueOf(repository.getStargazers()));
+        mTextViewWatchers.setText(String.valueOf(repository.getWatchers()));
+        mTextViewOpenIssues.setText(String.valueOf(repository.getOpenIssues()));
+
+        // Enable listener
+        mSwipeRefreshLayout.setRefreshing(false);
+
+        GithubServiceUser.isStarredRepository(repository.getFullName(), new GithubServiceListener<Boolean>() {
+            @Override
+            public void onError(int code, ErrorResponse response) {
+                mStarred = false;
+                updateStarButton(true);
+            }
+
+            @Override
+            public void onSuccess(Boolean star) {
+                mStarred = star;
+                updateStarButton(true);
+            }
+        });
+
+        GithubServiceUser.isWatchedRepository(repository.getFullName(), new GithubServiceListener<Boolean>() {
+            @Override
+            public void onError(int code, ErrorResponse response) {
+                mWatched = false;
+                updateWatchButton(true);
+            }
+
+            @Override
+            public void onSuccess(Boolean watch) {
+                mWatched = watch;
+                updateWatchButton(true);
+            }
+        });
+
+        updateIssues();
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(Loader<Repository> loader) {
 
     }
 
@@ -212,7 +260,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         if (view.getId() == R.id.button_description_star_repo) {
             updateStarButton(false);
 
-            GithubServiceUser.starredRepository(mRepository.getFullName(), !mStarred, new GithubServiceListener<Boolean>() {
+            GithubServiceUser.starredRepository(mFullName, !mStarred, new GithubServiceListener<Boolean>() {
                 @Override
                 public void onError(int code, ErrorResponse response) {
                     updateStarButton(true);
@@ -230,7 +278,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         } else if (view.getId() == R.id.button_description_watch_repo) {
             updateWatchButton(false);
 
-            GithubServiceUser.watchedRepository(mRepository.getFullName(), !mWatched, new GithubServiceListener<Boolean>() {
+            GithubServiceUser.watchedRepository(mFullName, !mWatched, new GithubServiceListener<Boolean>() {
                 @Override
                 public void onError(int code, ErrorResponse response) {
                     updateWatchButton(true);
@@ -282,63 +330,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-    private void initRepositoryData() {
-        getSupportActionBar().setTitle(mRepository.getFullName());
-
-        mTextViewOwnerLogin.setText(mRepository.getRepositoryOwner().getLogin());
-        ImageLoader
-                .what(mRepository.getRepositoryOwner().getAvatarUrl())
-                .error(R.drawable.ic_github_logo)
-                .in(mImageViewOwnerAvatar)
-                .transformer(new CircleImageTransformer())
-                .load();
-
-        mTextViewFullName.setText(mRepository.getName());
-        mTextViewDescription.setText(mRepository.getDescription());
-        mTextViewLanguage.setText(mRepository.getLanguage());
-        mTextViewDefaultBranch.setText(mRepository.getDefaultBranch());
-        //
-        mTextViewForks.setText(String.valueOf(mRepository.getForks()));
-        mTextViewStargazers.setText(String.valueOf(mRepository.getStargazers()));
-        mTextViewWatchers.setText(String.valueOf(mRepository.getWatchers()));
-        mTextViewOpenIssues.setText(String.valueOf(mRepository.getOpenIssues()));
-
-        // Enable listener
-        mButtonStar.setOnClickListener(this);
-        mButtonWatch.setOnClickListener(this);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        GithubServiceUser.isStarredRepository(mRepository.getFullName(), new GithubServiceListener<Boolean>() {
-            @Override
-            public void onError(int code, ErrorResponse response) {
-                mStarred = false;
-                updateStarButton(true);
-            }
-
-            @Override
-            public void onSuccess(Boolean star) {
-                mStarred = star;
-                updateStarButton(true);
-            }
-        });
-
-        GithubServiceUser.isWatchedRepository(mRepository.getFullName(), new GithubServiceListener<Boolean>() {
-            @Override
-            public void onError(int code, ErrorResponse response) {
-                mWatched = false;
-                updateWatchButton(true);
-            }
-
-            @Override
-            public void onSuccess(Boolean watch) {
-                mWatched = watch;
-                updateWatchButton(true);
-            }
-        });
-
-        updateIssues();
-    }
-
     private void updateIssues() {
         mCardViewIssuesOpened.setVisibility(View.VISIBLE);
         mCardViewIssuesClosed.setVisibility(View.VISIBLE);
@@ -349,7 +340,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
         mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
         mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
 
-        GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
+        GithubServiceRepository.getRepositoryIssues(mFullName, IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
             public void onError(int code, ErrorResponse response) {
                 mCardViewIssuesOpened.setVisibility(View.GONE);
@@ -370,7 +361,7 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
-        GithubServiceRepository.getRepositoryIssues(mRepository.getFullName(), IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
+        GithubServiceRepository.getRepositoryIssues(mFullName, IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
             public void onError(int code, ErrorResponse response) {
                 mCardViewIssuesClosed.setVisibility(View.GONE);
@@ -394,23 +385,6 @@ public class DescriptionActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onRefresh() {
-        GithubServiceRepository.getRepository(mRepository.getFullName(), new GithubServiceListener<Repository>() {
-            @Override
-            public void onError(int code, ErrorResponse response) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                Snackbar.make(findViewById(R.id.swiperefresh_description), response.getMessage(), Snackbar.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSuccess(Repository data) {
-                mSwipeRefreshLayout.setRefreshing(false);
-
-                if (data == null)
-                    return;
-
-                mRepository = data;
-                initRepositoryData();
-            }
-        });
+        getSupportLoaderManager().getLoader(LOADER_REPOSITORY_ID).forceLoad();
     }
 }

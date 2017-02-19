@@ -7,7 +7,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -40,23 +40,27 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.account.GitHubAccount;
-import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.adapters.events.EventsAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
-import instinctools.android.database.providers.EventsProvider;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
+import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
+import instinctools.android.loaders.AsyncReceivedEventsLoader;
 import instinctools.android.loaders.AsyncUserInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
+import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
+import instinctools.android.services.github.events.GithubServiceEvents;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
     private static final String TAG = "MainActivity";
@@ -70,10 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mEventsAdapter;
+    private EventsAdapter mEventsAdapter;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
+
+    // Models
+    private EventsListResponse mLastSearchResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +101,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        //mEventsAdapter = new RepositoryAdapter(this, true, null);
-        //mRecyclerView.setAdapter(mEventsAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
+        mEventsAdapter = new EventsAdapter(this);
+        mRecyclerView.setAdapter(mEventsAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore() {
+                if (mLastSearchResponse == null || mLastSearchResponse.getPageLinks().getNext() == null)
+                    return;
+
+                mEventsAdapter.getResource().add(null);
+                mRecyclerView.post(new Runnable() {
+                    public void run() {
+                        mEventsAdapter.notifyItemInserted(mEventsAdapter.getResource().size() - 1);
+                    }
+                });
+                GithubServiceEvents.getEventsByUrl(mLastSearchResponse.getPageLinks().getNext(), new GithubServiceListener<EventsListResponse>() {
+                    @Override
+                    public void onError(int code, @Nullable ErrorResponse response) {
+                        mEventsAdapter.getResource().remove(mEventsAdapter.getResource().size() - 1);
+                        mEventsAdapter.notifyItemRemoved(mEventsAdapter.getResource().size() - 1);
+                        mLoading = false;
+                    }
+
+                    @Override
+                    public void onSuccess(EventsListResponse response) {
+                        if (response != null) {
+                            int saveOldPos = mEventsAdapter.getResource().size() - 1;
+                            mEventsAdapter.getResource().remove(saveOldPos);
+                            mEventsAdapter.getResource().addAll(response.getEvents());
+                            mEventsAdapter.notifyItemRemoved(saveOldPos);
+                            mEventsAdapter.notifyItemRangeInserted(saveOldPos + 1, response.getEvents().size());
+                            mLastSearchResponse = response;
+                        }
+
+                        mLoading = false;
+                    }
+                });
+            }
+        });
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -115,15 +159,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initLoaders() {
-        // All events
-        getSupportLoaderManager().initLoader(LOADER_EVENTS_ID, null, this);
         // Notifications
         getSupportLoaderManager().initLoader(LOADER_NOTIFICATIONS_ID, null, this);
         // User info
         getSupportLoaderManager().initLoader(LOADER_USER_ID, new Bundle(), new LoaderManager.LoaderCallbacks<User>() {
             @Override
             public Loader<User> onCreateLoader(int id, Bundle args) {
-                return new AsyncUserInfoLoader(MainActivity.this, args);
+                return new AsyncUserInfoLoader(MainActivity.this, null);
             }
 
             @Override
@@ -133,6 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     return;
                 }
 
+                App.setLoggedUser(user);
+
                 // Update navigate drawer
                 updateUserInfoNavBar(user);
             }
@@ -140,6 +184,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onLoaderReset(Loader<User> loader) {
 
+            }
+        });
+
+        // All events
+        getSupportLoaderManager().initLoader(LOADER_EVENTS_ID, null, new LoaderManager.LoaderCallbacks<EventsListResponse>() {
+            @Override
+            public Loader<EventsListResponse> onCreateLoader(int id, Bundle args) {
+                return new AsyncReceivedEventsLoader(getApplicationContext(), null);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<EventsListResponse> loader) {
+
+            }
+
+            @Override
+            public void onLoadFinished(Loader<EventsListResponse> loader, EventsListResponse response) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+
+                mEventsAdapter.setResource(response.getEvents());
+                mEventsAdapter.notifyDataSetChanged();
+
+                mLastSearchResponse = response;
+
+                // Hidden refresh bar
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -203,9 +274,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Loader<Cursor> cursor = null;
         switch (id) {
-            case LOADER_EVENTS_ID:
-                cursor = new CursorLoader(this, EventsProvider.EVENT_CONTENT_URI, null, null, null, null);
-                break;
             case LOADER_NOTIFICATIONS_ID:
                 cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[]{String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
                 break;
@@ -219,18 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         switch (loader.getId()) {
-            case LOADER_EVENTS_ID: {
-                if (cursor.getCount() != 0) {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-                //mEventsAdapter.changeCursor(cursor, true);
-
-                // Hidden refresh bar
-                mSwipeRefreshLayout.setRefreshing(false);
-                break;
-            }
             case LOADER_NOTIFICATIONS_ID: {
                 ViewGroup view = (ViewGroup) mNavigationView.getMenu().findItem(R.id.nav_notification).getActionView();
                 TextView textView = (TextView) view.getChildAt(0);
@@ -255,10 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRefresh() {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(null, EventsProvider.AUTHORITY, bundle);
+        getSupportLoaderManager().getLoader(LOADER_EVENTS_ID).forceLoad();
     }
 
     @Override

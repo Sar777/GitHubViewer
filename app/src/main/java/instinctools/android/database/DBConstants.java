@@ -50,29 +50,6 @@ public class DBConstants {
     public static final String NOTIFICATION_LAST_READ_AT = "last_read_at";
     public static final String NOTIFICATION_URL = "url";
 
-    // Events
-    public static final String TABLE_EVENTS = "events";
-    public static final String EVENT_ID = "_id";
-    public static final String EVENT_TYPE = "type";
-    public static final String EVENT_IS_PUBLIC = "public";
-    public static final String EVENT_CREATED_AT = "created_at";
-    //
-    public static final String EVENT_REPO_ID = "repo_id";
-    public static final String EVENT_REPO_NAME = "repo_name";
-    public static final String EVENT_REPO_URL = "repo_url";
-    //
-    public static final String EVENT_ACTOR_ID = "actor_id";
-    public static final String EVENT_ACTOR_LOGIN = "actor_login";
-    public static final String EVENT_ACTOR_GRAVATAR_ID = "actor_gravatar_id";
-    public static final String EVENT_ACTOR_AVATAR_URL = "actor_avatar_url";
-    public static final String EVENT_ACTOR_URL = "actor_url";
-    //
-    public static final String EVENT_ORG_ID = "org_id";
-    public static final String EVENT_ORG_LOGIN = "org_login";
-    public static final String EVENT_ORG_GRAVATAR_ID = "org_gravatar_id";
-    public static final String EVENT_ORG_AVATAR_URL = "org_avatar_url";
-    public static final String EVENT_ORG_URL = "org_url";
-
     static final String TABLE_REPOSITORIES_CREATE = "CREATE TABLE " + TABLE_REPOSITORIES + "("
             + REPOSITORY_ID + " INTEGER, "
             + REPOSITORY_TYPE + " INTEGER, "
@@ -118,24 +95,4 @@ public class DBConstants {
             + NOTIFICATION_UPDATE_AT + " VARCHAR(30), "
             + NOTIFICATION_LAST_READ_AT + " VARCHAR(30), "
             + " PRIMARY KEY (" + NOTIFICATION_ID + ", " + NOTIFICATION_TYPE + ") ON CONFLICT REPLACE)";
-
-
-    static final String TABLE_EVENTS_CREATE = "CREATE TABLE " + TABLE_EVENTS + "("
-            + EVENT_ID + " INTEGER, "
-            + EVENT_TYPE + " VARCHAR(30), "
-            + EVENT_IS_PUBLIC + " INTEGER(1), "
-            + EVENT_CREATED_AT + " INTEGER, "
-            + EVENT_REPO_ID + " INTEGER, "
-            + EVENT_REPO_NAME + " VARCHAR(50), "
-            + EVENT_REPO_URL + " VARCHAR(255), "
-            + EVENT_ACTOR_ID + " INTEGER, "
-            + EVENT_ACTOR_LOGIN + " VARCHAR(50), "
-            + EVENT_ACTOR_GRAVATAR_ID + " VARCHAR(255), "
-            + EVENT_ACTOR_AVATAR_URL + " VARCHAR(255), "
-            + EVENT_ACTOR_URL + " VARCHAR(255), "
-            + EVENT_ORG_ID + " INTEGER, "
-            + EVENT_ORG_LOGIN + " VARCHAR(50), "
-            + EVENT_ORG_GRAVATAR_ID + " VARCHAR(255), "
-            + EVENT_ORG_AVATAR_URL + " VARCHAR(255), "
-            + EVENT_ORG_URL + " VARCHAR(255))";
 }

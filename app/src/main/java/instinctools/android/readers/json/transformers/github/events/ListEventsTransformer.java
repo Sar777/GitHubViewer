@@ -12,7 +12,7 @@ import instinctools.android.models.github.events.Event;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 public class ListEventsTransformer implements ITransformer<List<Event>> {
-    private static final String TAG = "ListUserRepositories";
+    private static final String TAG = "ListEventsTransformer";
 
     @Override
     public List<Event> transform(Object object) {

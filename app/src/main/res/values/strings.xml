@@ -45,6 +45,7 @@
     <string name="title_profile_repositories">Repositories</string>
     <string name="title_profile_following">Follow.</string>
     <string name="title_profile_information">Information:</string>
+    <string name="title_profile_organizations">Organizations:</string>
     <string name="title_menu">Menu</string>
     <string name="title_watch_repositories">Watch</string>
     <string name="title_star_repos">Stars</string>
@@ -57,7 +58,6 @@
     <string name="title_pref_header_data_sync_summary">Interval sync data</string>
     <string name="title_pref_header_general_summary">General application settings</string>
     <string name="title_pref_category_sync">Synchronization</string>
-    <string name="title_pref_category_sync_events">Notification</string>
     <string name="title_pref_category_sync_repositories">Repositories</string>
     <string name="title_pref_category_sync_notifications">Notification</string>
     <string name="title_pref_category_general_search_result">Max search result</string>
@@ -65,11 +65,9 @@
     <string name="title_pref_category_sync_summary">Synchronization repositories, notifications and etc from GitHub.com</string>
     <string name="title_pref_category_repos_summary">The interval between updating my list of repositories</string>
     <string name="title_pref_category_sync_notifications_summary">The interval between updating notifications</string>
-    <string name="title_pref_category_sync_events_summary">The interval between updating events</string>
     <string name="title_pref_category_general_search_result_summary">Max elements response by search</string>
     <string name="title_pref_category_general_sound_notifications_summary">Sound after get new notifications from GitHub.com</string>
     <!-- Preference keys -->
-    <string name="title_pref_key_sync_events">sync_events</string>
     <string name="title_pref_key_sync_repositories">sync_my_repositories</string>
     <string name="title_pref_key_sync_notifications">sync_notifications</string>
     <string name="title_pref_key_sync_account">sync_account</string>
@@ -128,4 +126,7 @@
     <string name="msg_fail_grant_account_permissions">Fail granted get accounts permissions</string>
     <string name="msg_fail_get_current_user_title">Fail get user info</string>
     <string name="msg_fail_get_current_user_summary">Fail get user info</string>
+    <!-- -->
+    <string name="title_profile_tab_about">About</string>
+    <string name="title_profile_tab_events">Events</string>
 </resources>

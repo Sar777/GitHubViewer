@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 import instinctools.android.App;
 import instinctools.android.R;
-import instinctools.android.adapters.NotificationTypeAdapter;
+import instinctools.android.adapters.notifications.NotificationTypeAdapter;
 import instinctools.android.constans.Constants;
 
 public class NotificationActivity extends AppCompatActivity {

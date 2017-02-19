@@ -1,10 +1,6 @@
 package instinctools.android.models.github.events;
 
 
-import android.content.ContentValues;
-
-import instinctools.android.database.DBConstants;
-
 public class EventRepository {
     private Integer mId;
     private String mName;
@@ -32,14 +28,5 @@ public class EventRepository {
 
     public void setUrl(String url) {
         this.mUrl = url;
-    }
-
-    public ContentValues build() {
-        ContentValues values = new ContentValues();
-
-        values.put(DBConstants.EVENT_REPO_ID, mId);
-        values.put(DBConstants.EVENT_REPO_NAME, mName);
-        values.put(DBConstants.EVENT_REPO_URL, mUrl);
-        return values;
     }
 }

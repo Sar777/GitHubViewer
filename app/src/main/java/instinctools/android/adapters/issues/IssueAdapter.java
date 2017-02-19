@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.issues;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

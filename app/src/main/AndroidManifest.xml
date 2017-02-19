@@ -32,9 +32,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.DescriptionActivity"
+            android:name=".activity.DescriptionRepositoryActivity"
             android:label="@string/title_activity_description"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="repository" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activity.AuthActivity"
@@ -45,10 +51,17 @@
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.ProfileActivity"
             android:label=""
-            android:theme="@style/AppTheme.Profile" />
+            android:theme="@style/AppTheme.Profile">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="profile" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".activity.IntroductionsActivity"
@@ -134,16 +147,6 @@
         </service>
 
         <service
-            android:name=".services.EventsSyncService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                android:resource="@xml/events_sync_adapter" />
-        </service>
-
-        <service
             android:name=".services.NotificationsSyncService"
             android:exported="false">
             <intent-filter>
@@ -162,13 +165,6 @@
             <meta-data android:name="android.content.SyncAdapter"
                 android:resource="@xml/repositories_sync_adapter" />
         </service>
-
-        <provider
-            android:name=".database.providers.EventsProvider"
-            android:authorities="instinctools.android.database.providers.Events"
-            android:syncable="true"
-            android:label="@string/title_events"
-            android:exported="false" />
 
         <provider
             android:name=".database.providers.RepositoriesProvider"

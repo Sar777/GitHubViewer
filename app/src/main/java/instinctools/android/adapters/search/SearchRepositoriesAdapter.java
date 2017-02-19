@@ -13,9 +13,10 @@ import android.widget.TextView;
 
 import instinctools.android.App;
 import instinctools.android.R;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.models.github.repositories.Repository;
 
-public class SearchRepositoriesAdapter extends AbstractSearchAdapter<Repository> {
+public class SearchRepositoriesAdapter extends AbstractRecyclerAdapter<Repository> {
     public SearchRepositoriesAdapter(@NonNull Context context) {
         super(context);
     }

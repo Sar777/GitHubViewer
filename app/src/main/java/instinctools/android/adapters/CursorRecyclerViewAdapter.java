@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    static final int VIEW_TYPE_ITEM = 1;
-    static final int VIEW_TYPE_HEADER = 2;
-    static final int VIEW_TYPE_EMPTY = 3;
+    protected static final int VIEW_TYPE_ITEM = 1;
+    protected static final int VIEW_TYPE_HEADER = 2;
+    protected static final int VIEW_TYPE_EMPTY = 3;
 
     private Context mContext;
 
@@ -24,7 +24,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     private DataSetObserver mDataSetObserver;
 
-    CursorRecyclerViewAdapter(String idColumnName, Context context, boolean showHeader, @Nullable Cursor cursor) {
+    public CursorRecyclerViewAdapter(String idColumnName, Context context, boolean showHeader, @Nullable Cursor cursor) {
         mContext = context;
         mCursor = cursor;
         mCanShowHeader = showHeader;

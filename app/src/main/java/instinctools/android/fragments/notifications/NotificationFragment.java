@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import instinctools.android.R;
-import instinctools.android.adapters.NotificationAdapter;
 import instinctools.android.adapters.SimpleItemTouchHelperCallback;
+import instinctools.android.adapters.notifications.NotificationAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;

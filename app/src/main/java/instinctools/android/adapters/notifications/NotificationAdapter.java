@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.notifications;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import instinctools.android.R;
+import instinctools.android.adapters.CursorRecyclerViewAdapter;
+import instinctools.android.adapters.ItemTouchHelperAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.models.github.errors.ErrorResponse;
@@ -19,7 +21,7 @@ import instinctools.android.models.github.notification.Notification;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.notification.GithubServiceNotifications;
 
-public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter  {
+public class NotificationAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> implements ItemTouchHelperAdapter {
     private Context mContext;
 
     public NotificationAdapter(Context context, boolean showHeader, @Nullable Cursor cursor) {

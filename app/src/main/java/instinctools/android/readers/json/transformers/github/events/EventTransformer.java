@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import instinctools.android.models.github.events.Event;
 import instinctools.android.models.github.events.enums.EventType;
 import instinctools.android.readers.json.transformers.ITransformer;
+import instinctools.android.readers.json.transformers.github.events.payload.EventPayloadTransformer;
 import instinctools.android.utility.GitHubDate;
 
 public class EventTransformer implements ITransformer<Event> {

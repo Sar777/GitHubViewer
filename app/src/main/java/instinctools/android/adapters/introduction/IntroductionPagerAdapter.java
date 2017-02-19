@@ -1,4 +1,4 @@
-package instinctools.android.adapters;
+package instinctools.android.adapters.introduction;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

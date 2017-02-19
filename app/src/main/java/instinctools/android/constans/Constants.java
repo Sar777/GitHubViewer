@@ -9,7 +9,7 @@ public class Constants {
     public static final String CLIENT_ID = "f2b8d4b381f74641a122";
     public static final String CLIENT_SECRET = "74923b8068e754421c46f16ada8d8f0c2d356d7b";
     public static final String CALLBACK_URL = "application://github";
-    public static final String SCOPES = "repo,notifications,gist,user";
+    public static final String SCOPES = "repo,notifications,gist,user,org";
 
     // Uri
     public static final String AUTH_CALLBACK_INITIAL = "oauth";
@@ -36,8 +36,6 @@ public class Constants {
     public static final int INTERVAL_UPDATE_REPO_SERVICES = 10;
     // Interval update notifications. Default
     public static final int INTERVAL_UPDATE_NOTIFICATIONS = 5;
-    // Interval update events. Default
-    public static final int INTERVAL_UPDATE_EVENTS = 10;
     //
     public static final int MAX_SEARCH_RESULT_BY_PAGE = 30;
 
