@@ -152,6 +152,7 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
         mProgressBarIssuesOpened.setVisibility(View.VISIBLE);
 
         mCardViewIssuesOpened = (CardView) findViewById(R.id.cardview_description_issues_opened);
+        mCardViewIssuesOpened.setVisibility(View.GONE);
 
         // Closed
         mRecyclerViewIssuesClosed = (RecyclerView) findViewById(R.id.recycler_description_issues_closed);
@@ -166,6 +167,7 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
         mProgressBarIssuesClosed.setVisibility(View.VISIBLE);
 
         mCardViewIssuesClosed = (CardView) findViewById(R.id.cardview_description_issues_closed);
+        mCardViewIssuesClosed.setVisibility(View.GONE);
 
         updateStarButton(false);
         updateWatchButton(false);
@@ -331,8 +333,8 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
     }
 
     private void updateIssues() {
-        mCardViewIssuesOpened.setVisibility(View.VISIBLE);
-        mCardViewIssuesClosed.setVisibility(View.VISIBLE);
+        mCardViewIssuesOpened.setVisibility(View.GONE);
+        mCardViewIssuesClosed.setVisibility(View.GONE);
 
         mProgressBarIssuesOpened.setVisibility(View.VISIBLE);
         mProgressBarIssuesClosed.setVisibility(View.VISIBLE);
@@ -343,16 +345,14 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
         GithubServiceRepository.getRepositoryIssues(mFullName, IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
             public void onError(int code, ErrorResponse response) {
-                mCardViewIssuesOpened.setVisibility(View.GONE);
             }
 
             @Override
             public void onSuccess(List<Issue> issues) {
-                if (issues == null || issues.isEmpty()) {
-                    mCardViewIssuesOpened.setVisibility(View.GONE);
+                if (issues == null || issues.isEmpty())
                     return;
-                }
 
+                mCardViewIssuesOpened.setVisibility(View.VISIBLE);
                 mIssueOpenedAdapter.setIssues(issues);
                 mIssueOpenedAdapter.notifyDataSetChanged();
 
@@ -364,16 +364,14 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
         GithubServiceRepository.getRepositoryIssues(mFullName, IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
             @Override
             public void onError(int code, ErrorResponse response) {
-                mCardViewIssuesClosed.setVisibility(View.GONE);
             }
 
             @Override
             public void onSuccess(List<Issue> issues) {
-                if (issues == null || issues.isEmpty()) {
-                    mCardViewIssuesClosed.setVisibility(View.GONE);
+                if (issues == null || issues.isEmpty())
                     return;
-                }
 
+                mCardViewIssuesClosed.setVisibility(View.VISIBLE);
                 mIssueClosedAdapter.setIssues(issues);
                 mIssueClosedAdapter.notifyDataSetChanged();
 

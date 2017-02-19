@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -30,10 +31,11 @@ import instinctools.android.models.github.user.User;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-public class ProfileAboutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object> {
+public class ProfileAboutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, SwipeRefreshLayout.OnRefreshListener {
     private static final int REQUEST_CODE_AUTHORIZATION = 1;
 
     // View
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private ViewGroup mViewGroupProfileInfo;
     private ViewGroup mOrganizationsContainer;
     private CardView mCardViewOrganizations;
@@ -60,6 +62,9 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
 
         mViewGroupProfileInfo = (ViewGroup) view.findViewById(R.id.layout_profile_about_info);
         mViewGroupProfileInfo.setVisibility(View.INVISIBLE);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_profile_about);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mCardViewOrganizations = (CardView) view.findViewById(R.id.cardview_profile_organizations);
         mCardViewOrganizations.setVisibility(View.GONE);
@@ -122,6 +127,8 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
             initialUserInfo((User)object);
         else if (loader.getId() == ProfileActivity.LOADER_ORGANIZATIONS_ID)
             initialOrganizationsInfo((List<Organization>)object);
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -210,5 +217,10 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
         }
 
         mCardViewOrganizations.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onRefresh() {
+        getActivity().getSupportLoaderManager().getLoader(ProfileActivity.LOADER_PROFILE_ID).forceLoad();
     }
 }

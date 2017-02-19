@@ -10,8 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_profile_events"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh_profile_events"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_profile_events"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

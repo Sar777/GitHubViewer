@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,11 +25,12 @@ import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.events.GithubServiceEvents;
 
-public class ProfileEventsFragment extends Fragment implements LoaderManager.LoaderCallbacks<EventsListResponse> {
+public class ProfileEventsFragment extends Fragment implements LoaderManager.LoaderCallbacks<EventsListResponse>, SwipeRefreshLayout.OnRefreshListener {
     // View
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private AbstractRecyclerAdapter mEventsAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     EventsListResponse mLastEventsListResponse;
 
@@ -46,6 +48,9 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_profile_events);
         mProgressBar.setVisibility(View.VISIBLE);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_profile_events);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -121,6 +126,7 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
 
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
 
         mLastEventsListResponse = response;
     }
@@ -128,5 +134,10 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<EventsListResponse> loader) {
 
+    }
+
+    @Override
+    public void onRefresh() {
+        getActivity().getSupportLoaderManager().getLoader(ProfileActivity.LOADER_EVENTS_ID).forceLoad();
     }
 }
