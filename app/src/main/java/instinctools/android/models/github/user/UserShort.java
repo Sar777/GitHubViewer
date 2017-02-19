@@ -1,13 +1,13 @@
-package instinctools.android.models.github.events;
+package instinctools.android.models.github.user;
 
-public class EventAuthor {
-    private Integer mId;
-    private String mLogin;
-    private String mGravatarId;
-    private String mAvatarUrl;
-    private String mUrl;
-    private String mHtmlUrl;
-    private String mType;
+public class UserShort {
+    protected Integer mId;
+    protected String mLogin;
+    protected String mGravatarId;
+    protected String mAvatarUrl;
+    protected String mUrl;
+    protected String mHtmlUrl;
+    protected String mType;
 
     public Integer getId() {
         return mId;

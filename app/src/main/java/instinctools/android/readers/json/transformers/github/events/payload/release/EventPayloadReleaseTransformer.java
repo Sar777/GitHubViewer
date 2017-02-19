@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.events.payload.release.PayloadRelease;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.events.EventAuthorTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 
 public class EventPayloadReleaseTransformer implements ITransformer<PayloadRelease> {
     private static final String TAG = "EventPayloadRelTrans";
@@ -43,7 +43,7 @@ public class EventPayloadReleaseTransformer implements ITransformer<PayloadRelea
             payloadRelease.setTagName(jsonObject.getString(J_TAG_NAME));
             payloadRelease.setName(jsonObject.getString(J_NAME));
 
-            payloadRelease.setAuthor(new EventAuthorTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
+            payloadRelease.setAuthor(new UserShortTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
             payloadRelease.setAssets(new ListEventPayloadReleaseAssetTransformer().transform(jsonObject.getJSONArray(J_ASSETS)));
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

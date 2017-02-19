@@ -165,7 +165,7 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
 
         ProfileActivity activity = (ProfileActivity)getActivity();
         if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setTitle(user.getName());
+            activity.getSupportActionBar().setTitle("None".equals(user.getName()) ? user.getLogin() : user.getName());
             activity.getSupportActionBar().setSubtitle(String.format("@%s", user.getLogin()));
         }
 

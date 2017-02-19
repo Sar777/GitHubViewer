@@ -2,6 +2,7 @@
     <string name="app_name">GitHub Viewer</string>
     <string name="title_repositories">Repositories</string>
     <string name="title_my_repositories">My Repositories</string>
+    <string name="title_activity_repository_contributors">Contributors</string>
     <string name="msg_empty_list">Empty list</string>
     <string name="title_activity_description">Description</string>
     <string name="title_activity_auth">Auth Github.com</string>
@@ -74,11 +75,15 @@
     <string name="title_pref_key_general_max_search_result">general_max_search_result</string>
     <string name="title_pref_key_general_sound_notifications">general_sound_notifications</string>
     <string name="title_pref_key_app_settings">app_settings</string>
-
+    <!-- -->
     <string name="title_description_button_star">Star</string>
     <string name="title_description_button_watch">Watch</string>
     <string name="title_description_button_unstar">Unstar</string>
     <string name="title_description_button_unwatch">Unwatch</string>
+    <string name="title_description_other_information">Other information</string>
+    <string name="title_description_contributors">Contributors</string>
+    <string name="title_description_issues">Issues</string>
+    <!-- -->
     <string name="title_search_activity">Search</string>
     <string name="title_search_search">Search</string>
     <string name="title_search_filter_params">Filter settings</string>
@@ -129,4 +134,5 @@
     <!-- -->
     <string name="title_profile_tab_about">About</string>
     <string name="title_profile_tab_events">Events</string>
+    <string name="msg_contributions">%d contributions</string>
 </resources>

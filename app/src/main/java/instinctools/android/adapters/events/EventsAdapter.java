@@ -21,8 +21,12 @@ import instinctools.android.models.github.events.payload.release.PayloadAsset;
 import instinctools.android.utility.CustomTextUtils;
 
 public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
-    public EventsAdapter(@NonNull Context context) {
+    private boolean mSelf;
+
+    public EventsAdapter(@NonNull Context context, boolean self) {
         super(context);
+
+        this.mSelf = self;
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -66,7 +70,10 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
             String actionText = null;
             switch (event.getType()) {
                 case PUSH:
-                    action = String.format("<a href='profile://%s'>%s</a> pushed to %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRef().split("/")[2], event.getRepo().getName(), event.getRepo().getName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> pushed to %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRef().split("/")[2], event.getRepo().getName(), event.getRepo().getName());
+                    else
+                        action = String.format("Pushed to %s at <a href='repository://%s'>%s</a>", event.getPayload().getRef().split("/")[2], event.getRepo().getName(), event.getRepo().getName());
                     mTextViewActionText.setVisibility(View.GONE);
 
                     for (int i = 0; i < event.getPayload().getCommits().size() && i < 4; ++i) {
@@ -83,31 +90,63 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     }
                     break;
                 case COMMIT_COMMENT:
-                    action = String.format("<a href='profile://%s'>%s</a> commented on commit <a href='%s'>%s@%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getComment().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getComment().getCommentId().substring(0, 7));
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> commented on commit <a href='%s'>%s@%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getComment().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getComment().getCommentId().substring(0, 7));
+                    else
+                        action = String.format("Commented on commit <a href='%s'>%s@%s</a>", event.getPayload().getComment().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getComment().getCommentId().substring(0, 7));
+
                     actionText = event.getPayload().getComment().getBody();
                     break;
                 case ISSUE_COMMENT:
-                    action = String.format("<a href='profile://%s'>%s</a> commented on issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> commented on issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                    else
+                        action = String.format("Commented on issue <a href='%s'>%s#%s</a>", event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+
                     actionText = event.getPayload().getComment().getBody();
                     break;
                 case PULL_REQUEST:
-                    action = String.format("<a href='profile://%s'>%s</a> %s pull request <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getAction(), event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> %s pull request <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getAction(), event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+                    else {
+                        action = String.format("%s pull request <a href='%s'>%s#%s</a>", event.getPayload().getAction(), event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+                        action = action.substring(0, 1).toUpperCase() + action.substring(1);
+                    }
+
                     actionText = event.getPayload().getPullRequest().getTitle();
                     break;
                 case PULL_REQUEST_REVIEW_COMMENT:
-                    action = String.format("<a href='profile://%s'>%s</a> commented on pull request <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> commented on pull request <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+                    else
+                        action = String.format("Commented on pull request <a href='%s'>%s#%s</a>", event.getPayload().getPullRequest().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getPullRequest().getNumber());
+
                     actionText = event.getPayload().getComment().getBody();
                     break;
                 case ISSUES:
-                    action = String.format("<a href='profile://%s'>%s</a> %s issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getAction(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> %s issue <a href='%s'>%s#%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getAction(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                    else {
+                        action = String.format("%s issue <a href='%s'>%s#%s</a>", event.getPayload().getAction(), event.getPayload().getIssue().getHtmlUrl(), event.getRepo().getName(), event.getPayload().getIssue().getNumber());
+                        action = action.substring(0, 1).toUpperCase() + action.substring(1);
+                    }
+
                     actionText = event.getPayload().getIssue().getTitle();
                     break;
                 case FORK:
-                    action = String.format("<a href='profile://%s'>%s</a> forked <a href='repository://%s'>%s</a> to <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName(), event.getPayload().getForkee().getFullName(), event.getPayload().getForkee().getFullName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> forked <a href='repository://%s'>%s</a> to <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName(), event.getPayload().getForkee().getFullName(), event.getPayload().getForkee().getFullName());
+                    else
+                        action = String.format("Forked <a href='repository://%s'>%s</a> to <a href='repository://%s'>%s</a>", event.getRepo().getName(), event.getRepo().getName(), event.getPayload().getForkee().getFullName(), event.getPayload().getForkee().getFullName());
+
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 case RELEASE: {
-                    action = String.format("<a href='profile://%s'>%s</a> released %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRelease().getName(), event.getRepo().getName(), event.getRepo().getName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> released %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRelease().getName(), event.getRepo().getName(), event.getRepo().getName());
+                    else
+                        action = String.format("Released %s at <a href='repository://%s'>%s</a>", event.getPayload().getRelease().getName(), event.getRepo().getName(), event.getRepo().getName());
+
                     mTextViewActionText.setVisibility(View.GONE);
 
                     for (PayloadAsset asset : event.getPayload().getRelease().getAssets()) {
@@ -120,15 +159,27 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     break;
                 }
                 case CREATE:
-                    action = String.format("<a href='profile://%s'>%s</a> created %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> created %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+                    else
+                        action = String.format("Created %s %s at <a href='repository://%s'>%s</a>", event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 case DELETE:
-                    action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> deleted %s %s at <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+                    else
+                        action = String.format("Deleted %s %s at <a href='repository://%s'>%s</a>", event.getPayload().getRefType(), event.getPayload().getRef(), event.getRepo().getName(), event.getRepo().getName());
+
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 case WATCH:
-                    action = String.format("<a href='profile://%s'>%s</a> starred <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName());
+                    if (!mSelf)
+                        action = String.format("<a href='profile://%s'>%s</a> starred <a href='repository://%s'>%s</a>", event.getActor().getLogin(), event.getActor().getDisplayLogin(), event.getRepo().getName(), event.getRepo().getName());
+                    else
+                        action = String.format("Starred <a href='repository://%s'>%s</a>", event.getRepo().getName(), event.getRepo().getName());
+
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 default:

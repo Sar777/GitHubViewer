@@ -18,6 +18,8 @@ import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.repositories.RepositoryReadme;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.models.github.user.User;
+import instinctools.android.models.github.user.UserContributor;
+import instinctools.android.models.github.user.UserShort;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.github.authorization.AccessTokenTransformer;
 import instinctools.android.readers.json.transformers.github.commits.CommitTransformer;
@@ -37,6 +39,10 @@ import instinctools.android.readers.json.transformers.github.repository.ListRepo
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryTransformer;
 import instinctools.android.readers.json.transformers.github.search.SearchResponseTransformer;
+import instinctools.android.readers.json.transformers.github.user.ListUserContributionsTransformer;
+import instinctools.android.readers.json.transformers.github.user.ListUsersShortTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserContributorTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 import instinctools.android.readers.json.transformers.github.user.UserTransformer;
 
 public class JsonTransformer {
@@ -74,6 +80,12 @@ public class JsonTransformer {
         // Organizations
         mTransformersMap.put(Organization.class.getName(), OrganizationTransformer.class);
         mTransformersMap.put(Organization[].class.getName(), ListOrganizationsTransformer.class);
+        // User short info
+        mTransformersMap.put(UserShort.class.getName(), UserShortTransformer.class);
+        mTransformersMap.put(UserShort[].class.getName(), ListUsersShortTransformer.class);
+        // User contributor
+        mTransformersMap.put(UserContributor.class.getName(), UserContributorTransformer.class);
+        mTransformersMap.put(UserContributor[].class.getName(), ListUserContributionsTransformer.class);
     }
 
     public static <Model, T> Model transform(@NonNull String json, Class<T> clazz) {

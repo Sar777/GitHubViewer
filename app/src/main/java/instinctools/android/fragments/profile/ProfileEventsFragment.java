@@ -92,7 +92,7 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
             }
         });
 
-        mEventsAdapter = new EventsAdapter(getContext());
+        mEventsAdapter = new EventsAdapter(getContext(), true);
         mRecyclerView.setAdapter(mEventsAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="instinctools.android.activity.DescriptionRepositoryActivity">
+    tools:context="instinctools.android.activity.RepositoryContributorsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,8 +19,9 @@
             android:background="?attr/colorPrimary"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_description" />
+    <include layout="@layout/content_repository_contributors" />
 
 </android.support.design.widget.CoordinatorLayout>

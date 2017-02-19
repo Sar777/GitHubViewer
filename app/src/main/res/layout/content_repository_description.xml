@@ -8,8 +8,8 @@
     android:layout_marginRight="@dimen/description_content_margin_left_right"
     android:layout_marginLeft="@dimen/description_content_margin_left_right"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="instinctools.android.activity.DescriptionRepositoryActivity"
-    tools:showIn="@layout/activity_description">
+    tools:context="instinctools.android.activity.RepositoryDescriptionActivity"
+    tools:showIn="@layout/activity_repository_description">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="wrap_content"
@@ -31,7 +31,6 @@
                     android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/description_cardview_padding"
-                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
                     app:cardElevation="@dimen/description_cardview_card_elevation"
                     tools:ignore="RtlHardcoded">
 
@@ -140,7 +139,6 @@
                     android:layout_marginTop="@dimen/description_title_text_view_margin_bottom_top"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/description_cardview_padding"
-                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
                     app:cardElevation="@dimen/description_cardview_card_elevation"
                     tools:ignore="RtlHardcoded">
 
@@ -219,7 +217,6 @@
                     android:layout_height="wrap_content"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/description_cardview_padding"
-                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
                     app:cardElevation="@dimen/description_cardview_card_elevation"
                     tools:ignore="RtlHardcoded">
 
@@ -298,12 +295,53 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardUseCompatPadding="true"
+                    app:contentPadding="@dimen/description_cardview_padding"
+                    app:cardElevation="@dimen/description_cardview_card_elevation"
+                    tools:ignore="RtlHardcoded">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                            android:text="@string/title_description_other_information"/>
+
+                        <TextView
+                            android:id="@+id/text_repository_description_contributors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:textColor="@android:color/black"
+                            android:clickable="true"
+                            android:textStyle="bold"
+                            android:text="@string/title_description_contributors"/>
+
+                        <TextView
+                            android:id="@+id/text_repository_description_issues"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@android:color/black"
+                            android:clickable="true"
+                            android:textStyle="bold"
+                            android:text="@string/title_description_issues"/>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:id="@+id/cardview_description_issues_opened"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/description_card_view_opened_issues_height"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/description_cardview_padding"
-                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
                     app:cardElevation="@dimen/description_cardview_card_elevation"
                     tools:ignore="RtlHardcoded">
 
@@ -344,7 +382,6 @@
                     android:layout_height="@dimen/description_card_view_opened_issues_height"
                     app:cardUseCompatPadding="true"
                     app:contentPadding="@dimen/description_cardview_padding"
-                    app:cardCornerRadius="@dimen/description_cardview_card_cornes_radius"
                     app:cardElevation="@dimen/description_cardview_card_elevation"
                     tools:ignore="RtlHardcoded">
 

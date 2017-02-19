@@ -30,6 +30,7 @@
     <string name="title_star_repos">Избранные</string>
     <string name="title_statistics">Статистика</string>
     <string name="title_description">Описание</string>
+    <string name="title_description_other_information">Другая информация</string>
     <!-- Preference -->
     <string name="title_pref_header_data_sync">Синхронизация</string>
     <string name="title_pref_header_general">Общие</string>

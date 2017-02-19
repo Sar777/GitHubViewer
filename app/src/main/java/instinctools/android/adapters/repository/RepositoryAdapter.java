@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import instinctools.android.R;
-import instinctools.android.activity.DescriptionRepositoryActivity;
+import instinctools.android.activity.RepositoryDescriptionActivity;
 import instinctools.android.adapters.CursorRecyclerViewAdapter;
 import instinctools.android.database.DBConstants;
 import instinctools.android.models.github.repositories.Repository;
@@ -56,7 +56,7 @@ public class RepositoryAdapter extends CursorRecyclerViewAdapter<RecyclerView.Vi
                 @Override
                 public void onClick(View view) {
                     Repository repository = Repository.fromCursor(getCursor(getAdapterPosition()));
-                    Intent intent = new Intent(mContext, DescriptionRepositoryActivity.class);
+                    Intent intent = new Intent(mContext, RepositoryDescriptionActivity.class);
                     intent.putExtra(EXTRA_REPOSITORY_NAME_TAG, repository.getFullName());
                     ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
                     mContext.startActivity(intent, options.toBundle());

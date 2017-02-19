@@ -2,7 +2,7 @@ package instinctools.android.models.github.events.payload.release;
 
 import java.util.List;
 
-import instinctools.android.models.github.events.EventAuthor;
+import instinctools.android.models.github.user.UserShort;
 
 public class PayloadRelease {
     private Integer mId;
@@ -10,7 +10,7 @@ public class PayloadRelease {
     private String mHtmlUrl;
     private String mTagName;
     private String mName;
-    private EventAuthor mAuthor;
+    private UserShort mAuthor;
     private List<PayloadAsset> mAssets;
 
     public Integer getId() {
@@ -53,11 +53,11 @@ public class PayloadRelease {
         this.mName = name;
     }
 
-    public EventAuthor getmAuthor() {
+    public UserShort getmAuthor() {
         return mAuthor;
     }
 
-    public void setAuthor(EventAuthor author) {
+    public void setAuthor(UserShort author) {
         this.mAuthor = author;
     }
 

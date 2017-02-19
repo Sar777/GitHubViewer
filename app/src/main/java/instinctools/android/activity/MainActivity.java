@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mEventsAdapter = new EventsAdapter(this);
+        mEventsAdapter = new EventsAdapter(this, false);
         mRecyclerView.setAdapter(mEventsAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 

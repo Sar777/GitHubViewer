@@ -68,7 +68,6 @@
     <dimen name="description_content_margin_left_right">8dp</dimen>
     <dimen name="description_divider_size">1dp</dimen>
     <dimen name="description_cardview_padding">10dp</dimen>
-    <dimen name="description_cardview_card_cornes_radius">2dp</dimen>
     <dimen name="description_cardview_card_elevation">2dp</dimen>
     <dimen name="description_cardview_margin_bottom_top">8dp</dimen>
     <dimen name="description_margin_title_bottom">15dp</dimen>
@@ -104,4 +103,5 @@
     <dimen name="layout_slider_container_padding_bottom">30dp</dimen>
     <dimen name="recycler_view_item_avatar_author_size">20dp</dimen>
     <dimen name="cardview_profile_organization_margin">8dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

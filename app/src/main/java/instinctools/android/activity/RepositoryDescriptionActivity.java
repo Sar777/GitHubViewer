@@ -36,8 +36,9 @@ import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class DescriptionRepositoryActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Repository>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class RepositoryDescriptionActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Repository>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     public static final String BUNDLE_REPOSITORY_NAME = "NAME";
+    public static final String EXTRA_REPOSITORY_FULLNAME = "FULLNAME";
 
     private static final int LOADER_REPOSITORY_ID = 1;
 
@@ -75,6 +76,10 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
     private IssueAdapter mIssueOpenedAdapter;
     private IssueAdapter mIssueClosedAdapter;
 
+    //
+    private TextView mTextViewContributors;
+    private TextView mTextViewIssues;
+
     private String mFullName;
 
     private boolean mStarred;
@@ -83,7 +88,7 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_description);
+        setContentView(R.layout.activity_repository_description);
 
         mStarred = false;
         mWatched = false;
@@ -168,6 +173,17 @@ public class DescriptionRepositoryActivity extends AppCompatActivity implements 
 
         mCardViewIssuesClosed = (CardView) findViewById(R.id.cardview_description_issues_closed);
         mCardViewIssuesClosed.setVisibility(View.GONE);
+
+        mTextViewContributors = (TextView) findViewById(R.id.text_repository_description_contributors);
+        mTextViewContributors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RepositoryDescriptionActivity.this, RepositoryContributorsActivity.class);
+                intent.putExtra(EXTRA_REPOSITORY_FULLNAME, mFullName);
+                startActivity(intent);
+            }
+        });
+        mTextViewIssues = (TextView) findViewById(R.id.text_repository_description_issues);
 
         updateStarButton(false);
         updateWatchButton(false);
