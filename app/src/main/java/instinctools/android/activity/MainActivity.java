@@ -204,7 +204,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
 
-                mEventsAdapter.setResource(response.getEvents());
+                if (response != null)
+                    mEventsAdapter.setResource(response.getEvents());
+                else
+                    Snackbar.make(findViewById(R.id.content_main), R.string.msg_main_activity_fail_load_events, Snackbar.LENGTH_SHORT).show();
+
                 mEventsAdapter.notifyDataSetChanged();
 
                 mLastSearchResponse = response;

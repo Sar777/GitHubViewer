@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import instinctools.android.models.github.events.payload.release.PayloadAsset;
 import instinctools.android.utility.CustomTextUtils;
 
 public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
+    private static final String TAG = "EventsAdapter";
+
     private boolean mSelf;
 
     public EventsAdapter(@NonNull Context context, boolean self) {
@@ -66,7 +69,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
             mTextViewActionText.setVisibility(View.VISIBLE);
             mViewGroupBody.removeAllViews();
 
-            String action;
+            String action = null;
             String actionText = null;
             switch (event.getType()) {
                 case PUSH:
@@ -183,7 +186,7 @@ public class EventsAdapter extends AbstractRecyclerAdapter<Event> {
                     mTextViewActionText.setVisibility(View.GONE);
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unsupported event type: " + event.getType());
+                    Log.e(TAG, "Unsupported event type: " + event.getType());
             }
 
             mTextViewAction.setText(CustomTextUtils.fromHtml(action));

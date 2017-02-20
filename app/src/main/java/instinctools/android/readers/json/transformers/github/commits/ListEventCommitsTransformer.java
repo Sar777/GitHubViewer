@@ -8,14 +8,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-import instinctools.android.models.github.commits.Commit;
+import instinctools.android.models.github.commits.EventCommit;
 import instinctools.android.readers.json.transformers.ITransformer;
 
-public class ListCommitsTransformer implements ITransformer<List<Commit>> {
-    private static final String TAG = "ListCommitsTransformer";
+public class ListEventCommitsTransformer implements ITransformer<List<EventCommit>> {
+    private static final String TAG = "ListEventCommitsTrans";
 
     @Override
-    public List<Commit> transform(Object object) {
+    public List<EventCommit> transform(Object object) {
         JSONArray jsonArray;
         if (object instanceof String) {
             try {
@@ -29,10 +29,10 @@ public class ListCommitsTransformer implements ITransformer<List<Commit>> {
         else
             return new ArrayList<>();
 
-        List<Commit> commits = new ArrayList<>();
+        List<EventCommit> commits = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i) {
             try {
-                commits.add(new CommitTransformer().transform(jsonArray.getJSONObject(i)));
+                commits.add(new EventCommitTransformer().transform(jsonArray.getJSONObject(i)));
             } catch (JSONException e) {
                 Log.e(TAG, "Json object fail", e);
             }

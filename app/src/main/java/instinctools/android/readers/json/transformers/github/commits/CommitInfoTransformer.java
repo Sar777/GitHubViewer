@@ -5,21 +5,20 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import instinctools.android.models.github.commits.Commit;
+import instinctools.android.models.github.commits.CommitInfo;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 
-public class CommitTransformer implements ITransformer<Commit> {
-    private static final String TAG = "CommitTransformer";
+public class CommitInfoTransformer implements ITransformer<CommitInfo> {
+    private static final String TAG = "CommitInfoTransformer";
 
     private static final String J_URL = "url";
-    private static final String J_SHA = "sha";
-    private static final String J_COMMIT = "commit";
     private static final String J_AUTHOR = "author";
     private static final String J_COMMITTER = "committer";
+    private static final String J_MESSAGE = "message";
+    private static final String J_COMMENT_COUNT = "comment_count";
 
     @Override
-    public Commit transform(Object object) {
+    public CommitInfo transform(Object object) {
         JSONObject jsonObject;
         if (object instanceof JSONObject)
             jsonObject = (JSONObject)object;
@@ -33,21 +32,21 @@ public class CommitTransformer implements ITransformer<Commit> {
         } else
             return null;
 
-        Commit commit = new Commit();
+        CommitInfo commitInfo = new CommitInfo();
         try {
-            commit.setUrl(jsonObject.getString(J_URL));
-            commit.setSha(jsonObject.getString(J_SHA));
+            commitInfo.setUrl(jsonObject.getString(J_URL));
 
-            commit.setCommitInfo(new CommitInfoTransformer().transform(jsonObject.getJSONObject(J_COMMIT)));
+            commitInfo.setAuthor(new CommitInfoAuthorDataTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
+            commitInfo.setCommitter(new CommitInfoAuthorDataTransformer().transform(jsonObject.getJSONObject(J_COMMITTER)));
 
-            commit.setAuthor(new UserShortTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
-            commit.setCommitter(new UserShortTransformer().transform(jsonObject.getJSONObject(J_COMMITTER)));
+            commitInfo.setMessage(jsonObject.getString(J_MESSAGE));
+            commitInfo.setCommentCount(jsonObject.getInt(J_COMMENT_COUNT));
 
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);
             return null;
         }
 
-        return commit;
+        return commitInfo;
     }
 }

@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.PageLinks;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.search.SearchRequest;
 import instinctools.android.models.github.search.SearchResponse;
@@ -38,7 +39,7 @@ public class GithubServiceSearch extends GithubService {
             return new SearchResponse();
         }
 
-        searchResponse.setPageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK));
+        searchResponse.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
         return searchResponse;
     }
 
@@ -63,7 +64,7 @@ public class GithubServiceSearch extends GithubService {
             public void onSuccess(int code, String content) {
                 SearchResponse searchResponse = JsonTransformer.transform(content, SearchResponse.class);
                 if (searchResponse != null)
-                    searchResponse.setPageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK));
+                    searchResponse.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
 
                 listener.onSuccess(searchResponse);
             }

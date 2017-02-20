@@ -65,7 +65,7 @@
     <dimen name="profile_base_cardview_content_padding">3dp</dimen>
     <dimen name="profile_divider_size">1dp</dimen>
     <!-- -->
-    <dimen name="description_content_margin_left_right">8dp</dimen>
+    <dimen name="repository_description_margin_left_right">8dp</dimen>
     <dimen name="description_divider_size">1dp</dimen>
     <dimen name="description_cardview_padding">10dp</dimen>
     <dimen name="description_cardview_card_elevation">2dp</dimen>
@@ -104,4 +104,5 @@
     <dimen name="recycler_view_item_avatar_author_size">20dp</dimen>
     <dimen name="cardview_profile_organization_margin">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="recycler_view_item_contributor_avatar_size">45dp</dimen>
 </resources>

@@ -32,7 +32,11 @@ public class ContributorsAdapter extends AbstractRecyclerAdapter<UserContributor
             super(view);
 
             mImageViewAvatar = (ImageView) view.findViewById(R.id.image_contributor_avatar);
-            mImageViewAvatar.setOnClickListener(new View.OnClickListener() {
+
+            mTextViewName = (TextView) view.findViewById(R.id.text_contributor_name);
+            mTextViewCount = (TextView) view.findViewById(R.id.text_contributors_count);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, ProfileActivity.class);
@@ -41,9 +45,6 @@ public class ContributorsAdapter extends AbstractRecyclerAdapter<UserContributor
                     mContext.startActivity(intent, options.toBundle());
                 }
             });
-
-            mTextViewName = (TextView) view.findViewById(R.id.text_contributor_name);
-            mTextViewCount = (TextView) view.findViewById(R.id.text_contributors_count);
         }
 
         void onBindViewHolder(int position) {

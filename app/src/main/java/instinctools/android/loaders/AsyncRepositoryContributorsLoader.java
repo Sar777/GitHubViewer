@@ -22,6 +22,6 @@ public class AsyncRepositoryContributorsLoader extends AsyncTaskLoader<Contribut
 
     @Override
     public ContributorsListResponse loadInBackground() {
-        return GithubServiceRepository.getRepositoryContributors(mFullName);
+        return GithubServiceRepository.getContributors(mFullName);
     }
 }
