@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.events.payload.release.PayloadAsset;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.events.EventAuthorTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 
 class EventPayloadReleaseAssetTransformer implements ITransformer<PayloadAsset> {
     private static final String TAG = "EventPayloadAssetTrans";
@@ -42,7 +42,7 @@ class EventPayloadReleaseAssetTransformer implements ITransformer<PayloadAsset> 
             payloadAsset.setUrl(jsonObject.getString(J_URL));
             payloadAsset.setName(jsonObject.getString(J_NAME));
             payloadAsset.setLabel(jsonObject.getString(J_LABEL));
-            payloadAsset.setUploader(new EventAuthorTransformer().transform(jsonObject.getJSONObject(J_UPLOADER)));
+            payloadAsset.setUploader(new UserShortTransformer().transform(jsonObject.getJSONObject(J_UPLOADER)));
             payloadAsset.setSize(jsonObject.getInt(J_SIZE));
             payloadAsset.setDownloadCount(jsonObject.getInt(J_DOWNLOAD_COUNT));
             payloadAsset.setBrowserDownloadUrl(jsonObject.getString(J_BROWSER_DOWNLOAD_URL));

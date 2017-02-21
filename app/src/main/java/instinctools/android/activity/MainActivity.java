@@ -53,8 +53,8 @@ import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncReceivedEventsLoader;
-import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.loaders.events.AsyncReceivedEventsLoader;
+import instinctools.android.loaders.user.AsyncUserInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.models.github.user.User;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mEventsAdapter = new EventsAdapter(this);
+        mEventsAdapter = new EventsAdapter(this, false);
         mRecyclerView.setAdapter(mEventsAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
@@ -204,7 +204,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mRecyclerView.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.GONE);
 
-                mEventsAdapter.setResource(response.getEvents());
+                if (response != null)
+                    mEventsAdapter.setResource(response.getEvents());
+                else
+                    Snackbar.make(findViewById(R.id.content_main), R.string.msg_main_activity_fail_load_events, Snackbar.LENGTH_SHORT).show();
+
                 mEventsAdapter.notifyDataSetChanged();
 
                 mLastSearchResponse = response;

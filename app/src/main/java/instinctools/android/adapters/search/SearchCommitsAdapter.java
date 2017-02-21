@@ -18,13 +18,13 @@ import instinctools.android.R;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.models.github.commits.Commit;
+import instinctools.android.models.github.commits.EventCommit;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class SearchCommitsAdapter extends AbstractRecyclerAdapter<Commit> {
+public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
     public SearchCommitsAdapter(@NonNull Context context) {
         super(context);
     }
@@ -47,14 +47,14 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<Commit> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Commit commit = getItem(getAdapterPosition());
+                    EventCommit commit = getItem(getAdapterPosition());
                     App.launchUrl(mContext, commit.getHtmlUrl());
                 }
             });
         }
 
         void onBindViewHolder(int position) {
-            Commit commit = getItem(position);
+            EventCommit commit = getItem(position);
 
             mImageViewAuthorAvatar.setVisibility(View.VISIBLE);
             mImageViewCommitterAvatar.setVisibility(View.VISIBLE);
@@ -125,7 +125,7 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<Commit> {
         RecyclerView.ViewHolder holder = super.onCreateViewHolder(parent, viewType);
 
         if (holder == null) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_commit, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_search_commit, parent, false);
             return new ItemViewHolder(itemView);
         }
 

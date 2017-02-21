@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.commits.ListCommitsTransformer;
+import instinctools.android.readers.json.transformers.github.commits.ListEventCommitsTransformer;
 import instinctools.android.readers.json.transformers.github.issues.ListIssueTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListRepositoriesTransformer;
 
@@ -47,7 +47,7 @@ public class SearchResponseTransformer implements ITransformer<SearchResponse> {
 
             // Is commits
             if (tempObject.has(J_HAS_TYPE_COMMITS))
-                searchResponse.setRepositories(new ListCommitsTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
+                searchResponse.setRepositories(new ListEventCommitsTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is repositories
             else if (tempObject.has(J_HAS_TYPE_REPOS))
                 searchResponse.setRepositories(new ListRepositoriesTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));

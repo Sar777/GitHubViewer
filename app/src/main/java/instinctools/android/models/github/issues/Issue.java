@@ -3,6 +3,8 @@ package instinctools.android.models.github.issues;
 import java.util.Date;
 import java.util.List;
 
+import instinctools.android.models.github.user.UserShort;
+
 public class Issue {
     private Integer mId;
     private String mUrl;
@@ -12,12 +14,15 @@ public class Issue {
     private Integer mNumber;
     private String mTitle;
     private String mBody;
+    private UserShort mUser;
+    private UserShort mAssignee;
     private Integer mComments;
     private IssuePullRequest mPullRequest;
     private List<IssueLabel> mLabels;
     private Date mCreatedAt;
     private Date mUpdateAt;
     private Date mClosedAt;
+    private List<UserShort> mAssignees;
 
     public Integer getId() {
         return mId;
@@ -83,6 +88,22 @@ public class Issue {
         this.mBody = body;
     }
 
+    public UserShort getUser() {
+        return mUser;
+    }
+
+    public void setUser(UserShort user) {
+        this.mUser = user;
+    }
+
+    public UserShort getAssignee() {
+        return mAssignee;
+    }
+
+    public void setAssignee(UserShort assignee) {
+        this.mAssignee = assignee;
+    }
+
     public Integer getComments() {
         return mComments;
     }
@@ -129,5 +150,13 @@ public class Issue {
 
     public void setClosedAt(Date closedAt) {
         this.mClosedAt = closedAt;
+    }
+
+    public List<UserShort> getAssignees() {
+        return mAssignees;
+    }
+
+    public void setAssignees(List<UserShort> assignees) {
+        this.mAssignees = assignees;
     }
 }

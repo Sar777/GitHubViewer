@@ -1,20 +1,18 @@
-package instinctools.android.loaders;
+package instinctools.android.loaders.repository;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
-import instinctools.android.activity.DescriptionRepositoryActivity;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.services.github.repository.GithubServiceRepository;
 
 public class AsyncRepositoryInfoLoader extends AsyncTaskLoader<Repository> {
     private String mFullName;
 
-    public AsyncRepositoryInfoLoader(Context context, Bundle bundle) {
+    public AsyncRepositoryInfoLoader(Context context, String fullname) {
         super(context);
 
-        mFullName = bundle.getString(DescriptionRepositoryActivity.BUNDLE_REPOSITORY_NAME);
+        mFullName = fullname;
     }
 
     @Override

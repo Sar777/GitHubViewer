@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import java.util.List;
 
 import instinctools.android.models.github.PageLinks;
+import instinctools.android.services.github.GitHubResponse;
 
-public class NotificationListResponse implements Parcelable {
-    private PageLinks mPageLinks;
+public class NotificationListResponse extends GitHubResponse implements Parcelable {
     private List<Notification> mNotifications;
 
     public NotificationListResponse(List<Notification> notifications) {
@@ -16,7 +16,7 @@ public class NotificationListResponse implements Parcelable {
     }
 
     private NotificationListResponse(Parcel in) {
-        mPageLinks = in.readParcelable(PageLinks.class.getClassLoader());
+        setPageLinks((PageLinks)in.readParcelable(PageLinks.class.getClassLoader()));
         mNotifications = in.createTypedArrayList(Notification.CREATOR);
     }
 
@@ -24,17 +24,9 @@ public class NotificationListResponse implements Parcelable {
         return mNotifications;
     }
 
-    public PageLinks getPageLinks() {
-        return mPageLinks;
-    }
-
-    public void setPageLinks(PageLinks pageLinks) {
-        this.mPageLinks = pageLinks;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(mPageLinks, flags);
+        dest.writeParcelable(getPageLinks(), flags);
         dest.writeTypedList(mNotifications);
     }
 

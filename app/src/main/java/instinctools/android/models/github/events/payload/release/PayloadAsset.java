@@ -1,13 +1,13 @@
 package instinctools.android.models.github.events.payload.release;
 
-import instinctools.android.models.github.events.EventAuthor;
+import instinctools.android.models.github.user.UserShort;
 
 public class PayloadAsset {
     private Integer mId;
     private String mUrl;
     private String mName;
     private String mLabel;
-    private EventAuthor mUploader;
+    private UserShort mUploader;
     private Integer mSize;
     private Integer mDownloadCount;
     private String mBrowserDownloadUrl;
@@ -44,11 +44,11 @@ public class PayloadAsset {
         this.mLabel = label;
     }
 
-    public EventAuthor getUploader() {
+    public UserShort getUploader() {
         return mUploader;
     }
 
-    public void setUploader(EventAuthor uploader) {
+    public void setUploader(UserShort uploader) {
         this.mUploader = uploader;
     }
 

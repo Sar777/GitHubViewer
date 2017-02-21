@@ -12,7 +12,7 @@ import instinctools.android.models.github.commits.Commit;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 public class ListCommitsTransformer implements ITransformer<List<Commit>> {
-    private static final String TAG = "ListUserRepositories";
+    private static final String TAG = "ListCommitsTransformer";
 
     @Override
     public List<Commit> transform(Object object) {

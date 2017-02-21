@@ -8,6 +8,7 @@ import java.util.Map;
 
 import instinctools.android.models.github.authorization.AccessToken;
 import instinctools.android.models.github.commits.Commit;
+import instinctools.android.models.github.commits.EventCommit;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.events.Event;
 import instinctools.android.models.github.issues.Issue;
@@ -18,10 +19,14 @@ import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.repositories.RepositoryReadme;
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.models.github.user.User;
+import instinctools.android.models.github.user.UserContributor;
+import instinctools.android.models.github.user.UserShort;
 import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.readers.json.transformers.github.authorization.AccessTokenTransformer;
 import instinctools.android.readers.json.transformers.github.commits.CommitTransformer;
+import instinctools.android.readers.json.transformers.github.commits.EventCommitTransformer;
 import instinctools.android.readers.json.transformers.github.commits.ListCommitsTransformer;
+import instinctools.android.readers.json.transformers.github.commits.ListEventCommitsTransformer;
 import instinctools.android.readers.json.transformers.github.errors.ErrorResponseTransformer;
 import instinctools.android.readers.json.transformers.github.events.EventTransformer;
 import instinctools.android.readers.json.transformers.github.events.ListEventsTransformer;
@@ -37,6 +42,10 @@ import instinctools.android.readers.json.transformers.github.repository.ListRepo
 import instinctools.android.readers.json.transformers.github.repository.RepositoryReadmeTransformer;
 import instinctools.android.readers.json.transformers.github.repository.RepositoryTransformer;
 import instinctools.android.readers.json.transformers.github.search.SearchResponseTransformer;
+import instinctools.android.readers.json.transformers.github.user.ListUserContributionsTransformer;
+import instinctools.android.readers.json.transformers.github.user.ListUsersShortTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserContributorTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 import instinctools.android.readers.json.transformers.github.user.UserTransformer;
 
 public class JsonTransformer {
@@ -71,9 +80,17 @@ public class JsonTransformer {
         // Events
         mTransformersMap.put(Event.class.getName(), EventTransformer.class);
         mTransformersMap.put(Event[].class.getName(), ListEventsTransformer.class);
+        mTransformersMap.put(EventCommit.class.getName(), EventCommitTransformer.class);
+        mTransformersMap.put(EventCommit[].class.getName(), ListEventCommitsTransformer.class);
         // Organizations
         mTransformersMap.put(Organization.class.getName(), OrganizationTransformer.class);
         mTransformersMap.put(Organization[].class.getName(), ListOrganizationsTransformer.class);
+        // User short info
+        mTransformersMap.put(UserShort.class.getName(), UserShortTransformer.class);
+        mTransformersMap.put(UserShort[].class.getName(), ListUsersShortTransformer.class);
+        // User contributor
+        mTransformersMap.put(UserContributor.class.getName(), UserContributorTransformer.class);
+        mTransformersMap.put(UserContributor[].class.getName(), ListUserContributionsTransformer.class);
     }
 
     public static <Model, T> Model transform(@NonNull String json, Class<T> clazz) {

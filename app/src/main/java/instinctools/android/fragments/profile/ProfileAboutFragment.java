@@ -24,7 +24,7 @@ import instinctools.android.activity.ProfileActivity;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.loaders.AsyncOrganizationsLoader;
-import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.loaders.user.AsyncUserInfoLoader;
 import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.organizations.Organization;
 import instinctools.android.models.github.user.User;
@@ -165,7 +165,7 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
 
         ProfileActivity activity = (ProfileActivity)getActivity();
         if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setTitle(user.getName());
+            activity.getSupportActionBar().setTitle("None".equals(user.getName()) ? user.getLogin() : user.getName());
             activity.getSupportActionBar().setSubtitle(String.format("@%s", user.getLogin()));
         }
 

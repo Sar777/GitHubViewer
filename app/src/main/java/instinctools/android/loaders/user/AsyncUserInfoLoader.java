@@ -1,4 +1,4 @@
-package instinctools.android.loaders;
+package instinctools.android.loaders.user;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;

@@ -2,6 +2,7 @@ package instinctools.android.fragments.profile;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -19,7 +20,7 @@ import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.adapters.events.EventsAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncUserEventsLoader;
+import instinctools.android.loaders.events.AsyncUserEventsLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.services.github.GithubServiceListener;
@@ -27,6 +28,7 @@ import instinctools.android.services.github.events.GithubServiceEvents;
 
 public class ProfileEventsFragment extends Fragment implements LoaderManager.LoaderCallbacks<EventsListResponse>, SwipeRefreshLayout.OnRefreshListener {
     // View
+    private ViewGroup mViewGroupContainer;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private AbstractRecyclerAdapter mEventsAdapter;
@@ -42,6 +44,8 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_events, null);
+
+        mViewGroupContainer = (ViewGroup) view.findViewById(R.id.layout_profile_events);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_profile_events);
         mRecyclerView.setVisibility(View.INVISIBLE);
@@ -77,7 +81,7 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
 
                     @Override
                     public void onSuccess(EventsListResponse response) {
-                        if (response != null) {
+                        if (response != null && response.getEvents() != null) {
                             int saveOldPos = mEventsAdapter.getResource().size() - 1;
                             mEventsAdapter.getResource().remove(saveOldPos);
                             mEventsAdapter.getResource().addAll(response.getEvents());
@@ -85,6 +89,8 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
                             mEventsAdapter.notifyItemRangeInserted(saveOldPos + 1, response.getEvents().size());
                             mLastEventsListResponse = response;
                         }
+                        else
+                            Snackbar.make(mViewGroupContainer, R.string.msg_profile_events_loading_fail, Snackbar.LENGTH_SHORT).show();
 
                         mLoading = false;
                     }
@@ -92,7 +98,7 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
             }
         });
 
-        mEventsAdapter = new EventsAdapter(getContext());
+        mEventsAdapter = new EventsAdapter(getContext(), true);
         mRecyclerView.setAdapter(mEventsAdapter);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
@@ -119,10 +125,12 @@ public class ProfileEventsFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<EventsListResponse> loader, EventsListResponse response) {
-        if (response != null) {
+        if (response != null && response.getEvents() != null)
             mEventsAdapter.setResource(response.getEvents());
-            mEventsAdapter.notifyDataSetChanged();
-        }
+        else
+            Snackbar.make(mViewGroupContainer, R.string.msg_profile_events_loading_fail, Snackbar.LENGTH_SHORT).show();
+
+        mEventsAdapter.notifyDataSetChanged();
 
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
