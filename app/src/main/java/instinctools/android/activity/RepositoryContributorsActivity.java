@@ -17,7 +17,7 @@ import instinctools.android.R;
 import instinctools.android.adapters.contributors.ContributorsAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncRepositoryContributorsLoader;
+import instinctools.android.loaders.repository.AsyncRepositoryContributorsLoader;
 import instinctools.android.models.github.contributors.ContributorsListResponse;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.services.github.GithubServiceListener;

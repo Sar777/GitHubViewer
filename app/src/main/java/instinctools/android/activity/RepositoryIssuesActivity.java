@@ -6,49 +6,49 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 
 import instinctools.android.R;
+import instinctools.android.adapters.issues.IssueTypeAdapter;
 import instinctools.android.adapters.profile.ProfileTypeAdapter;
-import instinctools.android.adapters.repository.RepositoryAdapter;
-import instinctools.android.adapters.repository.RepositoryTypeAdapter;
 
-public class RepositoryDescriptionActivity extends AppCompatActivity {
-    public static final String EXTRA_REPOSITORY_FULLNAME = "FULLNAME";
-
-    public static final int LOADER_REPOSITORY_ABOUT_ID = 1;
-    public static final int LOADER_REPOSITORY_COMMITS_ID = 2;
-
-    private String mFullName;
-
+public class RepositoryIssuesActivity extends AppCompatActivity {
     // View
     private ViewPager mViewPager;
-    private RepositoryTypeAdapter mPagerAdapter;
+    private IssueTypeAdapter mPagerAdapter;
     private TabLayout mTabLayout;
+
+    private String mFullName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_repository_description);
-
-        initView();
+        setContentView(R.layout.activity_repository_issues);
 
         Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.getData() != null)
-                mFullName = intent.getData().toString().split("//")[1];
-            else
-                mFullName = intent.getStringExtra(RepositoryAdapter.EXTRA_REPOSITORY_NAME_TAG);
+        if (intent == null) {
+            finish();
+            return;
         }
+
+        mFullName = intent.getStringExtra(RepositoryDescriptionActivity.EXTRA_REPOSITORY_FULLNAME);
+        if (TextUtils.isEmpty(mFullName)) {
+            finish();
+            return;
+        }
+
+        initView();
     }
 
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setSubtitle(mFullName);
         setSupportActionBar(toolbar);
 
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_repository);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout_issues);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager_repository);
-        mPagerAdapter = new RepositoryTypeAdapter(this, getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.pager_issues);
+        mPagerAdapter = new IssueTypeAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(ProfileTypeAdapter.NUM_PAGES);
 

@@ -1,4 +1,4 @@
-package instinctools.android.loaders;
+package instinctools.android.loaders.events;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -10,10 +10,10 @@ import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.events.GithubServiceEvents;
 import instinctools.android.services.github.user.GithubServiceUser;
 
-public class AsyncReceivedEventsLoader extends AsyncTaskLoader<EventsListResponse> {
+public class AsyncUserEventsLoader extends AsyncTaskLoader<EventsListResponse> {
     private String mUsername;
 
-    public AsyncReceivedEventsLoader(Context context, @Nullable String username) {
+    public AsyncUserEventsLoader(Context context, @Nullable String username) {
         super(context);
 
         this.mUsername = username;
@@ -34,6 +34,6 @@ public class AsyncReceivedEventsLoader extends AsyncTaskLoader<EventsListRespons
             mUsername = user.getLogin();
         }
 
-        return GithubServiceEvents.getReceivedEventsResponse(mUsername);
+        return GithubServiceEvents.getUserEventsResponse(mUsername);
     }
 }

@@ -11,6 +11,7 @@ import instinctools.android.models.github.commits.CommitsListResponse;
 import instinctools.android.models.github.contributors.ContributorsListResponse;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.issues.Issue;
+import instinctools.android.models.github.issues.IssueListResponse;
 import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.repositories.RepositoryReadme;
@@ -126,33 +127,6 @@ public class GithubServiceRepository extends GithubService {
         return (Repository) JsonTransformer.transform(client.getContent(), Repository.class);
     }
 
-    public static void getRepositoryIssues(String fullname, IssueState state, Direction direction, final GithubServiceListener<List<Issue>> listener) {
-        if (mSessionStorage == null)
-            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
-
-        HttpClientFactory.HttpClient client = HttpClientFactory.
-                create(String.format(API_REPOSITORY_ISSUES, fullname) + getIssuesRequestFormat(state, direction)).
-                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
-                setMethod(HttpClientFactory.METHOD_GET);
-
-        client.send(new OnHttpClientListener() {
-            @Override
-            public void onError(int errCode, String content) {
-                listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
-            }
-
-            @Override
-            public void onSuccess(int code, String content) {
-                if (code != HttpURLConnection.HTTP_OK) {
-                    listener.onSuccess(null);
-                    return;
-                }
-
-                listener.onSuccess((List<Issue>) JsonTransformer.transform(content, Issue[].class));
-            }
-        });
-    }
-
     public static ContributorsListResponse getContributors(String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
@@ -232,6 +206,48 @@ public class GithubServiceRepository extends GithubService {
             @Override
             public void onSuccess(int code, String content) {
                 CommitsListResponse response = new CommitsListResponse((List<Commit>)JsonTransformer.transform(content, Commit[].class));
+                response.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
+
+                listener.onSuccess(response);
+            }
+        });
+    }
+
+    public static IssueListResponse getIssues(String fullname, IssueState state, Direction direction) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_REPOSITORY_ISSUES, fullname) + getIssuesRequestFormat(state, direction)).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        IssueListResponse response = new IssueListResponse((List<Issue>)JsonTransformer.transform(client.getContent(), Issue[].class));
+        response.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
+        return response;
+    }
+
+    public static void getIssuesByUrl(String url, final GithubServiceListener<IssueListResponse> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        final HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(url).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET);
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int code, String content) {
+                listener.onError(code, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                IssueListResponse response = new IssueListResponse((List<Issue>)JsonTransformer.transform(content, Issue[].class));
                 response.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
 
                 listener.onSuccess(response);

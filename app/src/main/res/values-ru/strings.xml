@@ -77,4 +77,9 @@
     <string name="msg_fail_get_current_user_summary">В ходе получения данных о пользователе произошла неизвестная ошибка. Пожалуйста, по пробуйте авторизоваться ещё раз</string>
     <!-- Main acitivity -->
     <string name="msg_main_activity_fail_load_events">Ошибка загрузки ленты событий</string>
+    <!-- Repository issues Activity -->
+    <string name="title_repository_issue">Issues</string>
+    <string name="title_repository_issues_tab_closed">Закрытые</string>
+    <string name="title_repository_issues_tab_opened">Открытые</string>
+    <string name="msg_repositoy_issues_loading_fail">Ошибка при загрузке списка issues</string>
 </resources>

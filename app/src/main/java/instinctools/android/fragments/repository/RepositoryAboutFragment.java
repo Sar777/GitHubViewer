@@ -7,9 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,24 +15,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import instinctools.android.R;
 import instinctools.android.activity.ProfileActivity;
 import instinctools.android.activity.RepositoryContributorsActivity;
 import instinctools.android.activity.RepositoryDescriptionActivity;
-import instinctools.android.adapters.issues.IssueAdapter;
-import instinctools.android.decorations.DividerItemDecoration;
+import instinctools.android.activity.RepositoryIssuesActivity;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.loaders.AsyncRepositoryInfoLoader;
+import instinctools.android.loaders.repository.AsyncRepositoryInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
-import instinctools.android.models.github.issues.Issue;
-import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.models.github.repositories.Repository;
-import instinctools.android.services.github.Direction;
 import instinctools.android.services.github.GithubServiceListener;
-import instinctools.android.services.github.repository.GithubServiceRepository;
 import instinctools.android.services.github.user.GithubServiceUser;
 
 public class RepositoryAboutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Repository>, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -62,18 +52,6 @@ public class RepositoryAboutFragment extends Fragment implements LoaderManager.L
     private ProgressBar mProgressBarWatch;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    // Issues
-    private RecyclerView mRecyclerViewIssuesOpened;
-    private ProgressBar mProgressBarIssuesOpened;
-    private CardView mCardViewIssuesOpened;
-
-    private RecyclerView mRecyclerViewIssuesClosed;
-    private ProgressBar mProgressBarIssuesClosed;
-    private CardView mCardViewIssuesClosed;
-
-    private IssueAdapter mIssueOpenedAdapter;
-    private IssueAdapter mIssueClosedAdapter;
 
     //
     private TextView mTextViewContributors;
@@ -125,36 +103,6 @@ public class RepositoryAboutFragment extends Fragment implements LoaderManager.L
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_repository_description_about);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        // Opened
-        mRecyclerViewIssuesOpened = (RecyclerView) view.findViewById(R.id.recycler_description_issues_opened);
-        mRecyclerViewIssuesOpened.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
-        mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
-
-        mIssueOpenedAdapter = new IssueAdapter(getContext(), mRecyclerViewIssuesOpened, null);
-        mRecyclerViewIssuesOpened.setAdapter(mIssueOpenedAdapter);
-        mRecyclerViewIssuesOpened.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mProgressBarIssuesOpened = (ProgressBar) view.findViewById(R.id.pb_description_issue_opened);
-        mProgressBarIssuesOpened.setVisibility(View.VISIBLE);
-
-        mCardViewIssuesOpened = (CardView) view.findViewById(R.id.cardview_description_issues_opened);
-        mCardViewIssuesOpened.setVisibility(View.GONE);
-
-        // Closed
-        mRecyclerViewIssuesClosed = (RecyclerView) view.findViewById(R.id.recycler_description_issues_closed);
-        mRecyclerViewIssuesClosed.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
-        mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
-
-        mIssueClosedAdapter = new IssueAdapter(getContext(), mRecyclerViewIssuesClosed, null);
-        mRecyclerViewIssuesClosed.setAdapter(mIssueClosedAdapter);
-        mRecyclerViewIssuesClosed.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mProgressBarIssuesClosed = (ProgressBar) view.findViewById(R.id.pb_description_issue_closed);
-        mProgressBarIssuesClosed.setVisibility(View.VISIBLE);
-
-        mCardViewIssuesClosed = (CardView) view.findViewById(R.id.cardview_description_issues_closed);
-        mCardViewIssuesClosed.setVisibility(View.GONE);
-
         mTextViewContributors = (TextView) view.findViewById(R.id.text_repository_description_contributors);
         mTextViewContributors.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +112,16 @@ public class RepositoryAboutFragment extends Fragment implements LoaderManager.L
                 startActivity(intent);
             }
         });
+
         mTextViewIssues = (TextView) view.findViewById(R.id.text_repository_description_issues);
+        mTextViewIssues.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RepositoryIssuesActivity.class);
+                intent.putExtra(EXTRA_REPOSITORY_FULLNAME, ((RepositoryDescriptionActivity)getActivity()).getFullName());
+                startActivity(intent);
+            }
+        });
 
         updateStarButton(false);
         updateWatchButton(false);
@@ -258,8 +215,6 @@ public class RepositoryAboutFragment extends Fragment implements LoaderManager.L
                 updateWatchButton(true);
             }
         });
-
-        updateIssues();
     }
 
     @Override
@@ -339,55 +294,6 @@ public class RepositoryAboutFragment extends Fragment implements LoaderManager.L
             mButtonWatch.setVisibility(View.INVISIBLE);
             mProgressBarWatch.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void updateIssues() {
-        mCardViewIssuesOpened.setVisibility(View.GONE);
-        mCardViewIssuesClosed.setVisibility(View.GONE);
-
-        mProgressBarIssuesOpened.setVisibility(View.VISIBLE);
-        mProgressBarIssuesClosed.setVisibility(View.VISIBLE);
-
-        mRecyclerViewIssuesOpened.setVisibility(View.INVISIBLE);
-        mRecyclerViewIssuesClosed.setVisibility(View.INVISIBLE);
-
-        GithubServiceRepository.getRepositoryIssues(((RepositoryDescriptionActivity)getActivity()).getFullName(), IssueState.OPENED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
-            @Override
-            public void onError(int code, ErrorResponse response) {
-            }
-
-            @Override
-            public void onSuccess(List<Issue> issues) {
-                if (issues == null || issues.isEmpty())
-                    return;
-
-                mCardViewIssuesOpened.setVisibility(View.VISIBLE);
-                mIssueOpenedAdapter.setIssues(issues);
-                mIssueOpenedAdapter.notifyDataSetChanged();
-
-                mRecyclerViewIssuesOpened.setVisibility(View.VISIBLE);
-                mProgressBarIssuesOpened.setVisibility(View.GONE);
-            }
-        });
-
-        GithubServiceRepository.getRepositoryIssues(((RepositoryDescriptionActivity)getActivity()).getFullName(), IssueState.CLOSED, Direction.DESC, new GithubServiceListener<List<Issue>>() {
-            @Override
-            public void onError(int code, ErrorResponse response) {
-            }
-
-            @Override
-            public void onSuccess(List<Issue> issues) {
-                if (issues == null || issues.isEmpty())
-                    return;
-
-                mCardViewIssuesClosed.setVisibility(View.VISIBLE);
-                mIssueClosedAdapter.setIssues(issues);
-                mIssueClosedAdapter.notifyDataSetChanged();
-
-                mRecyclerViewIssuesClosed.setVisibility(View.VISIBLE);
-                mProgressBarIssuesClosed.setVisibility(View.GONE);
-            }
-        });
     }
 
     @Override

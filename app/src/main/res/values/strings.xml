@@ -147,4 +147,9 @@
     <string name="msg_contributions">%d contributions</string>
     <!-- Main Activity -->
     <string name="msg_main_activity_fail_load_events">Fail loading github events</string>
+    <!-- Repository issues Activity -->
+    <string name="title_repository_issue">Issues</string>
+    <string name="title_repository_issues_tab_closed">Closed</string>
+    <string name="title_repository_issues_tab_opened">Opened</string>
+    <string name="msg_repositoy_issues_loading_fail">Error with loading issues list</string>
 </resources>

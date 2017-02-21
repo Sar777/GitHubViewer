@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import instinctools.android.models.github.issues.Issue;
 import instinctools.android.models.github.issues.IssueState;
 import instinctools.android.readers.json.transformers.ITransformer;
+import instinctools.android.readers.json.transformers.github.user.ListUsersShortTransformer;
+import instinctools.android.readers.json.transformers.github.user.UserShortTransformer;
 import instinctools.android.utility.GitHubDate;
 
 public class IssueTransformer implements ITransformer<Issue> {
@@ -21,12 +23,15 @@ public class IssueTransformer implements ITransformer<Issue> {
     private static final String J_NUMBER = "number";
     private static final String J_TITLE = "title";
     private static final String J_BODY = "body";
+    private static final String J_USER = "user";
+    private static final String J_ASSIGNEE = "assignee";
     private static final String J_COMMENTS = "comments";
     private static final String J_PULL_REQUEST = "pull_request";
     private static final String J_LABELS = "labels";
     private static final String J_CREATED_AT = "created_at";
     private static final String J_UPDATED_AT = "updated_at";
     private static final String J_CLOSED_AT = "closed_at";
+    private static final String J_ASSIGNEES = "assignees";
 
     @Override
     public Issue transform(Object object) {
@@ -53,9 +58,15 @@ public class IssueTransformer implements ITransformer<Issue> {
             issue.setNumber(jsonObject.getInt(J_NUMBER));
             issue.setTitle(jsonObject.getString(J_TITLE));
             issue.setBody(jsonObject.getString(J_BODY));
+            issue.setUser(new UserShortTransformer().transform(jsonObject.getJSONObject(J_USER)));
+
+            if (!jsonObject.isNull(J_ASSIGNEE))
+                issue.setAssignee(new UserShortTransformer().transform(jsonObject.getJSONObject(J_ASSIGNEE)));
+
             issue.setComments(jsonObject.getInt(J_COMMENTS));
             issue.setLabels(new ListIssueLabelTransformer().transform(jsonObject.getJSONArray(J_LABELS)));
             issue.setCreatedAt(GitHubDate.parse(jsonObject.getString(J_CREATED_AT)));
+            issue.setAssignees(new ListUsersShortTransformer().transform(jsonObject.getJSONArray(J_ASSIGNEES)));
 
             if (!jsonObject.isNull(J_UPDATED_AT))
                 issue.setUpdateAt(GitHubDate.parse(jsonObject.getString(J_UPDATED_AT)));

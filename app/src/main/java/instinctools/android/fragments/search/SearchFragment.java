@@ -30,7 +30,7 @@ import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.fragments.search.enums.SearchFragmentType;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncSearchRequestLoader;
+import instinctools.android.loaders.search.AsyncSearchRequestLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.search.CommitsSearchRequest;
 import instinctools.android.models.github.search.IssuesSearchRequest;

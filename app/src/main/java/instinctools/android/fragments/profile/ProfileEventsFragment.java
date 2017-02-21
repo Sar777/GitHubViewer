@@ -20,7 +20,7 @@ import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.adapters.events.EventsAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncUserEventsLoader;
+import instinctools.android.loaders.events.AsyncUserEventsLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.services.github.GithubServiceListener;

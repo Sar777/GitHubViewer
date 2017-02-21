@@ -20,7 +20,7 @@ import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.adapters.commits.CommitsAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
-import instinctools.android.loaders.AsyncRepositoryCommitsLoader;
+import instinctools.android.loaders.repository.AsyncRepositoryCommitsLoader;
 import instinctools.android.models.github.commits.CommitsListResponse;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.services.github.GithubServiceListener;

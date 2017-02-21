@@ -1,4 +1,4 @@
-package instinctools.android.loaders;
+package instinctools.android.loaders.search;
 
 import android.content.Context;
 import android.os.Bundle;
