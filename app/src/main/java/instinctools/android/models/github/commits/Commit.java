@@ -1,5 +1,7 @@
 package instinctools.android.models.github.commits;
 
+import android.support.annotation.Nullable;
+
 import instinctools.android.models.github.user.UserShort;
 
 public class Commit {
@@ -33,6 +35,7 @@ public class Commit {
         this.mCommitInfo = commitInfo;
     }
 
+    @Nullable
     public UserShort getAuthor() {
         return mAuthor;
     }
@@ -41,6 +44,7 @@ public class Commit {
         this.mAuthor = author;
     }
 
+    @Nullable
     public UserShort getCommitter() {
         return mCommitter;
     }
