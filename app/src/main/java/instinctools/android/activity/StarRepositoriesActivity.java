@@ -1,5 +1,6 @@
 package instinctools.android.activity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,15 +18,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import instinctools.android.R;
-import instinctools.android.adapters.RepositoryAdapter;
+import instinctools.android.adapters.repository.RepositoryAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.RepositoriesProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.http.repository.HttpUpdateStarsRepositoriesService;
 
 public class StarRepositoriesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
-
     private static final int LOADER_REPOSITORIES_ID = 1;
 
     // View
@@ -74,8 +73,11 @@ public class StarRepositoriesActivity extends AppCompatActivity implements Loade
 
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateStarsRepositoriesService.class);
-        startService(intentService);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.REPOSITORY_SYNC_TYPE, Constants.REPOSITORY_TYPE_STAR);
+        ContentResolver.requestSync(null, RepositoriesProvider.AUTHORITY, bundle);
     }
 
     @Override

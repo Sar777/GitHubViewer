@@ -1,119 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="wrap_content"
-    android:id="@+id/layout_search_filter"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_search_filter_issue"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_margin="16dp">
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <include layout="@layout/fragment_search_order_filter"/>
 
-            <include layout="@layout/fragment_search_order_filter"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black"
+            android:text="@string/title_search_field_sort"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@android:color/black"
-                android:text="Sort"/>
+        <Spinner
+            android:id="@+id/spinner_search_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/entries_issue_sort"/>
 
-            <Spinner
-                android:id="@+id/spinner_search_sort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/entries_issue_sort"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="8dp"
+            android:text="@string/title_search_field_author"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="8dp"
-                android:text="Author"/>
+        <EditText
+            android:id="@+id/text_issue_filter_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minWidth="100dp"
+            android:textSize="12sp"
+            android:textColorHint="@color/colorGithubText"
+            android:hint="@string/title_search_field_github"
+            android:inputType="text" />
 
-            <EditText
-                android:id="@+id/text_issue_filter_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:minWidth="100dp"
-                android:textSize="12sp"
-                android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
-                android:inputType="text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/title_search_field_assignee"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="Assignee"/>
+        <EditText
+            android:id="@+id/text_issue_filter_assignee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minWidth="100dp"
+            android:textSize="12sp"
+            android:textColorHint="@color/colorGithubText"
+            android:hint="@string/title_search_field_github"
+            android:inputType="text" />
 
-            <EditText
-                android:id="@+id/text_issue_filter_assignee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:minWidth="100dp"
-                android:textSize="12sp"
-                android:textColorHint="@color/colorGithubText"
-                android:hint="Github"
-                android:inputType="text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/title_search_field_comments"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:text="Comments"/>
+        <EditText
+            android:id="@+id/text_issue_filter_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minWidth="100dp"
+            android:textSize="12sp"
+            android:textColorHint="@color/colorGithubText"
+            android:hint="@string/title_search_field_value_100"
+            android:inputType="text" />
 
-            <EditText
-                android:id="@+id/text_issue_filter_comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:minWidth="100dp"
-                android:textSize="12sp"
-                android:textColorHint="@color/colorGithubText"
-                android:hint=">100"
-                android:inputType="text" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black"
+            android:text="@string/title_search_field_type"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@android:color/black"
-                android:text="Type"/>
+        <Spinner
+            android:id="@+id/spinner_issue_filter_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entryValues="@array/entries_issue_type_values"
+            android:entries="@array/entries_issue_type"/>
 
-            <Spinner
-                android:id="@+id/spinner_issue_filter_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entryValues="@array/entries_issue_type_values"
-                android:entries="@array/entries_issue_type"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black"
+            android:text="@string/title_search_field_state"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="@android:color/black"
-                android:text="State"/>
-
-            <Spinner
-                android:id="@+id/spinner_issue_filter_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/entries_issue_state"/>
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</RelativeLayout>
+        <Spinner
+            android:id="@+id/spinner_issue_filter_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/entries_issue_state"/>
+    </LinearLayout>
+</ScrollView>

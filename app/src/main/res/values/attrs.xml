@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomSlidingDrawer">
+        <attr name="layout" format="reference"/>
+        <attr name="animation_duration" format="integer" value="300"/>
+    </declare-styleable>
+</resources>

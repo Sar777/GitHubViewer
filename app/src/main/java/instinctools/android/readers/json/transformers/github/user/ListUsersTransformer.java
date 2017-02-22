@@ -12,7 +12,7 @@ import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.transformers.ITransformer;
 
 public class ListUsersTransformer implements ITransformer<List<User>> {
-    private static final String TAG = "ListUserRepositories";
+    private static final String TAG = "ListUsersTransformer";
 
     @Override
     public List<User> transform(Object object) {

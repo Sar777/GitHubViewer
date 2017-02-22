@@ -51,30 +51,21 @@ public class GithubServiceAuthorization extends GithubService {
                 FIELD_REDIRECT_URL + "=" + mBaseCallback + "/" + uriCallback;
     }
 
-    public static void continueAuthorization(final String code, final GithubServiceListener<AccessToken> listener) {
+    public static AccessToken getAccessToken(final String code) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
         HttpClientFactory.HttpClient httpClient = HttpClientFactory.create(getTokenUrl(code));
         httpClient.
                 setMethod(HttpClientFactory.METHOD_POST).
-                addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON).
-                send(new OnHttpClientListener() {
-                    @Override
-                    public void onError(int errCode, String content) {
-                        listener.onError(errCode, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
-                    }
+                addHeader(HttpClientFactory.HEADER_ACCEPT, HttpClientFactory.HEADER_ACCEPT_TYPE_JSON);
 
-                    @Override
-                    public void onSuccess(int code, String content) {
-                        AccessToken token = JsonTransformer.transform(content, AccessToken.class);
-                        if (token == null)
-                            return;
+        httpClient.send();
 
-                        mSessionStorage.saveAccessToken(token.getAcessToken());
-                        listener.onSuccess(token);
-                    }
-                });
+        if (httpClient.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return JsonTransformer.transform(httpClient.getContent(), AccessToken.class);
     }
 
     public static void logout(final GithubServiceListener<Boolean> listener) {
@@ -99,7 +90,7 @@ public class GithubServiceAuthorization extends GithubService {
                     return;
                 }
 
-                mSessionStorage.resetAccessToken();
+                resetAccessToken();
                 listener.onSuccess(true);
             }
         });

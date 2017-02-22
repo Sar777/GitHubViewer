@@ -1,6 +1,6 @@
 package instinctools.android.fragments.notifications;
 
-import android.content.Intent;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,16 +18,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import instinctools.android.R;
-import instinctools.android.adapters.NotificationAdapter;
-import instinctools.android.adapters.RepositoryAdapter;
 import instinctools.android.adapters.SimpleItemTouchHelperCallback;
+import instinctools.android.adapters.notifications.NotificationAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
-import instinctools.android.services.http.notification.HttpGithubAllNotificationService;
-import instinctools.android.services.http.notification.HttpGithubParticipatingNotificationService;
-import instinctools.android.services.http.notification.HttpGithubUnreadNotificationService;
 
 public class NotificationFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final int LOADER_NOTIFICATION_UNREAD_ID = 1;
@@ -42,7 +38,6 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mRepositoryAdapter;
 
     private NotificationAdapter mNotificationAdapter;
 
@@ -72,7 +67,10 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_notification_list);
 
-        mNotificationAdapter = new NotificationAdapter(getContext(), mRecyclerView, false, null);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mNotificationAdapter = new NotificationAdapter(getContext(), false, null);
 
         if (isCanSwipeItem()) {
             ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mNotificationAdapter);
@@ -81,9 +79,6 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         }
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_notification_recycler);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -95,22 +90,11 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        Intent intent;
-        switch (mType) {
-            case ALL:
-                intent = new Intent(getContext(), HttpGithubAllNotificationService.class);
-                break;
-            case PARTICIPATING:
-                intent = new Intent(getContext(), HttpGithubParticipatingNotificationService.class);
-                break;
-            case UNREAD:
-                intent = new Intent(getContext(), HttpGithubUnreadNotificationService.class);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported in OnRefresh type: " + mType);
-        }
-
-        getActivity().startService(intent);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putInt(Constants.NOTIFICATION_SYNC_TYPE, getNotificationType());
+        ContentResolver.requestSync(null, NotificationsProvider.AUTHORITY, bundle);
     }
 
     @Override
@@ -129,7 +113,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] {String.valueOf(getDBNotificationType())}, null);
+        return new CursorLoader(getContext(), NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] {String.valueOf(getNotificationType())}, null);
     }
 
     @Override
@@ -163,7 +147,7 @@ public class NotificationFragment extends Fragment implements SwipeRefreshLayout
         return LOADER_NOTIFICATION_UNREAD_ID;
     }
 
-    private int getDBNotificationType() {
+    private int getNotificationType() {
         switch (mType) {
             case UNREAD:
                 return Constants.NOTIFICATION_TYPE_UNREAD;

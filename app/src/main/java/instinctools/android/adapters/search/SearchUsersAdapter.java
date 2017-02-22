@@ -1,5 +1,6 @@
 package instinctools.android.adapters.search;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -12,11 +13,12 @@ import android.widget.TextView;
 
 import instinctools.android.R;
 import instinctools.android.activity.ProfileActivity;
+import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
 import instinctools.android.models.github.user.User;
 
-public class SearchUsersAdapter extends AbstractSearchAdapter<User> {
+public class SearchUsersAdapter extends AbstractRecyclerAdapter<User> {
     public SearchUsersAdapter(@NonNull Context context) {
         super(context);
     }
@@ -39,7 +41,8 @@ public class SearchUsersAdapter extends AbstractSearchAdapter<User> {
                     User user = getItem(getAdapterPosition());
                     Intent intent = new Intent(mContext, ProfileActivity.class);
                     intent.putExtra(ProfileActivity.EXTRA_USERNAME, user.getLogin());
-                    mContext.startActivity(intent);
+                    ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                    mContext.startActivity(intent, options.toBundle());
                 }
             });
         }

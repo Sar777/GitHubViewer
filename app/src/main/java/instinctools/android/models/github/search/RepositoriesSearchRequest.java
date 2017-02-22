@@ -10,6 +10,7 @@ public class RepositoriesSearchRequest extends SearchRequest {
     public static final String FILTER_SIZE = "size";
     public static final String FILTER_STARS = "stars";
     public static final String FILTER_FORK = "fork";
+    public static final String FILTER_IS = "is";
 
     public RepositoriesSearchRequest(String text, SearchOrderType order, String sort, Map<String, String> filters) {
         super(SearchType.REPOSITORIES, text, order, sort, filters);

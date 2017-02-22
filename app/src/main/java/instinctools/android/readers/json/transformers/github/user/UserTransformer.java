@@ -10,7 +10,7 @@ import instinctools.android.readers.json.transformers.ITransformer;
 import instinctools.android.utility.CustomTextUtils;
 
 public class UserTransformer implements ITransformer<User> {
-    private static final String TAG = "SearchUserTransformer";
+    private static final String TAG = "UserTransformer";
 
     private static final String J_LOGIN = "login";
     private static final String J_ID = "id";

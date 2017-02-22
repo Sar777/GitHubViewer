@@ -23,6 +23,11 @@
         <item>Asc</item>
     </string-array>
 
+    <string-array name="entries_repo_is">
+        <item>Public</item>
+        <item>Private</item>
+    </string-array>
+
     <string-array name="entries_issue_state">
         <item>Open</item>
         <item>Closed</item>

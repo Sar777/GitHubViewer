@@ -3,12 +3,12 @@ package instinctools.android.models.github.search;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResponse<T> {
+import instinctools.android.services.github.GitHubResponse;
+
+public class SearchResponse<T> extends GitHubResponse {
     private Integer mTotalCount;
     private Boolean mIncompleteResults;
     private List<T> mResponse;
-    // not JSON
-    private PageLinks mPageLinks;
 
     public SearchResponse() {
         this.mTotalCount = 0;
@@ -38,13 +38,5 @@ public class SearchResponse<T> {
 
     public void setRepositories(List<T> response) {
         this.mResponse = response;
-    }
-
-    public void setPageLinks(String linksHeader) {
-        this.mPageLinks = new PageLinks(linksHeader);
-    }
-
-    public PageLinks getPageLinks() {
-        return mPageLinks;
     }
 }

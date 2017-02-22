@@ -1,12 +1,22 @@
 package instinctools.android.activity;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +27,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,9 +40,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import instinctools.android.App;
 import instinctools.android.R;
-import instinctools.android.adapters.RepositoryAdapter;
-import instinctools.android.broadcasts.OnAlarmReceiver;
+import instinctools.android.account.GitHubAccount;
+import instinctools.android.adapters.events.EventsAdapter;
 import instinctools.android.constans.Constants;
 import instinctools.android.database.DBConstants;
 import instinctools.android.database.providers.NotificationsProvider;
@@ -40,30 +52,35 @@ import instinctools.android.database.providers.SearchSuggestionsProvider;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.loaders.AsyncUserInfoLoader;
+import instinctools.android.listeners.EndlessRecyclerOnScrollListener;
+import instinctools.android.loaders.events.AsyncReceivedEventsLoader;
+import instinctools.android.loaders.user.AsyncUserInfoLoader;
 import instinctools.android.models.github.errors.ErrorResponse;
+import instinctools.android.models.github.events.EventsListResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.authorization.GithubServiceAuthorization;
-import instinctools.android.services.http.repository.HttpUpdateMyRepositoriesService;
-import instinctools.android.utility.Services;
+import instinctools.android.services.github.events.GithubServiceEvents;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener, MenuItem.OnMenuItemClickListener {
     private static final String TAG = "MainActivity";
 
-    public static final int PERMISSION_EXTERNAL_STORAGE = 100;
+    public static final int PERMISSION_GET_ACCOUNTS = 100;
 
-    private static final int LOADER_REPOSITORIES_ID = 1;
+    private static final int LOADER_EVENTS_ID = 1;
     private static final int LOADER_USER_ID = 2;
     private static final int LOADER_NOTIFICATIONS_ID = 3;
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RepositoryAdapter mRepositoryAdapter;
+    private EventsAdapter mEventsAdapter;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
+
+    // Models
+    private EventsListResponse mLastSearchResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         initView();
-
-        requestExternalStoragePermissions();
-
         initLoaders();
     }
 
@@ -82,17 +96,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_repositories_list);
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_main_events_list);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_repository_list);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_events_list);
         mRecyclerView.setVisibility(View.INVISIBLE);
 
-        mRepositoryAdapter = new RepositoryAdapter(this, true, null);
-        mRecyclerView.setAdapter(mRepositoryAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, true));
+        mEventsAdapter = new EventsAdapter(this, false);
+        mRecyclerView.setAdapter(mEventsAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore() {
+                if (mLastSearchResponse == null || mLastSearchResponse.getPageLinks().getNext() == null)
+                    return;
+
+                mEventsAdapter.getResource().add(null);
+                mRecyclerView.post(new Runnable() {
+                    public void run() {
+                        mEventsAdapter.notifyItemInserted(mEventsAdapter.getResource().size() - 1);
+                    }
+                });
+                GithubServiceEvents.getEventsByUrl(mLastSearchResponse.getPageLinks().getNext(), new GithubServiceListener<EventsListResponse>() {
+                    @Override
+                    public void onError(int code, @Nullable ErrorResponse response) {
+                        mEventsAdapter.getResource().remove(mEventsAdapter.getResource().size() - 1);
+                        mEventsAdapter.notifyItemRemoved(mEventsAdapter.getResource().size() - 1);
+                        mLoading = false;
+                    }
+
+                    @Override
+                    public void onSuccess(EventsListResponse response) {
+                        if (response != null) {
+                            int saveOldPos = mEventsAdapter.getResource().size() - 1;
+                            mEventsAdapter.getResource().remove(saveOldPos);
+                            mEventsAdapter.getResource().addAll(response.getEvents());
+                            mEventsAdapter.notifyItemRemoved(saveOldPos);
+                            mEventsAdapter.notifyItemRangeInserted(saveOldPos + 1, response.getEvents().size());
+                            mLastSearchResponse = response;
+                        }
+
+                        mLoading = false;
+                    }
+                });
+            }
+        });
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -108,26 +159,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initLoaders() {
-        // All repositories
-        getSupportLoaderManager().initLoader(LOADER_REPOSITORIES_ID, null, this);
         // Notifications
         getSupportLoaderManager().initLoader(LOADER_NOTIFICATIONS_ID, null, this);
         // User info
         getSupportLoaderManager().initLoader(LOADER_USER_ID, new Bundle(), new LoaderManager.LoaderCallbacks<User>() {
             @Override
             public Loader<User> onCreateLoader(int id, Bundle args) {
-                return new AsyncUserInfoLoader(MainActivity.this, args);
+                return new AsyncUserInfoLoader(MainActivity.this, null);
             }
 
             @Override
             public void onLoadFinished(Loader<User> loader, User user) {
                 if (user == null) {
-                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    showUserGetAlert();
                     return;
                 }
+
+                App.setLoggedUser(user);
 
                 // Update navigate drawer
                 updateUserInfoNavBar(user);
@@ -138,6 +186,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
+        // All events
+        getSupportLoaderManager().initLoader(LOADER_EVENTS_ID, null, new LoaderManager.LoaderCallbacks<EventsListResponse>() {
+            @Override
+            public Loader<EventsListResponse> onCreateLoader(int id, Bundle args) {
+                return new AsyncReceivedEventsLoader(getApplicationContext(), null);
+            }
+
+            @Override
+            public void onLoaderReset(Loader<EventsListResponse> loader) {
+
+            }
+
+            @Override
+            public void onLoadFinished(Loader<EventsListResponse> loader, EventsListResponse response) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+
+                if (response != null)
+                    mEventsAdapter.setResource(response.getEvents());
+                else
+                    Snackbar.make(findViewById(R.id.content_main), R.string.msg_main_activity_fail_load_events, Snackbar.LENGTH_SHORT).show();
+
+                mEventsAdapter.notifyDataSetChanged();
+
+                mLastSearchResponse = response;
+
+                // Hidden refresh bar
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void showUserGetAlert() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(R.string.msg_fail_get_current_user_title)
+                .setMessage(R.string.msg_fail_get_current_user_summary)
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setIcon(R.drawable.ic_github_logo)
+                .show();
     }
 
     private void updateUserInfoNavBar(User user) {
@@ -156,7 +252,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
+                ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                startActivity(intent, options.toBundle());
             }
         });
 
@@ -166,10 +263,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_EXTERNAL_STORAGE && grantResults.length == 2) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(findViewById(R.id.content_main), R.string.msg_permission_external_storage_granted, Snackbar.LENGTH_SHORT).show();
-            }
+        if (requestCode == PERMISSION_GET_ACCOUNTS && grantResults.length == 1) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                Snackbar.make(findViewById(R.id.content_main), R.string.msg_fail_grant_account_permissions, Snackbar.LENGTH_SHORT).show();
+            else
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    deleteAccount();
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -179,11 +278,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Loader<Cursor> cursor = null;
         switch (id) {
-            case LOADER_REPOSITORIES_ID:
-                cursor = new CursorLoader(this, RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null, null, null);
-                break;
             case LOADER_NOTIFICATIONS_ID:
-                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[] { String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
+                cursor = new CursorLoader(this, NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, DBConstants.NOTIFICATION_TYPE + " = ?", new String[]{String.valueOf(Constants.NOTIFICATION_TYPE_UNREAD)}, null);
                 break;
             default:
                 break;
@@ -194,20 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
         switch (loader.getId()) {
-            case LOADER_REPOSITORIES_ID: {
-                if (cursor.getCount() != 0) {
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    mProgressBar.setVisibility(View.GONE);
-                }
-
-                mRepositoryAdapter.changeCursor(cursor, true);
-
-                // Hidden refresh bar
-                mSwipeRefreshLayout.setRefreshing(false);
-                break;
-            }
             case LOADER_NOTIFICATIONS_ID: {
                 ViewGroup view = (ViewGroup) mNavigationView.getMenu().findItem(R.id.nav_notification).getActionView();
                 TextView textView = (TextView) view.getChildAt(0);
@@ -230,19 +313,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void requestExternalStoragePermissions() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                },
-                PERMISSION_EXTERNAL_STORAGE);
-    }
-
     @Override
     public void onRefresh() {
-        Intent intentService = new Intent(this, HttpUpdateMyRepositoriesService.class);
-        startService(intentService);
+        getSupportLoaderManager().getLoader(LOADER_EVENTS_ID).forceLoad();
     }
 
     @Override
@@ -297,22 +370,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @SuppressLint("NewApi")
     private void logout() {
-        // Stop alarm manager
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_MY_REPO_CODE);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_WATCH_REPO_CODE);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_STARS_REPO_CODE);
-
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_PARTICIPATING);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_ALL);
-        Services.stopAlarmBroadcast(this, OnAlarmReceiver.class, OnAlarmReceiver.REQUEST_GITHUB_NOTIFICATIONS_UNREAD);
-
         // Cleanup
         getContentResolver().delete(RepositoriesProvider.REPOSITORY_CONTENT_URI, null, null);
         getContentResolver().delete(NotificationsProvider.NOTIFICATIONS_CONTENT_URI, null, null);
 
         SearchRecentSuggestions searchSuggestions = new SearchRecentSuggestions(this, SearchSuggestionsProvider.AUTHORITY, SearchSuggestionsProvider.MODE);
         searchSuggestions.clearHistory();
+
+        deleteAccount();
 
         Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -341,5 +408,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
+    private void deleteAccount() {
+        AccountManager accountManager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.GET_ACCOUNTS }, PERMISSION_GET_ACCOUNTS);
+        else {
+            for (Account account : accountManager.getAccountsByType(GitHubAccount.TYPE)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+                    accountManager.removeAccountExplicitly(account);
+                else
+                    accountManager.removeAccount(account, this, new AccountManagerCallback<Bundle>() {
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                        }
+                    }, null);
+            }
+        }
     }
 }

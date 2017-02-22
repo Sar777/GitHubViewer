@@ -1,21 +1,33 @@
 package instinctools.android;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.app.ActivityCompat;
 
+import instinctools.android.account.GitHubAccount;
+import instinctools.android.activity.AuthenticatorActivity;
+import instinctools.android.activity.NotificationActivity;
 import instinctools.android.constans.Constants;
-import instinctools.android.database.DBConstants;
-import instinctools.android.services.HttpRunAllService;
+import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubService;
 import instinctools.android.storages.ApplicationPersistantStorage;
 import instinctools.android.storages.SettingsStorage;
 
-public class App extends Application {
+public class App extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context mContext;
+    private static User mLoggedUser;
+
+    private static boolean isNotificationActivityVisible;
 
     public void onCreate() {
         super.onCreate();
@@ -28,9 +40,7 @@ public class App extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.pref_sync_data, false);
 
-        startService(new Intent(this, HttpRunAllService.class));
-
-        deleteDatabase(DBConstants.DB_NAME);
+        registerActivityLifecycleCallbacks(this);
     }
 
     public static void launchUrl(final Context context, final String url) {
@@ -41,5 +51,67 @@ public class App extends Application {
 
     public static Context getAppContext() {
         return mContext;
+    }
+
+    public static boolean isNotificationActivityVisible() {
+        return isNotificationActivityVisible;
+    }
+
+    public static Account getApplicationAccount() {
+        final AccountManager accountManager = (android.accounts.AccountManager) mContext.getSystemService(Context.ACCOUNT_SERVICE);
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+            return null;
+
+        if (accountManager.getAccountsByType(GitHubAccount.TYPE).length == 0) {
+            Intent intent = new Intent(mContext, AuthenticatorActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(AuthenticatorActivity.INTENT_AUTH_TYPE, 1);
+            mContext.startActivity(intent);
+            return null;
+        }
+
+        return accountManager.getAccountsByType(GitHubAccount.TYPE)[0];
+    }
+
+    public static User getLoggedUser() {
+        return mLoggedUser;
+    }
+
+    public static void setLoggedUser(User user) {
+        mLoggedUser = user;
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+        if (activity instanceof NotificationActivity)
+            isNotificationActivityVisible = true;
+    }
+
+    @Override
+    public void onActivityPaused(Activity activity) {
+        if (activity instanceof NotificationActivity)
+            isNotificationActivityVisible = false;
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
     }
 }

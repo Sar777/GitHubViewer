@@ -2,14 +2,26 @@ package instinctools.android.models.github.notification;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import instinctools.android.database.DBConstants;
 
-public class NotificationSubject {
+public class NotificationSubject implements Parcelable {
     private String mTitle;
     private String mUrl;
     private String mLatestCommentUrl;
     private NotificationType mType;
+
+    public NotificationSubject() {
+    }
+
+    private NotificationSubject(Parcel in) {
+        mTitle = in.readString();
+        mUrl = in.readString();
+        mLatestCommentUrl = in.readString();
+        mType = in.readParcelable(NotificationType.class.getClassLoader());
+    }
 
     public String getTitle() {
         return mTitle;
@@ -43,6 +55,31 @@ public class NotificationSubject {
         this.mType = type;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeString(mUrl);
+        dest.writeString(mLatestCommentUrl);
+        dest.writeParcelable(mType, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<NotificationSubject> CREATOR = new Creator<NotificationSubject>() {
+        @Override
+        public NotificationSubject createFromParcel(Parcel in) {
+            return new NotificationSubject(in);
+        }
+
+        @Override
+        public NotificationSubject[] newArray(int size) {
+            return new NotificationSubject[size];
+        }
+    };
+
     public ContentValues build() {
         ContentValues values = new ContentValues();
         values.put(DBConstants.NOTIFICATION_SUBJECT_TITLE, mTitle);
@@ -52,7 +89,7 @@ public class NotificationSubject {
         return values;
     }
 
-    public static NotificationSubject fromCursor(Cursor cursor) {
+    static NotificationSubject fromCursor(Cursor cursor) {
         NotificationSubject subject = new NotificationSubject();
         subject.setTitle(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_TITLE)));
         subject.setUrl(cursor.getString(cursor.getColumnIndex(DBConstants.NOTIFICATION_SUBJECT_URL)));

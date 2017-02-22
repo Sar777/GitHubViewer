@@ -1,45 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_recycler_item_issue"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:layout_margin="6dp"
-    tools:ignore="RtlHardcoded">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginBottom="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginRight="@dimen/recycler_view_item_margin_right_left"
+    android:layout_marginLeft="@dimen/recycler_view_item_margin_right_left">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/image_issue_author_avatar"
+        android:layout_width="@dimen/recycler_view_item_contributor_avatar_size"
+        android:layout_height="@dimen/recycler_view_item_contributor_avatar_size"
+        app:srcCompat="@drawable/ic_github_logo"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
+        android:layout_toRightOf="@+id/image_issue_author_avatar"
+        android:layout_marginLeft="@dimen/recycler_view_item_margin_right_left"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_issue_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text_issue_created_time_ago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/text_issue_author_name"
+                android:layout_centerVertical="true"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/text_recycler_item_issue_state"
-            android:layout_width="wrap_content"
+            android:id="@+id/text_issue_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:background="@drawable/background_issue_state_opened"
-            android:textColor="@android:color/white"
-            android:textAllCaps="true"
-            android:padding="@dimen/description_recycler_view_item_issues_padding"
-            android:text="@string/title_opened"/>
-
-        <TextView
-            android:id="@+id/text_recycler_item_issue_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text_recycler_item_issue_state"
-            android:padding="@dimen/description_recycler_view_item_issues_padding"
-            android:textColor="#999" />
-
-        <TextView
-            android:id="@+id/text_recycler_item_issue_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text_recycler_item_issue_id"
-            android:textColor="#4078c0"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:maxLines="1"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            android:maxLines="2"
             android:ellipsize="end"
-            android:padding="@dimen/description_recycler_view_item_issues_padding" />
-    </RelativeLayout>
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text_issue_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:maxLength="10" />
+
+            <TextView
+                android:id="@+id/text_issue_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/ic_github_comment"
+                android:drawablePadding="6dp"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

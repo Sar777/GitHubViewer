@@ -25,13 +25,13 @@ public class DBConstants {
     public static final String REPOSITORY_OWNER_AVATAR_URL_ID = "avatar_url";
 
     // Notifications
-    public static final String TABLE_NOTIFICATIONS = "notifcations";
+    public static final String TABLE_NOTIFICATIONS = "notifications";
     public static final String NOTIFICATION_ID = "_id";
     public static final String NOTIFICATION_TYPE = "type";
     public static final String NOTIFICATION_REPO_ID = "repo_id";
     public static final String NOTIFICATION_REPO_NAME = "repo_name";
     public static final String NOTIFICATION_REPO_FULLNAME = "repo_fullname";
-    public static final String NOTIFICATION_REPO_DESCRIPION = "repo_description";
+    public static final String NOTIFICATION_REPO_DESCRIPTION = "repo_description";
     public static final String NOTIFICATION_REPO_PRIVATE = "repo_private";
     public static final String NOTIFICATION_REPO_FORK = "repo_fork";
     public static final String NOTIFICATION_REPO_HTML_URL = "repo_html_url";
@@ -76,7 +76,7 @@ public class DBConstants {
             + NOTIFICATION_REPO_ID + " INTEGER, "
             + NOTIFICATION_REPO_NAME + " VARCHAR(30), "
             + NOTIFICATION_REPO_FULLNAME + " VARCHAR(60), "
-            + NOTIFICATION_REPO_DESCRIPION + " VARCHAR(255), "
+            + NOTIFICATION_REPO_DESCRIPTION + " VARCHAR(255), "
             + NOTIFICATION_REPO_PRIVATE + " INTEGER(1), "
             + NOTIFICATION_REPO_FORK + " INTEGER(1), "
             + NOTIFICATION_REPO_HTML_URL + " VARCHAR(100), "
@@ -94,5 +94,5 @@ public class DBConstants {
             + NOTIFICATION_UNREAD + " INTEGER(1), "
             + NOTIFICATION_UPDATE_AT + " VARCHAR(30), "
             + NOTIFICATION_LAST_READ_AT + " VARCHAR(30), "
-            + " PRIMARY KEY (" + NOTIFICATION_ID + ", " + NOTIFICATION_TYPE + "))";
+            + " PRIMARY KEY (" + NOTIFICATION_ID + ", " + NOTIFICATION_TYPE + ") ON CONFLICT REPLACE)";
 }
