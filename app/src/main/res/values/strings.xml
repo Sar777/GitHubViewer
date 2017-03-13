@@ -24,6 +24,7 @@
     <string name="title_activity_introductions">About GitHub.com</string>
     <string name="title_introduction_sign_in">Sign In</string>
     <string name="msg_profile_events_loading_fail">Error with loading user events</string>
+    <string name="msg_profile_repos_loading_fail">Error with loading user repositories</string>
 
     <string name="title_sign_out_button">Sign out</string>
     <string name="msg_introductions_github_1">Welcome home, developers</string>
@@ -54,6 +55,7 @@
     <string name="title_profile_organizations">Organizations:</string>
     <string name="title_profile_tab_about">About</string>
     <string name="title_profile_tab_events">Events</string>
+    <string name="title_profile_tab_repositories">Repositories</string>
     <!-- Repository -->
     <string name="title_menu">Menu</string>
     <string name="title_watch_repositories">Watch</string>
