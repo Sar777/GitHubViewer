@@ -6,8 +6,10 @@ import java.util.List;
 
 import instinctools.android.http.HttpClientFactory;
 import instinctools.android.http.OnHttpClientListener;
+import instinctools.android.models.github.PageLinks;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.organizations.Organization;
+import instinctools.android.models.github.repositories.RepositoriesListResponse;
 import instinctools.android.models.github.repositories.Repository;
 import instinctools.android.models.github.user.User;
 import instinctools.android.readers.json.JsonTransformer;
@@ -17,6 +19,7 @@ import instinctools.android.services.github.GithubServiceListener;
 
 public class GithubServiceUser extends GithubService {
     private static final String API_USER_URL = API_BASE_URL + "/user";
+    private static final String API_USER_REPOS_URL = API_BASE_URL + "/users/%s/repos";
     private static final String API_USERS_URL = API_BASE_URL + "/users/%s";
     private static final String API_CURRENT_USER_ORGS = API_BASE_URL + "/user/orgs";
     private static final String API_USER_ORGS = API_BASE_URL + "/users/%s/orgs";
@@ -294,5 +297,48 @@ public class GithubServiceUser extends GithubService {
             return new ArrayList<>();
 
         return JsonTransformer.transform(client.getContent(), Organization[].class);
+    }
+
+
+    public static RepositoriesListResponse getRepositoriesListResponse(String username) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_USER_REPOS_URL, username)).
+                setMethod(HttpClientFactory.METHOD_GET).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        RepositoriesListResponse response = new RepositoriesListResponse((List<Repository>)JsonTransformer.transform(client.getContent(), Repository[].class));
+        response.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
+        return response;
+    }
+
+    public static void getRepositorisListByUrl(String url, final GithubServiceListener<RepositoriesListResponse> listener) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        final HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(url).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET);
+
+        client.send(new OnHttpClientListener() {
+            @Override
+            public void onError(int code, String content) {
+                listener.onError(code, (ErrorResponse) JsonTransformer.transform(content, ErrorResponse.class));
+            }
+
+            @Override
+            public void onSuccess(int code, String content) {
+                RepositoriesListResponse response = new RepositoriesListResponse((List<Repository>)JsonTransformer.transform(content, Repository[].class));
+                response.setPageLinks(new PageLinks(client.getResponseHeader(HttpClientFactory.HEADER_LINK)));
+
+                listener.onSuccess(response);
+            }
+        });
     }
 }

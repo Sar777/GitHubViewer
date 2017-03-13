@@ -5,6 +5,7 @@
     <color name="colorAccent">#4078c0</color>
 
     <color name="colorGithubText">#767676</color>
+    <color name="colorGithubGray">#959da5</color>
 
     <color name="github_octicon_green">#6cc644</color>
     <color name="github_octicon_red">#bd2c00</color>
