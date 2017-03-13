@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <stroke android:width="1dip" android:color="@color/github_octicon_green" />
+            <gradient android:angle="-90" android:startColor="@color/github_octicon_button_green_end" android:endColor="@color/github_octicon_button_green_start" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="5dp" />
+            <stroke android:width="1dip" android:color="@color/github_octicon_green" />
+            <gradient android:angle="-90" android:startColor="@color/github_octicon_button_green_start" android:endColor="@color/github_octicon_button_green_end" />
+        </shape>
+    </item>
+</selector>

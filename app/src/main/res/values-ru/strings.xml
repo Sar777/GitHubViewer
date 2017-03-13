@@ -1,0 +1,85 @@
+<resources>
+    <string name="title_repositories">Репозитории</string>
+    <string name="title_my_repositories">Мои репозитории</string>
+    <string name="msg_empty_list">Список пуст</string>
+    <string name="title_activity_description">Описание</string>
+    <string name="title_activity_auth">Авторизация Github.com</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="msg_login_or_email">Имя пользователя или email</string>
+    <string name="msg_auth_username_or_password_fail">Ошибка авторизации. Проверьте имя пользователя и пароль</string>
+    <string name="msg_auth_unknown_error">Неизвестная ошибка авторизации</string>
+    <string name="title_username">Имя пользователя</string>
+    <string name="title_email">Почта</string>
+    <string name="title_introduction_sign_in">Войти</string>
+    <string name="msg_sign_out_unknown_error">Ошибка выхода из учетной записи</string>
+    <string name="msg_auth_title_dialog">Авторизация</string>
+    <string name="msg_auth_message_dialog">Авторизация, пожалуйста, подождите</string>
+    <string name="msg_introductions_go">Начать</string>
+    <string name="title_nav_bar_control">Управление</string>
+    <string name="title_nav_bar_count_logout">Выйти</string>
+    <string name="title_nav_bar_my_repositories">Мои репозитории</string>
+    <string name="title_nav_bar_notifications">Мои оповещения</string>
+    <string name="title_nav_bar_settings">Настройки</string>
+    <string name="title_nav_bar_watch">Отслеживаемые</string>
+    <string name="title_nav_bar_stars">Избранные</string>
+    <string name="title_nav_bar_search">Поиск репозиториев</string>
+    <!-- Profile -->
+    <string name="title_profile_information">Информация:</string>
+    <string name="title_profile_organizations">Организации:</string>
+    <string name="title_profile_tab_about">Информация</string>
+    <string name="title_profile_tab_events">События</string>
+    <string name="msg_profile_events_loading_fail">Ошибка при загрузки списка событий</string>
+    <!-- Repository description -->
+    <string name="title_menu">Меню</string>
+    <string name="title_watch_repositories">Отслеживаемые</string>
+    <string name="title_star_repos">Избранные</string>
+    <string name="title_statistics">Статистика</string>
+    <!-- Repository description -->
+    <string name="title_description">Описание</string>
+    <string name="title_repository_description_other_information">Другая информация</string>
+    <string name="title_repository_description_tab_information">Информация</string>
+    <string name="title_repository_description_tab_commits">Коммиты</string>
+    <string name="msg_repository_description_commits_loading_fail">Ошибка при загрузке списка коммитов</string>
+    <!-- Preference -->
+    <string name="title_pref_header_data_sync">Синхронизация</string>
+    <string name="title_pref_header_general">Общие</string>
+    <string name="title_pref_header_data_sync_summary">Промежутки обновления данных</string>
+    <string name="title_pref_header_general_summary">Общие настройки приложения</string>
+    <string name="title_pref_category_sync">Синхранизации</string>
+    <string name="title_pref_category_sync_repositories">Репозитории</string>
+    <string name="title_pref_category_sync_notifications">Оповещения</string>
+    <string name="title_pref_category_general_search_result">Количество элементов при поиске</string>
+    <string name="title_pref_category_general_sound_notifications">Звук при получении оповещений</string>
+    <string name="title_pref_category_repos_summary">Промежуток между обновлением списка репозиториев</string>
+    <string name="title_pref_category_sync_notifications_summary">Промежуток между обновлением оповещений</string>
+    <string name="title_pref_category_general_search_result_summary">Максимальное количество выдачи элементов при поиске</string>
+    <string name="title_pref_category_general_sound_notifications_summary">Включение звукового уведомления при получении новых оповещений</string>
+    <string name="title_search_activity">Поиск</string>
+    <!-- -->
+    <string name="title_notification">Оповещения</string>
+    <string name="msg_unknown_error_mark_notification">Ошибка удаления оповещения</string>
+    <!-- -->
+    <string name="title_sort">Сортировка</string>
+    <string name="title_order">Порядок</string>
+    <!-- -->
+    <string name="title_search_setting_sort">Сортировать по</string>
+    <string name="title_search_setting_order">Выдавать по</string>
+    <string name="title_search_search">Поиск</string>
+    <string name="msg_github_notifications">Событие GitHub.com</string>
+    <string name="msg_github_notifications_stack">%d новых GitHub оповещений</string>
+    <string name="msg_github_notifications_from">Последнее оповещение от: %s</string>
+    <string name="title_notifications">Оповещения</string>
+    <string name="title_events">События</string>
+    <string name="title_pref_settings_summary">Настройки для приложения</string>
+    <string name="title_pref_settings">Настройки</string>
+    <string name="title_search_filter_params">Параметры поиска</string>
+    <string name="msg_fail_get_current_user_title">Ошибка получения данных</string>
+    <string name="msg_fail_get_current_user_summary">В ходе получения данных о пользователе произошла неизвестная ошибка. Пожалуйста, по пробуйте авторизоваться ещё раз</string>
+    <!-- Main acitivity -->
+    <string name="msg_main_activity_fail_load_events">Ошибка загрузки ленты событий</string>
+    <!-- Repository issues Activity -->
+    <string name="title_repository_issue">Issues</string>
+    <string name="title_repository_issues_tab_closed">Закрытые</string>
+    <string name="title_repository_issues_tab_opened">Открытые</string>
+    <string name="msg_repositoy_issues_loading_fail">Ошибка при загрузке списка issues</string>
+</resources>

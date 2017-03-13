@@ -1,20 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="instinctools.android">
+    package="instinctools.android"
+    android:installLocation="internalOnly">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
-        android:allowBackup="true"
+        android:name=".App"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme.Launcher">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.RepositoryDescriptionActivity"
+            android:label="@string/title_activity_description"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:scheme="repository" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.AuthActivity"
+            android:label="@string/title_activity_auth"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label=""
+            android:theme="@style/AppTheme.Profile">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:scheme="profile" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.IntroductionsActivity"
+            android:label="@string/title_activity_introductions"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.MyRepositoriesActivity"
+            android:label="@string/title_my_repositories"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.WatchRepositoriesActivity"
+            android:label="@string/title_watch_repositories"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.StarRepositoriesActivity"
+            android:label="@string/title_star_repos"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_search_activity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".activity.NotificationActivity"
+            android:label="@string/title_notification"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.AuthenticatorActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="github"
+                    android:path="/oauth"
+                    android:scheme="application" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.RepositoryContributorsActivity"
+            android:label="@string/title_activity_repository_contributors"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.RepositoryIssuesActivity"
+            android:label="@string/title_repository_issue"
+            android:theme="@style/AppTheme"/>
+
+        <receiver
+            android:name=".broadcast.NotificationsBroadcast"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="instinctools.android.ACTION_SYNC_NOTIFICATION_FINISHED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.GitHubAuthenticatorService"
+            android:exported="false"
+            android:process=":auth">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/github_authenticator" />
+        </service>
+        <service
+            android:name=".services.NotificationsSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/notifications_sync_adapter" />
+        </service>
+        <service
+            android:name=".services.RepositoriesSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/repositories_sync_adapter" />
+        </service>
+
+        <provider
+            android:name=".database.providers.RepositoriesProvider"
+            android:authorities="instinctools.android.database.providers.Repositories"
+            android:exported="false"
+            android:label="@string/title_repositories"
+            android:syncable="true" />
+        <provider
+            android:name=".database.providers.NotificationsProvider"
+            android:authorities="instinctools.android.database.providers.Notifications"
+            android:exported="false"
+            android:label="@string/title_notifications"
+            android:syncable="true" />
+        <provider
+            android:name=".database.providers.SearchSuggestionsProvider"
+            android:authorities="instinctools.android.database.providers.SearchSuggestions"
+            android:exported="false" />
     </application>
 
 </manifest>

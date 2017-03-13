@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/title_pref_header_general">
+        <ListPreference
+            android:key="@string/title_pref_key_general_max_search_result"
+            android:icon="@drawable/ic_github_search_black"
+            android:defaultValue="30"
+            android:entryValues="@array/entry_max_search_result"
+            android:entries="@array/entry_max_search_result"
+            android:title="@string/title_pref_category_general_search_result"
+            android:summary="@string/title_pref_category_general_search_result_summary">
+        </ListPreference>
+        <SwitchPreference
+            android:key="@string/title_pref_key_general_sound_notifications"
+            android:icon="@drawable/ic_volume_up_black_24dp"
+            android:defaultValue="true"
+            android:title="@string/title_pref_category_general_sound_notifications"
+            android:summary="@string/title_pref_category_general_sound_notifications_summary">
+        </SwitchPreference>
+    </PreferenceCategory>
+</PreferenceScreen>
