@@ -26,6 +26,7 @@
     <!-- Profile -->
     <string name="title_profile_information">Информация:</string>
     <string name="title_profile_organizations">Организации:</string>
+    <string name="title_profile_other">Другое:</string>
     <string name="title_profile_tab_about">Информация</string>
     <string name="title_profile_tab_events">События</string>
     <string name="title_profile_tab_repositories">Репозитории</string>

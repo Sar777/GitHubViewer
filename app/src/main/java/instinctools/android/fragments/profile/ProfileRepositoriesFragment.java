@@ -71,7 +71,7 @@ public class ProfileRepositoriesFragment extends Fragment implements LoaderManag
                         mRepositoriesAdapter.notifyItemInserted(mRepositoriesAdapter.getResource().size() - 1);
                     }
                 });
-                GithubServiceUser.getRepositorisListByUrl(mLastRepositoriesListResponse.getPageLinks().getNext(), new GithubServiceListener<RepositoriesListResponse>() {
+                GithubServiceUser.getRepositoriesListByUrl(mLastRepositoriesListResponse.getPageLinks().getNext(), new GithubServiceListener<RepositoriesListResponse>() {
                     @Override
                     public void onError(int code, @Nullable ErrorResponse response) {
                         mRepositoriesAdapter.getResource().remove(mRepositoriesAdapter.getResource().size() - 1);

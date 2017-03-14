@@ -124,6 +124,9 @@
         <activity
             android:name=".activity.RepositoryIssuesActivity"
             android:label="@string/title_repository_issue"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.FollowActivity"
             android:theme="@style/AppTheme"/>
 
         <receiver

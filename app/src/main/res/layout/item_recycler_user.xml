@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/recycler_view_item_material_left_container_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:id="@+id/text_user_login"
@@ -30,8 +31,8 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textColor="#4078c0"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/text_user_type"
