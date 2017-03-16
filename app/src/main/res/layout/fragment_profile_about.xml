@@ -50,7 +50,7 @@
                             android:layout_width="@dimen/profile_github_icon_size"
                             android:layout_height="@dimen/profile_github_icon_size"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/user_avatar_default"
+                            android:src="@drawable/user_avatar_circle"
                             tools:ignore="ContentDescription,RtlHardcoded" />
 
                         <View

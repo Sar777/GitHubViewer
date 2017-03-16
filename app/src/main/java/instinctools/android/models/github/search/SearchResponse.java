@@ -36,7 +36,7 @@ public class SearchResponse<T> extends GitHubResponse {
         return mResponse;
     }
 
-    public void setRepositories(List<T> response) {
+    public void setResponse(List<T> response) {
         this.mResponse = response;
     }
 }

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import instinctools.android.models.github.search.SearchResponse;
 import instinctools.android.readers.json.transformers.ITransformer;
-import instinctools.android.readers.json.transformers.github.commits.ListEventCommitsTransformer;
+import instinctools.android.readers.json.transformers.github.commits.ListCommitsTransformer;
 import instinctools.android.readers.json.transformers.github.issues.ListIssueTransformer;
 import instinctools.android.readers.json.transformers.github.repository.ListRepositoriesTransformer;
 
@@ -19,7 +19,7 @@ public class SearchResponseTransformer implements ITransformer<SearchResponse> {
     private static final String J_ITEMS = "items";
 
     private static final String J_HAS_TYPE_REPOS = "default_branch";
-    private static final String J_HAS_TYPE_COMMITS = "committer_id";
+    private static final String J_HAS_TYPE_COMMITS = "commit";
     private static final String J_HAS_TYPE_ISSUES = "assignee";
     private static final String J_HAS_TYPE_USERS = "login";
 
@@ -47,18 +47,18 @@ public class SearchResponseTransformer implements ITransformer<SearchResponse> {
 
             // Is commits
             if (tempObject.has(J_HAS_TYPE_COMMITS))
-                searchResponse.setRepositories(new ListEventCommitsTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
+                searchResponse.setResponse(new ListCommitsTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is repositories
             else if (tempObject.has(J_HAS_TYPE_REPOS))
-                searchResponse.setRepositories(new ListRepositoriesTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
+                searchResponse.setResponse(new ListRepositoriesTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is issues
             else if (tempObject.has(J_HAS_TYPE_ISSUES))
-                searchResponse.setRepositories(new ListIssueTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
+                searchResponse.setResponse(new ListIssueTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             // Is users
             else if (tempObject.has(J_HAS_TYPE_USERS))
-                searchResponse.setRepositories(new SearchListUsersTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
+                searchResponse.setResponse(new SearchListUsersTransformer().transform(jsonObject.getJSONArray(J_ITEMS)));
             else
-                throw new UnsupportedOperationException("Unsupported search response items type");
+                throw new UnsupportedOperationException("Unsupported search response items type: " + tempObject.toString());
 
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

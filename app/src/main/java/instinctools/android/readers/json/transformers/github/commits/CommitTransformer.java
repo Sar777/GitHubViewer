@@ -40,8 +40,11 @@ public class CommitTransformer implements ITransformer<Commit> {
 
             commit.setCommitInfo(new CommitInfoTransformer().transform(jsonObject.getJSONObject(J_COMMIT)));
 
-            commit.setAuthor(new UserShortTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
-            commit.setCommitter(new UserShortTransformer().transform(jsonObject.getJSONObject(J_COMMITTER)));
+            if (jsonObject.has(J_AUTHOR) && !jsonObject.isNull(J_AUTHOR))
+                commit.setAuthor(new UserShortTransformer().transform(jsonObject.getJSONObject(J_AUTHOR)));
+
+            if (jsonObject.has(J_COMMITTER) && !jsonObject.isNull(J_COMMITTER))
+                commit.setCommitter(new UserShortTransformer().transform(jsonObject.getJSONObject(J_COMMITTER)));
 
         } catch (JSONException e) {
             Log.e(TAG, "Parse json field error...", e);

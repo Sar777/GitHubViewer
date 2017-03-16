@@ -3,6 +3,7 @@ package instinctools.android.adapters.search;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +14,18 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.models.github.commits.EventCommit;
+import instinctools.android.models.github.commits.Commit;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.user.User;
 import instinctools.android.services.github.GithubServiceListener;
 import instinctools.android.services.github.user.GithubServiceUser;
+import instinctools.android.utility.CustomTextUtils;
 
-public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
+public class SearchCommitsAdapter extends AbstractRecyclerAdapter<Commit> {
     public SearchCommitsAdapter(@NonNull Context context) {
         super(context);
     }
@@ -44,25 +45,29 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
             mTextViewMessage = (TextView) view.findViewById(R.id.text_commit_message);
             mTextViewTimeAgo = (TextView) view.findViewById(R.id.text_commit_time);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EventCommit commit = getItem(getAdapterPosition());
-                    App.launchUrl(mContext, commit.getHtmlUrl());
-                }
-            });
+// TODO disabled click commits
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Commit commit = getItem(getAdapterPosition());
+//                    App.launchUrl(mContext, commit.getUrl());
+//                }
+//            });
         }
 
         void onBindViewHolder(int position) {
-            EventCommit commit = getItem(position);
+            Commit commit = getItem(position);
 
             mImageViewAuthorAvatar.setVisibility(View.VISIBLE);
             mImageViewCommitterAvatar.setVisibility(View.VISIBLE);
 
-            if (commit.getAuthorId() != 0) {
-                if (commit.getAuthorId().equals(commit.getCommitterId())) {
+            mImageViewAuthorAvatar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.user_avatar_circle));
+            mImageViewCommitterAvatar.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.user_avatar_circle));
+
+            if (commit.getAuthor() != null) {
+                if (commit.getAuthor().getId().equals(commit.getCommitter().getId())) {
                     mImageViewCommitterAvatar.setVisibility(View.INVISIBLE);
-                    GithubServiceUser.getUser(commit.getAuthorId(), new GithubServiceListener<User>() {
+                    GithubServiceUser.getUser(commit.getAuthor().getLogin(), new GithubServiceListener<User>() {
                         @Override
                         public void onError(int code, @Nullable ErrorResponse response) {
                         }
@@ -77,7 +82,7 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
                         }
                     });
                 } else {
-                    GithubServiceUser.getUser(commit.getAuthorId(), new GithubServiceListener<User>() {
+                    GithubServiceUser.getUser(commit.getAuthor().getLogin(), new GithubServiceListener<User>() {
                         @Override
                         public void onError(int code, @Nullable ErrorResponse response) {
                         }
@@ -92,8 +97,8 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
                         }
                     });
 
-                    if (commit.getCommitterId() != 0)
-                        GithubServiceUser.getUser(commit.getCommitterId(), new GithubServiceListener<User>() {
+                    if (commit.getCommitter() != null)
+                        GithubServiceUser.getUser(commit.getCommitter().getLogin(), new GithubServiceListener<User>() {
                             @Override
                             public void onError(int code, @Nullable ErrorResponse response) {
                             }
@@ -110,13 +115,16 @@ public class SearchCommitsAdapter extends AbstractRecyclerAdapter<EventCommit> {
                 }
             }
 
-            mTextViewMessage.setText(commit.getMessage());
+            mTextViewMessage.setText(commit.getCommitInfo().getMessage());
 
-            String commitDate = new SimpleDateFormat("MMM dd yyyy", Locale.getDefault()).format(commit.getCommitterDate());
-            if (commit.getAuthorId().equals(commit.getCommitterId()))
-                mTextViewTimeAgo.setText(String.format("%s committed %s", commit.getCommitterName(), commitDate));
+            String commitDate = new SimpleDateFormat("MMM dd yyyy", Locale.getDefault()).format(commit.getCommitInfo().getCommitter().getDate());
+            String text;
+            if (commit.getCommitInfo().getAuthor().getName().equals(commit.getCommitInfo().getCommitter().getName()))
+                text = String.format("<b>%s</b> committed <b>%s</b>", commit.getCommitInfo().getCommitter().getName(), commitDate);
             else
-                mTextViewTimeAgo.setText(String.format("%s committed with %s on %s", commit.getAuthorName(), commit.getCommitterName(), commitDate));
+                text = String.format("<b>%s</b> committed with <b>%s</b> on <b>%s</b>", commit.getCommitInfo().getAuthor().getName(), commit.getCommitInfo().getCommitter().getName(), commitDate);
+
+            mTextViewTimeAgo.setText(CustomTextUtils.fromHtml(text));
         }
     }
 

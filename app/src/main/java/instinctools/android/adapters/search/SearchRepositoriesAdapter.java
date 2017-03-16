@@ -1,6 +1,8 @@
 package instinctools.android.adapters.search;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import instinctools.android.App;
 import instinctools.android.R;
+import instinctools.android.activity.RepositoryDescriptionActivity;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.models.github.repositories.Repository;
 
 public class SearchRepositoriesAdapter extends AbstractRecyclerAdapter<Repository> {
+    public static final String EXTRA_REPOSITORY_NAME_TAG = "REPOSITORY";
+
     public SearchRepositoriesAdapter(@NonNull Context context) {
         super(context);
     }
@@ -47,7 +51,10 @@ public class SearchRepositoriesAdapter extends AbstractRecyclerAdapter<Repositor
                 @Override
                 public void onClick(View view) {
                     Repository repository = getItem(getAdapterPosition());
-                    App.launchUrl(mContext, repository.getHtmlUrl());
+                    Intent intent = new Intent(mContext, RepositoryDescriptionActivity.class);
+                    intent.putExtra(EXTRA_REPOSITORY_NAME_TAG, repository.getFullName());
+                    ActivityOptions options = ActivityOptions.makeScaleUpAnimation(view, 0, 0, 0, 0);
+                    mContext.startActivity(intent, options.toBundle());
                 }
             });
         }

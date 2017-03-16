@@ -26,7 +26,7 @@
             android:layout_marginTop="@dimen/nav_header_vertical_spacing"
             android:clickable="false"
             android:layout_centerInParent="true"
-            app:srcCompat="@drawable/user_avatar_default"
+            app:srcCompat="@drawable/user_avatar_circle"
             tools:ignore="ContentDescription" />
 
     </RelativeLayout>
