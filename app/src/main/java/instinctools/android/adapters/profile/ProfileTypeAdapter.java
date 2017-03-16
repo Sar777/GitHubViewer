@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import instinctools.android.R;
 import instinctools.android.fragments.profile.ProfileAboutFragment;
 import instinctools.android.fragments.profile.ProfileEventsFragment;
+import instinctools.android.fragments.profile.ProfileRepositoriesFragment;
 
 public class ProfileTypeAdapter extends FragmentStatePagerAdapter {
-    public static final int NUM_PAGES = 2;
+    public static final int NUM_PAGES = 3;
 
     private final Context mContext;
 
@@ -29,6 +30,9 @@ public class ProfileTypeAdapter extends FragmentStatePagerAdapter {
                 break;
             case 1:
                 fragment = new ProfileEventsFragment();
+                break;
+            case 2:
+                fragment = new ProfileRepositoriesFragment();
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported search fragment type by position: " + position);
@@ -49,6 +53,8 @@ public class ProfileTypeAdapter extends FragmentStatePagerAdapter {
                 return mContext.getString(R.string.title_profile_tab_about);
             case 1:
                 return mContext.getString(R.string.title_profile_tab_events);
+            case 2:
+                return mContext.getString(R.string.title_profile_tab_repositories);
         }
 
         return null;

@@ -64,6 +64,7 @@
     <dimen name="profile_base_cardview_elevation">3dp</dimen>
     <dimen name="profile_base_cardview_content_padding">3dp</dimen>
     <dimen name="profile_divider_size">1dp</dimen>
+    <dimen name="profile_about_margin_top_info">30dp</dimen>
     <!-- -->
     <dimen name="repository_description_margin_left_right">8dp</dimen>
     <dimen name="description_divider_size">1dp</dimen>

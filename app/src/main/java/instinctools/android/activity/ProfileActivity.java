@@ -13,6 +13,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final int LOADER_PROFILE_ID = 1;
     public static final int LOADER_ORGANIZATIONS_ID = 2;
     public static final int LOADER_EVENTS_ID = 3;
+    public static final int LOADER_REPOSITORIES_ID = 4;
 
     public static final String EXTRA_USERNAME = "USERNAME";
 

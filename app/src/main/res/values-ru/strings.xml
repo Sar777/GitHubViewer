@@ -26,9 +26,12 @@
     <!-- Profile -->
     <string name="title_profile_information">Информация:</string>
     <string name="title_profile_organizations">Организации:</string>
+    <string name="title_profile_other">Другое:</string>
     <string name="title_profile_tab_about">Информация</string>
     <string name="title_profile_tab_events">События</string>
+    <string name="title_profile_tab_repositories">Репозитории</string>
     <string name="msg_profile_events_loading_fail">Ошибка при загрузки списка событий</string>
+    <string name="msg_profile_repos_loading_fail">Ошибка при загрузки списка репозиториев</string>
     <!-- Repository description -->
     <string name="title_menu">Меню</string>
     <string name="title_watch_repositories">Отслеживаемые</string>
