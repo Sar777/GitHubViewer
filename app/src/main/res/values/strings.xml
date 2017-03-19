@@ -65,6 +65,7 @@
     <string name="title_description">Description</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_repository_description_tab_information">About</string>
+    <string name="title_repository_description_tab_content">Files</string>
     <string name="title_repository_description_tab_commits">Commits</string>
     <!-- Preference -->
     <string name="title_pref_header_data_sync">Sync Data</string>
@@ -97,6 +98,7 @@
     <string name="title_repository_description_contributors">Contributors</string>
     <string name="title_repository_description_issues">Issues</string>
     <string name="msg_repository_description_commits_loading_fail">Error with loading commits list</string>
+    <string name="msg_repository_description_content_loading_fail">Error with loading files list</string>
     <!-- -->
     <string name="title_search_activity">Search</string>
     <string name="title_search_search">Search</string>

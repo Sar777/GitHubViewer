@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import instinctools.android.R;
 import instinctools.android.fragments.repository.RepositoryAboutFragment;
 import instinctools.android.fragments.repository.RepositoryCommitsFragment;
+import instinctools.android.fragments.repository.RepositoryContentFragment;
 
 public class RepositoryTypeAdapter extends FragmentStatePagerAdapter {
-    public static final int NUM_PAGES = 2;
+    public static final int NUM_PAGES = 3;
 
     private final Context mContext;
 
@@ -28,6 +29,9 @@ public class RepositoryTypeAdapter extends FragmentStatePagerAdapter {
                 fragment = new RepositoryAboutFragment();
                 break;
             case 1:
+                fragment = new RepositoryContentFragment();
+                break;
+            case 2:
                 fragment = new RepositoryCommitsFragment();
                 break;
             default:
@@ -48,6 +52,8 @@ public class RepositoryTypeAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return mContext.getString(R.string.title_repository_description_tab_information);
             case 1:
+                return mContext.getString(R.string.title_repository_description_tab_content);
+            case 2:
                 return mContext.getString(R.string.title_repository_description_tab_commits);
         }
 
