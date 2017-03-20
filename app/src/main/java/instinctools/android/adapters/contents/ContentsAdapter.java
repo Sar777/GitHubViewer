@@ -1,8 +1,10 @@
 package instinctools.android.adapters.contents;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -11,9 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import instinctools.android.App;
 import instinctools.android.R;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
+import instinctools.android.fragments.repository.RepositoryContentFragment;
 import instinctools.android.models.github.contents.Content;
+import instinctools.android.models.github.contents.ContentType;
 
 public class ContentsAdapter extends AbstractRecyclerAdapter<Content> {
     public ContentsAdapter(@NonNull Context context) {
@@ -35,8 +40,15 @@ public class ContentsAdapter extends AbstractRecyclerAdapter<Content> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Content cont = getItem(getAdapterPosition());
-                    // TODO
+                    Content contentItem = getItem(getAdapterPosition());
+                    if (contentItem.getType() == ContentType.DIR) {
+                        Intent intent = new Intent(RepositoryContentFragment.INTENT_FILTER_CONTENT_CLICK);
+                        intent.putExtra(RepositoryContentFragment.EXTRA_CONTENT_PATH, contentItem.getPath());
+                        intent.putExtra(RepositoryContentFragment.EXTRA_CONTENT_NAME, contentItem.getName());
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                    }
+                    else
+                        App.launchUrl(mContext, contentItem.getHtmlUrl());
                 }
             });
         }

@@ -106,4 +106,10 @@
     <dimen name="cardview_profile_organization_margin">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="recycler_view_item_contributor_avatar_size">45dp</dimen>
+    <!-- -->
+    <dimen name="repository_content_name_left_margin">8dp</dimen>
+    <dimen name="repository_content_name_right_margin">50dp</dimen>
+    <dimen name="repository_content_type_size">20dp</dimen>
+    <dimen name="content_path_margin_left_right">3dp</dimen>
+    <dimen name="content_path_drawable_padding">4dp</dimen>
 </resources>

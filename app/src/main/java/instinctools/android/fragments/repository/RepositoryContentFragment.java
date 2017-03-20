@@ -1,10 +1,15 @@
 package instinctools.android.fragments.repository;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,23 +22,49 @@ import java.util.List;
 import instinctools.android.R;
 import instinctools.android.activity.RepositoryDescriptionActivity;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
+import instinctools.android.adapters.contents.ContentPathAdapter;
 import instinctools.android.adapters.contents.ContentsAdapter;
 import instinctools.android.decorations.DividerItemDecoration;
 import instinctools.android.loaders.repository.AsyncRepositoryContentLoader;
 import instinctools.android.models.github.contents.Content;
 
 public class RepositoryContentFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Content>> {
+    public static final String INTENT_FILTER_CONTENT_CLICK = "CONTENT_CLICK";
+    public static final String EXTRA_CONTENT_PATH = "CONTENT_PATH";
+    public static final String EXTRA_CONTENT_NAME = "CONTENT_NAME";
+
     // View
     private ViewGroup mViewGroupContainer;
-    private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerViewContent;
+    private RecyclerView mRecyclerViewContentPath;
     private ProgressBar mProgressBar;
     private AbstractRecyclerAdapter mContentAdapter;
+    private AbstractRecyclerAdapter mContentPathAdapter;
 
     private String mCurrentPath;
+
+    // Broadcast
+    private BroadcastReceiver mContentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mCurrentPath = intent.getStringExtra(EXTRA_CONTENT_PATH);
+
+            mRecyclerViewContent.setVisibility(View.INVISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            mContentPathAdapter.getResource().add(intent.getStringExtra(EXTRA_CONTENT_NAME));
+            //mContentPathAdapter.notifyItemInserted(mContentPathAdapter.getResource().size() - 1);
+            mContentPathAdapter.notifyDataSetChanged();
+
+            getActivity().getSupportLoaderManager().restartLoader(RepositoryDescriptionActivity.LOADER_REPOSITORY_CONTENT_ID, Bundle.EMPTY, RepositoryContentFragment.this);
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mContentReceiver, new IntentFilter(INTENT_FILTER_CONTENT_CLICK));
     }
 
     @Override
@@ -45,19 +76,26 @@ public class RepositoryContentFragment extends Fragment implements LoaderManager
 
         mViewGroupContainer = (ViewGroup) view.findViewById(R.id.layout_repository_description_content);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_repository_content);
-        mRecyclerView.setVisibility(View.INVISIBLE);
+        mRecyclerViewContent = (RecyclerView) view.findViewById(R.id.recycler_repository_content);
+        mRecyclerViewContent.setVisibility(View.INVISIBLE);
+
+        mRecyclerViewContentPath = (RecyclerView) view.findViewById(R.id.recycler_repository_content_path);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerViewContentPath.setLayoutManager(linearLayoutManager);
+
+        mContentPathAdapter = new ContentPathAdapter(getContext());
+        mRecyclerViewContentPath.setAdapter(mContentPathAdapter);
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading_repository_content);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerViewContent.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mContentAdapter = new ContentsAdapter(getContext());
-        mRecyclerView.setAdapter(mContentAdapter);
+        mRecyclerViewContent.setAdapter(mContentAdapter);
 
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
+        mRecyclerViewContent.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, false));
 
         return view;
     }
@@ -75,6 +113,12 @@ public class RepositoryContentFragment extends Fragment implements LoaderManager
     }
 
     @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mContentReceiver);
+        super.onDestroy();
+    }
+
+    @Override
     public Loader<List<Content>> onCreateLoader(int id, Bundle args) {
         return new AsyncRepositoryContentLoader(getContext(), ((RepositoryDescriptionActivity)getActivity()).getFullName(), mCurrentPath);
     }
@@ -88,7 +132,7 @@ public class RepositoryContentFragment extends Fragment implements LoaderManager
 
         mContentAdapter.notifyDataSetChanged();
 
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mRecyclerViewContent.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }
 
