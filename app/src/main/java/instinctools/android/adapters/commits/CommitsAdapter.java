@@ -43,13 +43,14 @@ public class CommitsAdapter extends AbstractRecyclerAdapter<Commit> {
         void onBindViewHolder(int position) {
             Commit commit = getItem(position);
 
-            ImageLoader
-                    .what(commit.getAuthor().getAvatarUrl())
-                    .in(mImageViewCommitterAvatar)
-                    .transformer(new CircleImageTransformer())
-                    .load();
+            if (commit.getAuthor() != null)
+                ImageLoader
+                        .what(commit.getAuthor().getAvatarUrl())
+                        .in(mImageViewCommitterAvatar)
+                        .transformer(new CircleImageTransformer())
+                        .load();
 
-            mTextViewCommitterName.setText(commit.getAuthor().getLogin());
+            mTextViewCommitterName.setText(commit.getCommitInfo().getAuthor().getName());
 
             mTextViewCommitMessage.setText(commit.getCommitInfo().getMessage());
             mTextViewCommitTimeAgo.setText(DateUtils.getRelativeTimeSpanString(commit.getCommitInfo().getCommitter().getDate().getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS));

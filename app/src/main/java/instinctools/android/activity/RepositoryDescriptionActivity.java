@@ -17,6 +17,7 @@ public class RepositoryDescriptionActivity extends AppCompatActivity {
 
     public static final int LOADER_REPOSITORY_ABOUT_ID = 1;
     public static final int LOADER_REPOSITORY_COMMITS_ID = 2;
+    public static final int LOADER_REPOSITORY_CONTENT_ID = 3;
 
     private String mFullName;
 

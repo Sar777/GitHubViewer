@@ -41,8 +41,10 @@
     <string name="title_description">Описание</string>
     <string name="title_repository_description_other_information">Другая информация</string>
     <string name="title_repository_description_tab_information">Информация</string>
+    <string name="title_repository_description_tab_content">Файлы</string>
     <string name="title_repository_description_tab_commits">Коммиты</string>
     <string name="msg_repository_description_commits_loading_fail">Ошибка при загрузке списка коммитов</string>
+    <string name="msg_repository_description_content_loading_fail">Ошибка загрузке списка файлов</string>
     <!-- Preference -->
     <string name="title_pref_header_data_sync">Синхронизация</string>
     <string name="title_pref_header_general">Общие</string>

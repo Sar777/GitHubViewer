@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_repository_description_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/pb_loading_repository_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_repository_content_path"
+        android:layout_width="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_height="35dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_repository_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/recycler_repository_content_path"
+        android:scrollbars="vertical"/>
+</RelativeLayout>
