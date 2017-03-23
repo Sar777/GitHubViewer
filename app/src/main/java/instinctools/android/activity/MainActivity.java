@@ -361,6 +361,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_notification:
                 startActivity(new Intent(this, NotificationActivity.class));
                 break;
+            case R.id.nav_organizations:
+                startActivity(new Intent(this, OrganizationsActivity.class));
+                break;
             default:
                 break;
         }

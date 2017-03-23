@@ -19,6 +19,7 @@
     <string name="title_nav_bar_count_logout">Выйти</string>
     <string name="title_nav_bar_my_repositories">Мои репозитории</string>
     <string name="title_nav_bar_notifications">Мои оповещения</string>
+    <string name="title_nav_bar_organizations">Мои организации</string>
     <string name="title_nav_bar_settings">Настройки</string>
     <string name="title_nav_bar_watch">Отслеживаемые</string>
     <string name="title_nav_bar_stars">Избранные</string>
@@ -87,4 +88,6 @@
     <string name="title_repository_issues_tab_closed">Закрытые</string>
     <string name="title_repository_issues_tab_opened">Открытые</string>
     <string name="msg_repositoy_issues_loading_fail">Ошибка при загрузке списка issues</string>
+    <!-- User organizations -->
+    <string name="title_my_organizations">Мои организации</string>
 </resources>

@@ -127,7 +127,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.FollowActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.OrganizationsActivity"
+            android:label="@string/title_my_organizations"
+            android:theme="@style/AppTheme" />
 
         <receiver
             android:name=".broadcast.NotificationsBroadcast"

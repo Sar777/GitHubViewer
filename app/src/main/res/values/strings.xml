@@ -45,6 +45,7 @@
     <string name="title_nav_bar_stars">Stargazers</string>
     <string name="title_nav_bar_my_repositories">My repositories</string>
     <string name="title_nav_bar_notifications">My notifications</string>
+    <string name="title_nav_bar_organizations">My organizations</string>
     <string name="title_nav_bar_search">Search repositories</string>
     <!-- Profile -->
     <string name="title_profile_followers">Followers</string>
@@ -157,4 +158,6 @@
     <string name="title_repository_issues_tab_closed">Closed</string>
     <string name="title_repository_issues_tab_opened">Opened</string>
     <string name="msg_repositoy_issues_loading_fail">Error with loading issues list</string>
+    <!-- User organizations -->
+    <string name="title_my_organizations">My organizations</string>
 </resources>
