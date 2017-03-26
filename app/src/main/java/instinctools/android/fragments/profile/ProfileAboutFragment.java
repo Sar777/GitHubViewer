@@ -24,7 +24,7 @@ import instinctools.android.activity.FollowActivity;
 import instinctools.android.activity.ProfileActivity;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.loaders.AsyncOrganizationsLoader;
+import instinctools.android.loaders.organizations.AsyncOrganizationsListLoader;
 import instinctools.android.loaders.user.AsyncUserInfoLoader;
 import instinctools.android.misc.LinkTransformationMethod;
 import instinctools.android.models.github.follow.FollowType;
@@ -124,7 +124,7 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
                 loader = new AsyncUserInfoLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
                 break;
             case ProfileActivity.LOADER_ORGANIZATIONS_ID:
-                loader = new AsyncOrganizationsLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
+                loader = new AsyncOrganizationsListLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported loader id: " + id);
