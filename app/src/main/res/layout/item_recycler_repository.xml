@@ -13,7 +13,6 @@
         android:layout_width="@dimen/recycler_view_item_icon_size"
         android:layout_height="@dimen/recycler_view_item_icon_size"
         android:layout_marginLeft="@dimen/recycler_view_item_image_view_margin_left_right"
-
         app:srcCompat="@drawable/ic_github_logo"
         android:layout_centerVertical="true"
         tools:ignore="ContentDescription,RtlHardcoded" />

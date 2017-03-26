@@ -19,6 +19,7 @@
     <string name="title_nav_bar_count_logout">Выйти</string>
     <string name="title_nav_bar_my_repositories">Мои репозитории</string>
     <string name="title_nav_bar_notifications">Мои оповещения</string>
+    <string name="title_nav_bar_organizations">Мои организации</string>
     <string name="title_nav_bar_settings">Настройки</string>
     <string name="title_nav_bar_watch">Отслеживаемые</string>
     <string name="title_nav_bar_stars">Избранные</string>
@@ -26,9 +27,12 @@
     <!-- Profile -->
     <string name="title_profile_information">Информация:</string>
     <string name="title_profile_organizations">Организации:</string>
+    <string name="title_profile_other">Другое:</string>
     <string name="title_profile_tab_about">Информация</string>
     <string name="title_profile_tab_events">События</string>
+    <string name="title_profile_tab_repositories">Репозитории</string>
     <string name="msg_profile_events_loading_fail">Ошибка при загрузки списка событий</string>
+    <string name="msg_profile_repos_loading_fail">Ошибка при загрузки списка репозиториев</string>
     <!-- Repository description -->
     <string name="title_menu">Меню</string>
     <string name="title_watch_repositories">Отслеживаемые</string>
@@ -38,8 +42,10 @@
     <string name="title_description">Описание</string>
     <string name="title_repository_description_other_information">Другая информация</string>
     <string name="title_repository_description_tab_information">Информация</string>
+    <string name="title_repository_description_tab_content">Файлы</string>
     <string name="title_repository_description_tab_commits">Коммиты</string>
     <string name="msg_repository_description_commits_loading_fail">Ошибка при загрузке списка коммитов</string>
+    <string name="msg_repository_description_content_loading_fail">Ошибка загрузке списка файлов</string>
     <!-- Preference -->
     <string name="title_pref_header_data_sync">Синхронизация</string>
     <string name="title_pref_header_general">Общие</string>
@@ -82,4 +88,6 @@
     <string name="title_repository_issues_tab_closed">Закрытые</string>
     <string name="title_repository_issues_tab_opened">Открытые</string>
     <string name="msg_repositoy_issues_loading_fail">Ошибка при загрузке списка issues</string>
+    <!-- User organizations -->
+    <string name="title_my_organizations">Мои организации</string>
 </resources>

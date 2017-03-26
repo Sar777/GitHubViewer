@@ -20,19 +20,24 @@ import java.util.List;
 
 import instinctools.android.R;
 import instinctools.android.activity.AuthActivity;
+import instinctools.android.activity.FollowActivity;
 import instinctools.android.activity.ProfileActivity;
 import instinctools.android.imageloader.ImageLoader;
 import instinctools.android.imageloader.transformers.CircleImageTransformer;
-import instinctools.android.loaders.AsyncOrganizationsLoader;
+import instinctools.android.loaders.organizations.AsyncOrganizationsListLoader;
 import instinctools.android.loaders.user.AsyncUserInfoLoader;
 import instinctools.android.misc.LinkTransformationMethod;
+import instinctools.android.models.github.follow.FollowType;
 import instinctools.android.models.github.organizations.Organization;
 import instinctools.android.models.github.user.User;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-public class ProfileAboutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, SwipeRefreshLayout.OnRefreshListener {
+public class ProfileAboutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private static final int REQUEST_CODE_AUTHORIZATION = 1;
+
+    public static final String EXTRA_FOLLOW_TYPE = "FOLLOW_TYPE";
+    public static final String EXTRA_USERNAME = "USERNAME";
 
     // View
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -50,6 +55,9 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
     private TextView mTextViewBlog;
     private TextView mTextViewOrganization;
     private TextView mTextViewBio;
+
+    private TextView mTextViewFollowersAction;
+    private TextView mTextViewFollowingAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,11 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
 
         mTextViewOrganization = (TextView) view.findViewById(R.id.text_profile_organization);
         mTextViewBio = (TextView) view.findViewById(R.id.text_profile_bio);
+
+        mTextViewFollowersAction = (TextView) view.findViewById(R.id.text_profile_followers_action);
+        mTextViewFollowersAction.setOnClickListener(this);
+        mTextViewFollowingAction = (TextView) view.findViewById(R.id.text_profile_following_action);
+        mTextViewFollowingAction.setOnClickListener(this);
         return view;
     }
 
@@ -111,7 +124,7 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
                 loader = new AsyncUserInfoLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
                 break;
             case ProfileActivity.LOADER_ORGANIZATIONS_ID:
-                loader = new AsyncOrganizationsLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
+                loader = new AsyncOrganizationsListLoader(getContext(), ((ProfileActivity)getActivity()).getUserName());
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported loader id: " + id);
@@ -222,5 +235,20 @@ public class ProfileAboutFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onRefresh() {
         getActivity().getSupportLoaderManager().getLoader(ProfileActivity.LOADER_PROFILE_ID).forceLoad();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.text_profile_following_action:
+            case R.id.text_profile_followers_action: {
+                Intent intent = new Intent(getContext(), FollowActivity.class);
+                intent.putExtra(EXTRA_FOLLOW_TYPE, v.getId() == R.id.text_profile_followers_action ? FollowType.Followers : FollowType.Following);
+                startActivity(intent);
+                break;
+            }
+            default:
+                break;
+        }
     }
 }

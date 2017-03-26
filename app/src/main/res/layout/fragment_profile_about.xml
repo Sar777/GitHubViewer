@@ -50,7 +50,7 @@
                             android:layout_width="@dimen/profile_github_icon_size"
                             android:layout_height="@dimen/profile_github_icon_size"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/user_avatar_default"
+                            android:src="@drawable/user_avatar_circle"
                             tools:ignore="ContentDescription,RtlHardcoded" />
 
                         <View
@@ -118,6 +118,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:maxLines="1"
+                                android:ellipsize="end"
                                 android:text="@string/title_profile_followers" />
 
                             <TextView
@@ -143,6 +145,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                                android:maxLines="1"
+                                android:ellipsize="end"
                                 android:text="@string/title_profile_following" />
 
                             <TextView
@@ -252,6 +256,58 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="@dimen/profile_cardview_information_padding"
+                app:cardElevation="@dimen/profile_cardview_information_elevation"
+                tools:ignore="RtlHardcoded">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:text="@string/title_profile_other"/>
+
+                    <LinearLayout
+                        android:id="@+id/layout_profile_other_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_profile_followers_action"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/profile_divider_margin_top_bottom"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/title_profile_followers"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/profile_divider_size"
+                            android:background="?android:attr/dividerHorizontal" />
+
+
+                        <TextView
+                            android:id="@+id/text_profile_following_action"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="6dp"
+                            android:text="@string/title_profile_following"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/cardview_profile_organizations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -270,7 +326,7 @@
                     android:id="@+id/layout_profile_organization_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="@dimen/profile_about_margin_top_info"
                     android:orientation="vertical">
                 </LinearLayout>
             </android.support.v7.widget.CardView>

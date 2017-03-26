@@ -7,6 +7,10 @@
         android:title="@string/title_nav_bar_my_repositories"
         app:itemIconTint="@android:color/black"/>
     <item
+        android:id="@+id/nav_organizations"
+        android:icon="@drawable/ic_github_organization"
+        android:title="@string/title_nav_bar_organizations" />
+    <item
         android:id="@+id/nav_notification"
         android:icon="@drawable/ic_github_notification"
         android:title="@string/title_nav_bar_notifications"

@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.Collections;
+
 import instinctools.android.R;
 import instinctools.android.activity.RepositoryDescriptionActivity;
 import instinctools.android.adapters.AbstractRecyclerAdapter;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginBottom="@dimen/recycler_view_item_margin_top_bottom"
+    android:layout_marginRight="@dimen/recycler_view_item_margin_right_left"
+    android:layout_marginLeft="@dimen/recycler_view_item_margin_right_left">
+
+    <ImageView
+        android:id="@+id/image_content_type"
+        android:layout_width="@dimen/repository_content_type_size"
+        android:layout_height="@dimen/repository_content_type_size"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/text_content_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/image_content_type"
+        android:layout_marginLeft="@dimen/repository_content_name_left_margin"
+        android:layout_marginRight="@dimen/repository_content_name_right_margin"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/text_content_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:layout_alignParentRight="true"
+        tools:ignore="RtlHardcoded" />
+</RelativeLayout>

@@ -1,5 +1,7 @@
 package instinctools.android.services.github.repository;
 
+import android.support.annotation.NonNull;
+
 import java.net.HttpURLConnection;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import instinctools.android.http.OnHttpClientListener;
 import instinctools.android.models.github.PageLinks;
 import instinctools.android.models.github.commits.Commit;
 import instinctools.android.models.github.commits.CommitsListResponse;
+import instinctools.android.models.github.contents.Content;
 import instinctools.android.models.github.contributors.ContributorsListResponse;
 import instinctools.android.models.github.errors.ErrorResponse;
 import instinctools.android.models.github.issues.Issue;
@@ -28,6 +31,7 @@ public class GithubServiceRepository extends GithubService {
     private static final String API_REPOSITORY_ISSUES = API_BASE_URL + "/repos/%s/issues";
     private static final String API_REPOSITORY_CONTRIBUTORS = API_BASE_URL + "/repos/%s/contributors";
     private static final String API_REPOSITORY_COMMITS = API_BASE_URL + "/repos/%s/commits";
+    private static final String API_REPOSITORY_CONTENT = API_BASE_URL + "/repos/%s/contents";
 
     private static final String FIELD_STATE = "state";
     private static final String FIELD_DIRECTION = "direction";
@@ -43,7 +47,7 @@ public class GithubServiceRepository extends GithubService {
                 direction.toString();
     }
 
-    public static RepositoryReadme getRepositoryReadme(String fullname) {
+    public static RepositoryReadme getRepositoryReadme(@NonNull String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -58,7 +62,7 @@ public class GithubServiceRepository extends GithubService {
         return (RepositoryReadme) JsonTransformer.transform(client.getContent(), RepositoryReadmeTransformer.class);
     }
 
-    public static void getRepositoryReadme(String fullname, final GithubServiceListener<RepositoryReadme> listener) {
+    public static void getRepositoryReadme(@NonNull String fullname, final GithubServiceListener<RepositoryReadme> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -85,7 +89,7 @@ public class GithubServiceRepository extends GithubService {
         });
     }
 
-    public static void getRepository(String fullname, final GithubServiceListener<Repository> listener) {
+    public static void getRepository(@NonNull String fullname, final GithubServiceListener<Repository> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -112,7 +116,7 @@ public class GithubServiceRepository extends GithubService {
         });
     }
 
-    public static Repository getRepository(String fullname) {
+    public static Repository getRepository(@NonNull String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -127,7 +131,7 @@ public class GithubServiceRepository extends GithubService {
         return (Repository) JsonTransformer.transform(client.getContent(), Repository.class);
     }
 
-    public static ContributorsListResponse getContributors(String fullname) {
+    public static ContributorsListResponse getContributors(@NonNull String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -145,7 +149,7 @@ public class GithubServiceRepository extends GithubService {
         return response;
     }
 
-    public static void getContributionsByUrl(String url, final GithubServiceListener<ContributorsListResponse> listener) {
+    public static void getContributionsByUrl(@NonNull String url, @NonNull final GithubServiceListener<ContributorsListResponse> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -171,7 +175,7 @@ public class GithubServiceRepository extends GithubService {
         });
     }
 
-    public static CommitsListResponse getCommits(String fullname) {
+    public static CommitsListResponse getCommits(@NonNull String fullname) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -188,7 +192,7 @@ public class GithubServiceRepository extends GithubService {
         return response;
     }
 
-    public static void getCommitsByUrl(String url, final GithubServiceListener<CommitsListResponse> listener) {
+    public static void getCommitsByUrl(@NonNull String url, @NonNull final GithubServiceListener<CommitsListResponse> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -213,7 +217,7 @@ public class GithubServiceRepository extends GithubService {
         });
     }
 
-    public static IssueListResponse getIssues(String fullname, IssueState state, Direction direction) {
+    public static IssueListResponse getIssues(@NonNull String fullname, IssueState state, Direction direction) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -230,7 +234,7 @@ public class GithubServiceRepository extends GithubService {
         return response;
     }
 
-    public static void getIssuesByUrl(String url, final GithubServiceListener<IssueListResponse> listener) {
+    public static void getIssuesByUrl(@NonNull String url, @NonNull final GithubServiceListener<IssueListResponse> listener) {
         if (mSessionStorage == null)
             throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
 
@@ -253,5 +257,20 @@ public class GithubServiceRepository extends GithubService {
                 listener.onSuccess(response);
             }
         });
+    }
+
+    public static List<Content> getContent(@NonNull String fullname, @NonNull String path) {
+        if (mSessionStorage == null)
+            throw new IllegalArgumentException("Not init github service. Please, before use it: GithubService.init");
+
+        HttpClientFactory.HttpClient client = HttpClientFactory.
+                create(String.format(API_REPOSITORY_CONTENT, fullname) + (!"".equals(path) ? "/" + path : "")).
+                addHeader(HttpClientFactory.HEADER_AUTHORIZATION, getFormatAccessToken()).
+                setMethod(HttpClientFactory.METHOD_GET).send();
+
+        if (client.getCode() != HttpURLConnection.HTTP_OK)
+            return null;
+
+        return (List<Content>)JsonTransformer.transform(client.getContent(), Content[].class);
     }
 }

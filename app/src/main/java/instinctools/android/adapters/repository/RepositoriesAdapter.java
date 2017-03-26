@@ -1,4 +1,4 @@
-package instinctools.android.adapters.search;
+package instinctools.android.adapters.repository;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -18,11 +18,17 @@ import instinctools.android.activity.RepositoryDescriptionActivity;
 import instinctools.android.adapters.AbstractRecyclerAdapter;
 import instinctools.android.models.github.repositories.Repository;
 
-public class SearchRepositoriesAdapter extends AbstractRecyclerAdapter<Repository> {
+public class RepositoriesAdapter extends AbstractRecyclerAdapter<Repository> {
+    private static final String TAG = "RepositoriesAdapter";
+
     public static final String EXTRA_REPOSITORY_NAME_TAG = "REPOSITORY";
 
-    public SearchRepositoriesAdapter(@NonNull Context context) {
+    private boolean mSelf;
+
+    public RepositoriesAdapter(@NonNull Context context, boolean self) {
         super(context);
+
+        this.mSelf = self;
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -59,37 +65,37 @@ public class SearchRepositoriesAdapter extends AbstractRecyclerAdapter<Repositor
             });
         }
 
-        void onBindViewHolder(int position) {
-            Repository repository = getItem(position);
+        private void onBindViewHolder(int position) {
+            Repository item = getItem(position);
 
-            if (repository.isPrivate())
+            if (item.isPrivate())
                 mPrivateTextView.setVisibility(View.VISIBLE);
             else
                 mPrivateTextView.setVisibility(View.GONE);
 
-            if (repository.isFork())
+            if (item.isFork())
                 mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_github_repo_forked));
             else
                 mRepositoryType.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_github_repo));
 
-            mTitle.setText(repository.getFullName());
+            mTitle.setText(item.getFullName());
 
-            mWatchTextView.setText(String.valueOf(repository.getWatchers()));
-            mStarTextView.setText(String.valueOf(repository.getStargazers()));
-            mForkTextView.setText(String.valueOf(repository.getForks()));
+            mWatchTextView.setText(String.valueOf(item.getWatchers()));
+            mStarTextView.setText(String.valueOf(item.getStargazers()));
+            mForkTextView.setText(String.valueOf(item.getForks()));
 
-            if (TextUtils.isEmpty(repository.getDescription()))
+            if (TextUtils.isEmpty(item.getDescription()))
                 mDescription.setVisibility(View.GONE);
             else {
                 mDescription.setVisibility(View.VISIBLE);
-                mDescription.setText(repository.getDescription());
+                mDescription.setText(item.getDescription());
             }
 
-            if (TextUtils.isEmpty(repository.getLanguage()))
+            if (TextUtils.isEmpty(item.getLanguage()))
                 mLanguageTextView.setVisibility(View.GONE);
             else {
                 mLanguageTextView.setVisibility(View.VISIBLE);
-                mLanguageTextView.setText(repository.getLanguage());
+                mLanguageTextView.setText(item.getLanguage());
             }
         }
     }
